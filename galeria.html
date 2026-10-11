@@ -1,21 +1,19 @@
 <!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+  <title>Galería Oficial | SERGIO RICARDO MOLINA</title>
+  <link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Raleway:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<html class="dark" lang="es"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>Galería Oficial | SERGIO RICARDO MOLINA</title>
-<link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Raleway:wght@500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-    * { 
-      box-sizing: border-box; 
-      -webkit-tap-highlight-color: transparent;
-    }
+  <style>
+    * { box-sizing: border-box; }
     body {
       background-color: #111111;
       color: #e5e2e1;
@@ -24,6 +22,7 @@
       user-select: none;
       -webkit-user-select: none;
       -webkit-touch-callout: none;
+      overflow-x: hidden;
     }
     
     .shield-protected {
@@ -32,82 +31,21 @@
       pointer-events: none;
     }
 
-    /* 🛡️ BLACKOUT ULTRA-RÁPIDO INSTANTÁNEO (ZERO TRANSITION) */
-    /* Resuelve el retraso de 200ms-500ms de Android / Motorola (Brave y Chrome) */
+    /* 🛡️ EFECTO PANTALLA NEGRA ANTI-SCREENSHOT CALIBRADO */
     .blackout-active {
-      display: none !important;
-      visibility: hidden !important;
+      background-color: #000000 !important;
       opacity: 0 !important;
-      filter: brightness(0) contrast(0) !important;
+      visibility: hidden !important;
       transition: none !important;
     }
 
-    /* Micro-malla protectora de seguridad continua (anti screen grab & OCR) */
-    .security-mesh-pattern {
-      background-image: repeating-linear-gradient(
-        -45deg,
-        rgba(0, 0, 0, 0.42) 0px,
-        rgba(0, 0, 0, 0.42) 1.5px,
-        transparent 1.5px,
-        transparent 9px
-      ),
-      repeating-linear-gradient(
-        45deg,
-        rgba(0, 0, 0, 0.25) 0px,
-        rgba(0, 0, 0, 0.25) 1px,
-        transparent 1px,
-        transparent 8px
-      );
-    }
-
-    /* Capa permanente Touch & Hold (Tap to Peek): censura activa por defecto */
-    .peek-curtain {
-      opacity: 0.95;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      transition: opacity 0.08s ease-out, backdrop-filter 0.08s ease-out;
-    }
-
-    /* Al mantener presionado con un solo dedo (touch/hold o click sostenido) se levanta la censura */
-    .touch-revealed .peek-curtain {
-      opacity: 0 !important;
-      backdrop-filter: blur(0px) !important;
-      -webkit-backdrop-filter: blur(0px) !important;
-      pointer-events: none !important;
-    }
-
-    /* Marca de agua diagonal disuasiva que invalida cualquier intento de crop/screenshot */
-    .watermark-diagonal {
-      pointer-events: none;
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      opacity: 0.45;
-      mix-blend-mode: overlay;
-    }
-    .watermark-diagonal span {
-      transform: rotate(-32deg);
-      white-space: nowrap;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.85);
-      text-shadow: 0 1px 2px rgba(0,0,0,0.9);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Impresión estrictamente bloqueada */
     @media print {
       body * {
         visibility: hidden !important;
         display: none !important;
       }
       body::before {
-        content: "FOTOGRAFÍA PROTEGIDA • SERGIO RICARDO MOLINA • DERECHOS RESERVADOS";
+        content: "FOTOGRAFÍA PROTEGIDA · SERGIO RICARDO MOLINA · PROHIBIDA SU IMPRESIÓN";
         visibility: visible !important;
         display: flex !important;
         position: fixed;
@@ -125,172 +63,168 @@
   </style>
 </head>
 <body class="bg-[#111111] text-[#e5e2e1] min-h-screen flex flex-col justify-between selection:bg-[#005580] selection:text-white pb-36">
-<!-- Cortina Negra Infranqueable Anti-Screenshot (Blackout Shield Inmediato) -->
-<div class="hidden fixed inset-0 z-[99999] bg-[#000000] flex flex-col items-center justify-center p-6 text-center select-none" id="blackoutShieldOverlay">
-<div class="w-16 h-16 rounded-full bg-[#161616] border border-red-500/80 flex items-center justify-center text-red-500 mb-4 animate-pulse shadow-2xl">
-<span class="material-symbols-outlined text-[32px]">shield</span>
-</div>
-<h3 class="text-xl sm:text-2xl font-bold font-['Raleway'] text-white mb-2 tracking-wide uppercase">
+
+  <!-- Cortina Negra de Censura Anti-Screenshot -->
+  <div id="blackoutShieldOverlay" class="hidden fixed inset-0 z-[99999] bg-[#000000] flex flex-col items-center justify-center p-6 text-center select-none" style="transition: none !important;">
+    <div class="w-16 h-16 rounded-full bg-[#111111] border border-red-500/80 flex items-center justify-center text-red-500 mb-4 animate-pulse shadow-2xl">
+      <span class="material-symbols-outlined text-[32px]">shield</span>
+    </div>
+    <h3 class="text-xl sm:text-2xl font-headline font-bold text-white mb-2 tracking-wide uppercase">
       FOTOGRAFÍA PROTEGIDA
     </h3>
-<p class="text-xs sm:text-sm text-[#888888] max-w-md leading-relaxed font-mono mb-4">
-      SERGIO RICARDO MOLINA · CONTENIDO BLOQUEADO POR DERECHOS DE AUTOR.<br/>
-      Para obtener copias en alta resolución, encargá tu pedido impreso o digital oficial.
+    <p class="text-xs sm:text-sm text-[#888888] max-w-md leading-relaxed font-mono mb-4">
+      SERGIO RICARDO MOLINA · CONTENIDO BLOQUEADO POR DERECHOS DE AUTOR.
+      <br>
+      Para obtener copias en alta resolución, encargá tu pedido impreso o digital.
     </p>
-<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#181818] border border-[#333333] text-xs font-mono text-[#38bdf8] mb-6">
-<span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-<span>Captura neutralizada por el sistema</span>
-</div>
-<button class="px-5 py-2.5 rounded-xl bg-[#1c1c1c] hover:bg-[#252525] text-[#c0c7cf] hover:text-white text-xs font-semibold border border-[#333333] transition-all active:scale-95 cursor-pointer" onclick="desactivarBlackoutManual()">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#181818] border border-[#333333] text-xs font-mono text-[#38bdf8]">
+      <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+      <span>Captura neutralizada por el sistema</span>
+    </div>
+    <button onclick="desactivarBlackoutManual()" class="mt-6 px-5 py-2.5 rounded-xl bg-[#181818] hover:bg-[#222222] text-[#c0c7cf] hover:text-white text-xs font-semibold border border-[#333333] transition-all active:scale-95 cursor-pointer">
       Continuar viendo la galería
     </button>
-</div>
-<!-- Toast Disuasivo de Seguridad con Alerta Técnica -->
-<div class="fixed top-4 left-1/2 -translate-x-1/2 z-[10000] -translate-y-28 opacity-0 transition-all duration-200 pointer-events-none flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#141414]/95 border border-red-500/80 text-white shadow-2xl backdrop-blur-md max-w-[90vw]" id="toastSecurity">
-<span class="material-symbols-outlined text-red-400 text-[20px] shrink-0">security</span>
-<span class="text-xs font-mono font-medium leading-tight text-left" id="toastSecurityMsg">Escudo Anti-Screenshot: Captura bloqueada a negro.</span>
-</div>
-<!-- Header Superior -->
-<header class="w-full bg-[#141414] border-b border-[#242424] sticky top-0 z-40">
-<div class="flex justify-between items-center w-full px-4 md:px-6 max-w-7xl mx-auto h-16">
-<div class="flex items-center gap-2.5">
-<span class="material-symbols-outlined text-[#38bdf8] text-[24px]">photo_camera</span>
-<span class="text-white font-['Raleway'] font-bold text-base sm:text-lg tracking-tight">SERGIO RICARDO MOLINA</span>
-</div>
-<a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#2a2a2a] hover:border-[#38bdf8] bg-[#181818] hover:bg-[#202020] text-xs font-semibold text-[#c0c7cf] hover:text-white transition-all shadow-sm active:scale-95" href="eventos.html">
-<span class="material-symbols-outlined text-[16px]">arrow_back</span>
-<span>Volver a Eventos</span>
-</a>
-</div>
-</header>
-<!-- Contenido Central -->
-<main class="w-full max-w-7xl mx-auto p-4 sm:p-6 md:p-8 space-y-6 flex-1">
-<!-- Hero / Título de Galería -->
-<div class="space-y-2">
-<div class="flex flex-wrap items-center gap-2">
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-[#004466]/40 border border-[#0088cc]/60 text-[#38bdf8] uppercase tracking-wider">
-<span class="material-symbols-outlined text-[13px]">shield</span>
-<span>Galería Oficial con Escudo Anti-Screenshot</span>
-</span>
-<span class="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 bg-emerald-950/30 px-2 py-0.5 rounded border border-emerald-800/40">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-<span>Efecto Pantalla Negra Activo</span>
-</span>
-</div>
-<h1 class="text-2xl sm:text-4xl font-['Raleway'] font-bold text-white tracking-tight" id="lblTituloGaleria">
+  </div>
+
+  <!-- Toast Disuasivo de Seguridad -->
+  <div id="toastSecurity" class="fixed top-5 left-1/2 -translate-x-1/2 z-[10000] -translate-y-24 opacity-0 transition-all duration-200 pointer-events-none flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#181818]/95 border border-red-500/80 text-white shadow-2xl backdrop-blur-md">
+    <span class="material-symbols-outlined text-red-400 text-[20px]">security</span>
+    <span class="text-xs font-mono font-medium" id="toastSecurityMsg">Escudo Anti-Screenshot: Captura bloqueada a negro.</span>
+  </div>
+
+  <!-- Header Superior -->
+  <header class="w-full bg-[#141414] border-b border-[#242424] sticky top-0 z-40">
+    <div class="flex justify-between items-center w-full px-4 md:px-6 max-w-7xl mx-auto h-16">
+      <div class="flex items-center gap-2.5">
+        <span class="material-symbols-outlined text-[#38bdf8] text-[24px]">photo_camera</span>
+        <span class="text-white font-headline font-bold text-base sm:text-lg tracking-tight">SERGIO RICARDO MOLINA</span>
+      </div>
+      <a href="eventos.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#2a2a2a] hover:border-[#38bdf8] bg-[#181818] hover:bg-[#202020] text-xs font-semibold text-[#c0c7cf] hover:text-white transition-all shadow-sm active:scale-95">
+        <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+        <span>Volver a Eventos</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Contenido Central -->
+  <main class="w-full max-w-7xl mx-auto p-4 sm:p-6 md:p-8 space-y-6 flex-1">
+    
+    <!-- Hero / Título de Galería -->
+    <div class="space-y-2">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-[#004466]/40 border border-[#0088cc]/60 text-[#38bdf8] uppercase tracking-wider">
+          <span class="material-symbols-outlined text-[13px]">verified_user</span>
+          <span>Galería Oficial Protegida</span>
+        </span>
+        <span class="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 bg-emerald-950/30 px-2 py-0.5 rounded border border-emerald-800/40">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Protección Inteligente Activa</span>
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-4xl font-headline font-bold text-white tracking-tight" id="lblTituloGaleria">
         Cargando Galería Oficial...
       </h1>
-<p class="text-xs sm:text-sm text-[#888888] max-w-2xl leading-relaxed">
+      <p class="text-xs sm:text-sm text-[#888888] max-w-2xl leading-relaxed">
         Seleccione las fotografías deseadas en copia impresa, archivo digital o ambas modalidades. Confirme su pedido directo al WhatsApp oficial de Sergio Ricardo Molina.
       </p>
-</div>
-<!-- Banner Didáctico: Resolución técnica del delay en Android/Motorola + Blindaje Tap-to-Peek -->
-<div class="bg-[#141d24] border border-[#005580]/50 rounded-2xl p-3.5 sm:p-4 text-xs font-mono text-[#9bccf4] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
-<div class="flex items-start gap-2.5">
-<span class="material-symbols-outlined text-[#38bdf8] text-[20px] shrink-0 mt-0.5">touch_app</span>
-<div>
-<span class="font-bold text-white uppercase tracking-wider block text-[11px]">Protección Activa "Touch &amp; Hold" (Sin retardo de captura en Android)</span>
-<span class="text-[#8dbee6] text-[11px] block mt-0.5">
-            Mantenga apoyado el dedo sobre cualquier foto para visualizarla. En Android (Motorola/Brave/Chrome), al disparar captura el sistema corta el tacto al instante, volviendo a censura negra antes del screenshot.
-          </span>
-</div>
-</div>
-<div class="shrink-0 flex items-center gap-1.5 text-[10px] text-emerald-400 bg-black/40 px-2.5 py-1 rounded-lg border border-emerald-500/30 font-semibold self-end sm:self-auto">
-<span class="material-symbols-outlined text-[14px]">verified_user</span>
-<span>Blindaje 0ms Latencia</span>
-</div>
-</div>
-<!-- Banner Oficial de Tarifas -->
-<div class="bg-[#181818] border border-[#262626] rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-[#141414] border border-[#2e2e2e] flex items-center justify-center text-[#38bdf8]">
-<span class="material-symbols-outlined text-[22px]">payments</span>
-</div>
-<div>
-<span class="text-[10px] font-mono text-[#888888] uppercase tracking-wider block">Lista de Precios y Tarifas Oficiales</span>
-<p class="text-xs sm:text-sm text-white font-semibold flex flex-wrap items-center gap-x-3 gap-y-1 mt-0.5">
-<span>📷 Copia Impresa 15x21 cm: <strong class="text-[#facc15] font-mono font-bold" id="lblTarifaImpresa">$7.500</strong></span>
-<span class="text-[#444444]">•</span>
-<span>☁️ Archivo Digital HD: <strong class="text-[#38bdf8] font-mono font-bold" id="lblTarifaDigital">$2.500</strong></span>
-</p>
-</div>
-</div>
-<div class="flex items-center gap-2 text-xs font-mono text-[#777777] border-t md:border-t-0 pt-2 md:pt-0 border-[#222222]">
-<span class="material-symbols-outlined text-amber-400 text-[18px]">workspace_premium</span>
-<span>Papel fotográfico químico Fuji Crystal Archive • Garantía Sergio Molina</span>
-</div>
-</div>
-<!-- Cuadrícula Dinámica de Fotos Reales (Google Drive) con Blindaje Touch & Hold -->
-<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 pt-2" id="gridFotos">
-<div class="col-span-full py-20 text-center text-[#888888]">
-<div class="w-8 h-8 border-2 border-[#38bdf8] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-<p class="text-sm font-semibold text-white">Conectando con álbum oficial de Drive...</p>
-</div>
-</div>
-</main>
-<!-- Barra Fija Flotante Inferior de Pedido y WhatsApp -->
-<div class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-24px)] max-w-4xl z-40 bg-[#161616]/95 border border-[#005580] rounded-2xl p-3 sm:p-4 shadow-2xl backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-3 transition-all duration-300" id="barraFlotantePedido">
-<div class="flex items-center justify-between w-full sm:w-auto gap-4">
-<div class="flex items-center gap-2.5">
-<span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-<div class="flex flex-col text-left font-mono">
-<span class="text-xs text-white font-bold" id="lblConteoSeleccion">0 fotos seleccionadas</span>
-<span class="text-[11px] text-[#888888]" id="lblTotalCalculado">Total: $0</span>
-</div>
-</div>
-<button class="text-xs font-mono text-[#888888] hover:text-white underline transition-colors cursor-pointer" onclick="limpiarSeleccion()">
+
+      <!-- Panel Informativo de Navegación Fluida -->
+      <div class="p-3.5 rounded-xl bg-[#141d26] border border-[#005580]/60 flex items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[#38bdf8] text-[22px] shrink-0">swipe</span>
+          <div class="flex flex-col text-left">
+            <span class="text-white font-semibold uppercase tracking-wider text-[11px]">Navegación Fluida & Selección Rápida</span>
+            <span class="text-[#8899a6] text-[11px] leading-relaxed">Toque cualquier foto o el icono de lupa para verla en pantalla completa. Deslice a la izquierda o derecha para explorar todas las tomas del evento con total soltura.</span>
+          </div>
+        </div>
+        <span class="hidden sm:inline-flex px-2.5 py-1 rounded bg-[#004466]/40 text-[#38bdf8] font-mono text-[10px] shrink-0 border border-[#0088cc]/40">
+          Exploración Optimizada
+        </span>
+      </div>
+    </div>
+
+    <!-- Banner Oficial de Tarifas -->
+    <div class="bg-[#181818] border border-[#262626] rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-[#141414] border border-[#2e2e2e] flex items-center justify-center text-[#38bdf8]">
+          <span class="material-symbols-outlined text-[22px]">payments</span>
+        </div>
+        <div>
+          <span class="text-[10px] font-mono text-[#888888] uppercase tracking-wider block">Lista de Precios y Tarifas Oficiales</span>
+          <p class="text-xs sm:text-sm text-white font-semibold flex flex-wrap items-center gap-x-3 gap-y-1 mt-0.5">
+            <span>📷 Copia Impresa 15x21 cm: <strong class="text-[#facc15] font-mono font-bold" id="lblTarifaImpresa">$7.500</strong></span>
+            <span class="text-[#444444]">•</span>
+            <span>☁️ Archivo Digital HD: <strong class="text-[#38bdf8] font-mono font-bold" id="lblTarifaDigital">$2.500</strong></span>
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-xs font-mono text-[#777777] border-t md:border-t-0 pt-2 md:pt-0 border-[#222222]">
+        <span class="material-symbols-outlined text-amber-400 text-[18px]">workspace_premium</span>
+        <span>Papel fotográfico químico Fuji Crystal Archive • Garantía Sergio Molina</span>
+      </div>
+    </div>
+
+    <!-- Cuadrícula Dinámica de Fotos -->
+    <div id="gridFotos" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 pt-2">
+      <div class="col-span-full py-20 text-center text-[#888888]">
+        <div class="w-8 h-8 border-2 border-[#38bdf8] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+        <p class="text-sm font-semibold text-white">Conectando con álbum oficial de Drive...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Barra Fija Flotante Inferior de Pedido y WhatsApp -->
+  <div id="barraFlotantePedido" class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-24px)] max-w-4xl z-40 bg-[#161616]/95 border border-[#005580] rounded-2xl p-3 sm:p-4 shadow-2xl backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-3 transition-all duration-300">
+    <div class="flex items-center justify-between w-full sm:w-auto gap-4">
+      <div class="flex items-center gap-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <div class="flex flex-col text-left font-mono">
+          <span class="text-xs text-white font-bold" id="lblConteoSeleccion">0 fotos seleccionadas</span>
+          <span class="text-[11px] text-[#888888]" id="lblTotalCalculado">Total: $0</span>
+        </div>
+      </div>
+      <button onclick="limpiarSeleccion()" class="text-xs font-mono text-[#888888] hover:text-white underline transition-colors cursor-pointer">
         Vaciar
       </button>
-</div>
-<div class="flex items-center gap-2.5 w-full sm:w-auto">
-<button class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#22c55e] hover:bg-[#16a34a] text-black font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95 cursor-pointer" onclick="enviarPedidoWhatsApp()">
-<span class="material-symbols-outlined text-[18px]">chat</span>
-<span>Enviar Pedido por WhatsApp</span>
-</button>
-</div>
-</div>
-<!-- Visor Modal Ampliado en Alta Resolución con Blindaje Anti-Screenshot y Controles de Navegación -->
-<div class="hidden fixed inset-0 z-50 bg-[#000000]/95 backdrop-blur-2xl flex items-center justify-center p-2 sm:p-4" id="modalVisor" onclick="cerrarVisorFondo(event)">
-<button class="absolute top-4 right-4 z-50 p-2.5 rounded-full bg-[#181818]/90 text-[#aaaaaa] hover:text-white border border-[#333333] transition-colors cursor-pointer shadow-lg" onclick="cerrarVisor()">
-<span class="material-symbols-outlined text-[20px]">close</span>
-</button>
-<button class="absolute left-3 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-[#181818]/90 hover:bg-[#222222] text-white border border-[#333333] hidden sm:flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-lg" onclick="cambiarFoto(-1, event)">
-<span class="material-symbols-outlined text-[24px]">chevron_left</span>
-</button>
-<button class="absolute right-3 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-[#181818]/90 hover:bg-[#222222] text-white border border-[#333333] hidden sm:flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-lg" onclick="cambiarFoto(1, event)">
-<span class="material-symbols-outlined text-[24px]">chevron_right</span>
-</button>
-<!-- Contenedor Interactivo con Escudo Touch & Hold en Modal -->
-<div class="relative max-w-4xl max-h-[85vh] overflow-hidden rounded-xl bg-black border border-[#242424] shadow-2xl flex items-center justify-center select-none" id="visorTouchContainer">
-<!-- Imagen de Alta Calidad -->
-<img alt="Muestra Oficial" class="shield-protected max-w-full max-h-[85vh] object-contain" id="imgVisorAmpliada" src=""/>
-<!-- Micro-malla protectora continua invisible a la vista pero distorsionadora en screenshots -->
-<div class="security-mesh-pattern absolute inset-0 pointer-events-none z-10 opacity-30"></div>
-<!-- Marca de agua diagonal que invalida la extracción gráfica -->
-<div class="watermark-diagonal z-20">
-<span>© SERGIO RICARDO MOLINA • MUESTRA OFICIAL</span>
-</div>
-<!-- Firma discreta institucional en la esquina inferior izquierda -->
-<div class="absolute bottom-3 left-3 pointer-events-none z-20 flex items-center gap-1.5 px-2.5 py-1 rounded bg-black/80 backdrop-blur-sm border border-white/10 text-white font-mono text-[11px]">
-<span class="text-[#38bdf8]">Sergio Molina</span>
-<span>•</span>
-<span id="lblVisorNombreArchivo">#foto.jpg</span>
-</div>
-<!-- Botones táctiles inferiores para móviles (Anterior / Siguiente) -->
-<div class="absolute bottom-3 right-3 z-30 flex sm:hidden items-center gap-2">
-<button class="w-8 h-8 rounded-full bg-black/80 border border-white/20 text-white flex items-center justify-center text-xs active:scale-90" onclick="cambiarFoto(-1, event)">
-<span class="material-symbols-outlined text-[16px]">chevron_left</span>
-</button>
-<button class="w-8 h-8 rounded-full bg-black/80 border border-white/20 text-white flex items-center justify-center text-xs active:scale-90" onclick="cambiarFoto(1, event)">
-<span class="material-symbols-outlined text-[16px]">chevron_right</span>
-</button>
-</div>
-</div>
-</div>
-<script>
-    // =========================================================================
-    // CREDENCIALES OFICIALES (SUPABASE & GOOGLE DRIVE API)
-    // =========================================================================
+    </div>
+
+    <div class="flex items-center gap-2.5 w-full sm:w-auto">
+      <button onclick="enviarPedidoWhatsApp()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#22c55e] hover:bg-[#16a34a] text-black font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95 cursor-pointer">
+        <span class="material-symbols-outlined text-[18px]">chat</span>
+        <span>Enviar Pedido por WhatsApp</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Visor Modal Ampliado: Limpio Sin Marca de Agua y con Swipe Fluido -->
+  <div id="modalVisor" class="hidden fixed inset-0 z-50 bg-[#000000]/98 backdrop-blur-2xl flex items-center justify-center p-2 sm:p-4" onclick="cerrarVisorFondo(event)">
+    <button onclick="cerrarVisor()" class="absolute top-4 right-4 z-50 p-2.5 rounded-full bg-[#181818]/80 text-[#aaaaaa] hover:text-white border border-[#333333] transition-colors cursor-pointer">
+      <span class="material-symbols-outlined text-[20px]">close</span>
+    </button>
+    
+    <button onclick="cambiarFoto(-1, event)" class="absolute left-3 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-[#181818]/80 hover:bg-[#222222] text-white border border-[#333333] hidden sm:flex items-center justify-center transition-all active:scale-90 cursor-pointer">
+      <span class="material-symbols-outlined text-[24px]">chevron_left</span>
+    </button>
+    
+    <button onclick="cambiarFoto(1, event)" class="absolute right-3 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-[#181818]/80 hover:bg-[#222222] text-white border border-[#333333] hidden sm:flex items-center justify-center transition-all active:scale-90 cursor-pointer">
+      <span class="material-symbols-outlined text-[24px]">chevron_right</span>
+    </button>
+
+    <div class="relative max-w-4xl max-h-[85vh] overflow-hidden rounded-xl bg-black border border-[#242424] shadow-2xl flex items-center justify-center select-none" id="contenedorVisorModal">
+      <!-- Imagen ampliada limpia sin marcas invasivas -->
+      <img id="imgVisorAmpliada" src="" alt="Fotografía Oficial" class="shield-protected max-w-full max-h-[85vh] object-contain">
+      
+      <!-- Firma sobria institucional en la esquina inferior izquierda -->
+      <div class="absolute bottom-3 left-3 pointer-events-none flex items-center gap-1.5 px-2.5 py-1 rounded bg-black/80 backdrop-blur-sm border border-white/10 text-white font-mono text-[11px] z-30">
+        <span class="text-[#38bdf8]">Sergio Molina</span>
+        <span>•</span>
+        <span id="lblVisorNombreArchivo">#foto.jpg</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
     const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
     const API_KEY_DRIVE = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
@@ -305,34 +239,15 @@
     let tituloEvento = 'Galería Oficial';
     let folderIdActual = '';
 
-    // Coordenadas táctiles para swipe en modal visor móvil
-    let touchStartX = 0;
-    let touchEndX = 0;
-
     // =========================================================================
-    // 🛡️ 1. SISTEMA ANTI-SCREENSHOT CON PROTECCIÓN INSTANTÁNEA (0ms LATENCIA)
-    //
-    // ANÁLISIS DEL PROBLEMA EN DISPOSITIVOS ANDROID (Motorola, Xiaomi, Samsung con Brave / Chrome):
-    // Cuando el usuario presiona los botones físicos (Power + Vol Down) o ejecuta el
-    // gesto de tres dedos de Motorola, el kernel y el compositor de pantalla de Android
-    // (SurfaceFlinger) congelan la superficie de la ventana gráfica ANTES de despachar
-    // los eventos de cambio de contexto a la aplicación web (Brave/Chrome).
-    // Por ello, los eventos clásicos 'blur' o 'visibilitychange' sufren un retraso intrínseco
-    // de entre 200ms y 500ms en el navegador. En ese intervalo, Android ya capturó el framebuffer.
-    //
-    // SOLUCIÓN TÉCNICA DEFINITIVA IMPLEMENTADA:
-    // A) En reposo, la imagen posee una capa protectora con censura "Tap to Peek" y micro-malla SVG.
-    // B) Al presionar los botones físicos o deslizar 3 dedos, el sistema operativo corta inmediatamente
-    //    el pipeline multitouch (disparando touchcancel y pointercancel de 0 milisegundos).
-    // C) Sin transiciones CSS (transition: none !important), todas las imágenes colapsan a negro
-    //    absoluto (display: none / filter: brightness(0)) antes de que el SO grabe el screenshot.
+    // 🛡️ 1. DETECCIÓN ANTI-SCREENSHOT CALIBRADA (SIN BLOQUEO DE SCROLL)
     // =========================================================================
     function activarEfectoPantallaNegra() {
-      // Bloqueo de menú contextual
+      // Bloqueo de Clic Derecho
       document.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         activarBlackoutTemporal();
-        mostrarToastSeguridad('⚠️ Clic secundario bloqueado: Fotografías protegidas por autor.');
+        mostrarToastSeguridad('⚠️ Clic derecho bloqueado: Fotografías protegidas por autor.');
       });
 
       // Bloqueo de arrastre de imágenes
@@ -342,12 +257,16 @@
         }
       });
 
-      // Teclas físicas en desktop (PrintScreen, F12, Ctrl+P, etc.)
+      // Teclas físicas de PrintScreen / Snapshot
       window.addEventListener('keyup', (e) => {
         if (e.key === 'PrintScreen' || e.key === 'Snapshot') {
           activarBlackoutTemporal();
           mostrarToastSeguridad('🛡️ Captura bloqueada a negro (Blackout Shield Activo).');
-          limpiarPortapapeles();
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText('');
+            }
+          } catch (_) {}
         }
       });
 
@@ -358,8 +277,6 @@
 
         if (key === 'PrintScreen') {
           activarBlackoutTemporal();
-          mostrarToastSeguridad('🛡️ Captura neutralizada por el sistema.');
-          limpiarPortapapeles();
         }
 
         if (
@@ -369,21 +286,11 @@
         ) {
           e.preventDefault();
           activarBlackoutTemporal();
-          mostrarToastSeguridad('🛡️ Acción bloqueada por derechos de autor.');
           return false;
         }
       });
 
-      // DETECCIÓN INSTANTÁNEA EN ANDROID (TOUCHCANCEL / POINTERCANCEL / BLUR)
-      window.addEventListener('touchcancel', () => {
-        // En Motorola y Brave, la combinación física Power+VolDown cancela el toque en 0ms
-        colapsarTodasLasFotos();
-      }, { passive: true });
-
-      window.addEventListener('pointercancel', () => {
-        colapsarTodasLasFotos();
-      }, { passive: true });
-
+      // Al perder el foco (activación del menú de recorte de pantalla o cambio de app)
       window.addEventListener('blur', () => {
         activarBlackoutTemporal();
       });
@@ -395,21 +302,12 @@
       });
     }
 
-    function colapsarTodasLasFotos() {
-      // Retira inmediatamente la clase de revelado táctil en todas las tarjetas
-      document.querySelectorAll('.tarjeta-foto').forEach(card => {
-        card.classList.remove('touch-revealed');
-      });
-      // Oculta imágenes al instante sin transiciones
+    function activarBlackoutTemporal() {
       document.querySelectorAll('#gridFotos img, #modalVisor img').forEach(img => {
         img.classList.add('blackout-active');
       });
       const shield = document.getElementById('blackoutShieldOverlay');
       if (shield) shield.classList.remove('hidden');
-    }
-
-    function activarBlackoutTemporal() {
-      colapsarTodasLasFotos();
     }
 
     function desactivarBlackoutManual() {
@@ -420,14 +318,6 @@
       if (shield) shield.classList.add('hidden');
     }
 
-    function limpiarPortapapeles() {
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText('');
-        }
-      } catch (_) {}
-    }
-
     let toastTimer = null;
     function mostrarToastSeguridad(msg) {
       const toast = document.getElementById('toastSecurity');
@@ -435,14 +325,14 @@
       if (!toast || !txt) return;
 
       txt.textContent = msg;
-      toast.classList.remove('-translate-y-28', 'opacity-0');
+      toast.classList.remove('-translate-y-24', 'opacity-0');
       toast.classList.add('translate-y-0', 'opacity-100');
 
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => {
         toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('-translate-y-28', 'opacity-0');
-      }, 3500);
+        toast.classList.add('-translate-y-24', 'opacity-0');
+      }, 3000);
     }
 
     // =========================================================================
@@ -473,7 +363,6 @@
       document.getElementById('lblTarifaDigital').textContent = `$${TARIFA_DIGITAL.toLocaleString('es-AR')}`;
     }
 
-    // Extractor universal de ID de Google Drive
     function extraerIdDrive(input) {
       if (!input) return '';
       const str = decodeURIComponent(String(input)).trim();
@@ -491,7 +380,6 @@
     async function cargarGaleria() {
       await sincronizarTarifas();
       activarEfectoPantallaNegra();
-      configurarSwipeModal();
 
       const params = new URLSearchParams(window.location.search);
       const paramTitulo = params.get('titulo');
@@ -500,7 +388,6 @@
       const paramDrive = params.get('drive');
       const paramKey = params.get('key');
 
-      // Si viene con clave asignada, redirigir a la vista privada
       if (paramKey && paramKey.trim().length > 0) {
         window.location.href = `privadas.html?key=${encodeURIComponent(paramKey)}&id=${encodeURIComponent(paramId || paramFolder || '')}&titulo=${encodeURIComponent(paramTitulo || '')}`;
         return;
@@ -513,19 +400,16 @@
 
       let folderId = '';
 
-      // 1. Extraer ID directo de parámetros ?folder= o ?drive=
       if (paramFolder && paramFolder.trim().length > 5) {
         folderId = extraerIdDrive(paramFolder);
       } else if (paramDrive && paramDrive.trim().length > 5) {
         folderId = extraerIdDrive(paramDrive);
       }
 
-      // 2. Si ?id= es un ID largo de Drive directo (> 18 caracteres no numérico puro)
       if (!folderId && paramId && paramId.trim().length > 18 && isNaN(paramId)) {
         folderId = extraerIdDrive(paramId);
       }
 
-      // 3. Consultar Supabase por ID numérico o identificador
       if (!folderId && paramId) {
         try {
           if (window.supabase) {
@@ -548,7 +432,6 @@
         }
       }
 
-      // 4. Si aún no hay folderId, tomar la última galería pública registrada en Supabase
       if (!folderId && window.supabase) {
         try {
           const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -568,7 +451,6 @@
         } catch (_) {}
       }
 
-      // 5. Fallback a Respaldo Local (localStorage 'galerias_locales')
       if (!folderId) {
         try {
           const locales = JSON.parse(localStorage.getItem('galerias_locales') || '[]');
@@ -585,7 +467,6 @@
         } catch (_) {}
       }
 
-      // 6. Fallback final si paramId era una URL directa
       if (!folderId && paramId) {
         folderId = extraerIdDrive(paramId);
       }
@@ -600,10 +481,12 @@
     }
 
     // =========================================================================
-    // 3. CARGA COMPLETA Y ROBUSTA DE FOTOS DESDE GOOGLE DRIVE (HASTA 2000 FOTOS)
+    // 3. CARGA DE FOTOS DESDE GOOGLE DRIVE
     // =========================================================================
     async function cargarFotosCompletas(folderId) {
+      const grid = document.getElementById('gridFotos');
       listaFotos = [];
+
       let pageToken = '';
       let totalCargadas = 0;
 
@@ -648,7 +531,7 @@
 
       } catch (e) {
         console.error('Error al consultar Drive:', e);
-        mostrarErrorDrive('No se pudieron descargar las fotos de Drive. Verificá que la carpeta esté compartida en modo público ("Cualquier persona que tenga el vínculo puede ver").');
+        mostrarErrorDrive('No se pudieron descargar las fotos de Drive. Verificá que la carpeta esté compartida como pública (cualquier persona con el enlace puede ver).');
       }
     }
 
@@ -698,7 +581,7 @@
     }
 
     // =========================================================================
-    // 4. RENDERIZADO CON CAPA "TOUCH & HOLD" / TAP TO PEEK
+    // 4. RENDERIZADO DE CUADRÍCULA CON SCROLL FLUIDO
     // =========================================================================
     function renderizarCuadricula() {
       const grid = document.getElementById('gridFotos');
@@ -709,54 +592,28 @@
         const nombreDisplay = foto.name.startsWith('#') ? foto.name : `#${foto.name}`;
 
         const card = document.createElement('div');
-        card.className = `tarjeta-foto relative bg-[#181818] border rounded-2xl overflow-hidden flex flex-col justify-between transition-all shadow-md select-none ${itemCarrito.impresa || itemCarrito.digital ? 'border-[#38bdf8] bg-[#14222d]' : 'border-[#262626] hover:border-[#005580]'}`;
+        card.className = `tarjeta-foto bg-[#181818] border rounded-2xl overflow-hidden flex flex-col justify-between transition-all shadow-md ${itemCarrito.impresa || itemCarrito.digital ? 'border-[#38bdf8] bg-[#14222d]' : 'border-[#262626] hover:border-[#005580]'}`;
         card.id = `card-foto-${foto.id}`;
 
         card.innerHTML = `
-          <!-- Área de Visualización Protegida con Touch & Hold -->
-          <div class="visor-area relative aspect-[3/4] bg-[#000000] overflow-hidden cursor-pointer select-none group"
-               onpointerdown="iniciarReveladoTáctil('${foto.id}', event)"
-               onpointerup="finalizarReveladoTáctil('${foto.id}', event)"
-               onpointerleave="finalizarReveladoTáctil('${foto.id}', event)"
-               onpointercancel="finalizarReveladoTáctil('${foto.id}', event)">
+          <div class="relative aspect-[3/4] bg-[#0e0e0e] overflow-hidden cursor-pointer select-none group" 
+               onclick="abrirVisor(${index})">
             
-            <!-- Imagen real de Drive -->
-            <img src="${foto.thumb}" alt="${foto.name}" loading="lazy" class="shield-protected w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src='https://lh3.googleusercontent.com/d/${foto.id}'">
-            
-            <!-- Micro-malla protectora continua invisible al usuario pero distorsionadora en capturas -->
-            <div class="security-mesh-pattern absolute inset-0 pointer-events-none z-10 opacity-25"></div>
+            <!-- Imagen nítida -->
+            <img src="${foto.thumb}" alt="${foto.name}" loading="lazy" class="shield-protected w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 pointer-events-none" onerror="this.src='https://lh3.googleusercontent.com/d/${foto.id}'">
 
-            <!-- Marca de agua diagonal de seguridad -->
-            <div class="watermark-diagonal z-20">
-              <span>SERGIO RICARDO MOLINA</span>
-            </div>
-
-            <!-- Capa permanente "Tap to Peek" / "Reveal on Touch & Hold" -->
-            <div class="peek-curtain absolute inset-0 bg-[#0c0c0c]/85 flex flex-col items-center justify-center p-3 text-center z-25">
-              <span class="material-symbols-outlined text-[#38bdf8] text-[26px] mb-1">touch_app</span>
-              <span class="text-[10px] font-mono font-bold tracking-wider text-white uppercase leading-tight">
-                MANTENGA PARA VER
-              </span>
-              <span class="text-[9px] font-mono text-[#888888] mt-0.5">
-                VISTA PROTEGIDA
-              </span>
-            </div>
-
-            <!-- Etiqueta superior con nombre de archivo -->
-            <div class="absolute top-2.5 left-2.5 z-30 pointer-events-none">
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-black/85 border border-white/10 text-white backdrop-blur-md">
+            <div class="absolute top-2.5 left-2.5 z-20">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-black/80 border border-white/10 text-white backdrop-blur-md">
                 ${nombreDisplay}
               </span>
             </div>
 
-            <!-- Botón de apertura a pantalla completa (Visor HD) -->
-            <button type="button" onclick="abrirVisor(${index}, event)" title="Ampliar en pantalla completa" class="absolute top-2.5 right-2.5 z-30 w-7 h-7 rounded-full bg-black/80 hover:bg-[#005580] text-white flex items-center justify-center transition-colors cursor-pointer border border-white/10 shadow-lg">
+            <button type="button" onclick="abrirVisor(${index}); event.stopPropagation();" class="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full bg-black/70 hover:bg-[#005580] text-white flex items-center justify-center transition-colors">
               <span class="material-symbols-outlined text-[15px]">zoom_in</span>
             </button>
           </div>
 
-          <!-- Botonera de Compra Dual (Impresa / Digital) -->
-          <div class="p-3 bg-[#181818] border-t border-[#222222] space-y-2 select-none">
+          <div class="p-3 bg-[#181818] border-t border-[#222222] space-y-2">
             <div class="grid grid-cols-2 gap-1.5">
               <button type="button" onclick="toggleOpcion('${foto.id}', 'impresa', '${foto.name}', event)" id="btn-imp-${foto.id}" class="py-2 px-1.5 rounded-xl border text-[11px] font-mono font-bold flex flex-col items-center justify-center gap-0.5 transition-all active:scale-95 cursor-pointer ${itemCarrito.impresa ? 'bg-amber-400 border-amber-400 text-black shadow-md' : 'bg-[#141414] border-[#facc15]/60 hover:border-[#facc15] text-[#facc15]'}">
                 <div class="flex items-center gap-1">
@@ -789,23 +646,6 @@
       });
 
       actualizarBarraPedido();
-    }
-
-    // Funciones del mecanismo Touch & Hold (Touch to Reveal)
-    function iniciarReveladoTáctil(id, event) {
-      if (event) event.preventDefault();
-      const card = document.getElementById(`card-foto-${id}`);
-      if (card) {
-        card.classList.add('touch-revealed');
-      }
-    }
-
-    function finalizarReveladoTáctil(id, event) {
-      if (event) event.preventDefault();
-      const card = document.getElementById(`card-foto-${id}`);
-      if (card) {
-        card.classList.remove('touch-revealed');
-      }
     }
 
     function toggleOpcion(fotoId, tipo, nombre, event) {
@@ -905,17 +745,14 @@ Total estimado: $${subtotal.toLocaleString('es-AR')}
     }
 
     // =========================================================================
-    // 6. VISOR MODAL AMPLIO CON SWIPE Y REVELADO
+    // 6. VISOR MODAL AMPLIO CON SWIPE FLUIDO Y SIN MARCA DE AGUA
     // =========================================================================
-    function abrirVisor(index, event) {
-      if (event) event.stopPropagation();
+    function abrirVisor(index) {
       indiceVisor = index;
       const foto = listaFotos[indiceVisor];
       if (!foto) return;
 
-      const img = document.getElementById('imgVisorAmpliada');
-      img.classList.remove('blackout-active');
-      img.src = foto.full;
+      document.getElementById('imgVisorAmpliada').src = foto.full;
       document.getElementById('lblVisorNombreArchivo').textContent = foto.name;
       document.getElementById('modalVisor').classList.remove('hidden');
 
@@ -933,37 +770,29 @@ Total estimado: $${subtotal.toLocaleString('es-AR')}
 
     function cambiarFoto(delta, event) {
       if (event) event.stopPropagation();
-      if (listaFotos.length === 0) return;
       indiceVisor += delta;
       if (indiceVisor < 0) indiceVisor = listaFotos.length - 1;
       if (indiceVisor >= listaFotos.length) indiceVisor = 0;
       abrirVisor(indiceVisor);
     }
 
-    function configurarSwipeModal() {
-      const visor = document.getElementById('visorTouchContainer');
-      if (!visor) return;
+    // Soporte para gestos táctiles Swipe en el visor modal
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const visorEl = document.getElementById('modalVisor');
 
-      visor.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-      }, { passive: true });
+    visorEl.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
 
-      visor.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipeGesture();
-      }, { passive: true });
-    }
-
-    function handleSwipeGesture() {
-      const diffX = touchEndX - touchStartX;
-      if (Math.abs(diffX) > 45) {
-        if (diffX < 0) {
-          cambiarFoto(1); // Deslizar hacia la izquierda -> siguiente
-        } else {
-          cambiarFoto(-1); // Deslizar hacia la derecha -> anterior
-        }
+    visorEl.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX + 45 < touchStartX) {
+        cambiarFoto(1); // Deslizar a la izquierda: siguiente foto
+      } else if (touchEndX > touchStartX + 45) {
+        cambiarFoto(-1); // Deslizar a la derecha: foto anterior
       }
-    }
+    }, { passive: true });
 
     // =========================================================================
     // 7. REGISTRADOR DE MÉTRICAS SILENCIOSO
@@ -990,4 +819,5 @@ Total estimado: $${subtotal.toLocaleString('es-AR')}
 
     window.addEventListener('DOMContentLoaded', cargarGaleria);
   </script>
-</body></html>
+</body>
+</html>
