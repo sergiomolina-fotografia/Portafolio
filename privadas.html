@@ -603,7 +603,60 @@
 </div>
 <footer class="text-center">
 <p>© Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina</p>
-</footer>
+</footer><script>
+  (function() {
+    const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
+    const API_KEY_DRIVE = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
+    const sbClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+    // 1. Detección automática de dispositivo propio y exclusión
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('sergio') === '1' || urlParams.get('admin') === '1' || urlParams.get('ignorar') === '1') {
+        localStorage.setItem('dispositivo_token', 'sergio_molina_master_device');
+        localStorage.setItem('ignorar_visita', 'true');
+        sessionStorage.setItem('es_admin_sergio', 'true');
+        urlParams.delete('sergio');
+        urlParams.delete('admin');
+        urlParams.delete('ignorar');
+        const cleanUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '') + window.location.hash;
+        window.history.replaceState({}, document.title, cleanUrl);
+      }
+    } catch (e) { console.warn('Error gestionando token admin:', e); }
+
+    // 2. Función blindada de registro de visitas y analítica
+    async function registrarVisita(tipo, detalle) {
+      try {
+        if (!sbClient) return;
+        if (localStorage.getItem('ignorar_visita') === 'true' || localStorage.getItem('dispositivo_token') === 'sergio_molina_master_device' || sessionStorage.getItem('es_admin_sergio') === 'true') {
+          return;
+        }
+        const token = localStorage.getItem('dispositivo_token');
+        if (token) {
+          const { data: ignorado } = await sbClient.from('dispositivos_ignorados').select('id').eq('token', token).maybeSingle();
+          if (ignorado) {
+            localStorage.setItem('ignorar_visita', 'true');
+            return;
+          }
+        }
+        const dispositivo = window.innerWidth <= 640 ? 'mobile' : (window.innerWidth <= 1024 ? 'tablet' : 'desktop');
+        await sbClient.from('visitas').insert([{
+          tipo: tipo || 'visita_privada',
+          pagina: 'privadas.html',
+          album_titulo: window.tituloActual || document.getElementById('titulo-galeria')?.innerText || 'Galería Privada',
+          detalle: detalle || 'Acceso a sesión privada',
+          dispositivo: dispositivo,
+          origen: document.referrer || 'directo'
+        }]);
+      } catch (err) {
+        console.warn('Registro de métrica privada omitido:', err);
+      }
+    }
+    window.registrarVisita = registrarVisita;
+    window.registrarMetrica = registrarVisita;
+  })();
+</script>
 <script>
     // CREDENCIALES OFICIALES SUPABASE & GOOGLE DRIVE
     const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
