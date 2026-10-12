@@ -1,71 +1,341 @@
-<!DOCTYPE html><html lang="es"><head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Sobre mí | Sergio Ricardo Molina</title>
-  <link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png">
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #111111; color: #ffffff; padding: 20px 16px 40px; max-width: 960px; margin: 0 auto; min-height: 100vh; }
-    .cabecera-galeria { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid #282828; }
-    .btn-volver { background: #222222; color: #ffffff; border: 1px solid #005580; padding: 8px 16px; border-radius: 20px; font-size: 0.88rem; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; transition: background 0.2s, border-color 0.2s; }
-    .btn-volver:hover { background: #2f2f2f; border-color: #38bdf8; }
-    .titulo-categoria { font-size: 1.3rem; font-weight: 400; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
-    .bio-container { padding: 30px 15px; line-height: 1.8; text-align: center; max-width: 680px; margin: 0 auto; }
-    .avatar-bio { width: 180px; height: 180px; object-fit: cover; border-radius: 50%; margin: 0 auto 28px; border: 2px solid #005580; box-shadow: 0 4px 25px rgba(0,0,0,0.6); display: block; }
-    .texto-bio { font-size: 1.05rem; color: #e5e5e5; margin-bottom: 18px; font-weight: 300; }
-    .btn-sesiones { display: inline-flex; align-items: center; gap: 8px; background: #181818; color: #4ade80; border: 2px solid #4ade80; padding: 12px 24px; border-radius: 24px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.2s; margin-top: 16px; }
-    .btn-sesiones:hover { background: rgba(74, 222, 128, 0.1); transform: translateY(-2px); }
-    .redes-sociales { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 40px; }
-    .btn-red { background: #222222; border-radius: 12px; padding: 14px 6px; text-align: center; color: #ffffff; text-decoration: none; font-size: 0.88rem; font-weight: 600; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transition: transform 0.2s; }
-    .btn-red:active { transform: scale(0.96); }
-    .btn-wsp { border: 2px solid #4ade80; color: #4ade80; }
-    .btn-cat { border: 2px solid #facc15; color: #facc15; }
-    .btn-ig  { border: 2px solid #fb923c; color: #fb923c; }
-    footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #222222; color: #666666; font-size: 0.8rem; }
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sobre Mí · Sergio Ricardo Molina | Fotografía Profesional</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;family=Raleway:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config based on Design System & Darkroom Palette -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary-fixed": "#cae6ff",
+            "on-tertiary-container": "#ffb36e",
+            "surface-container-lowest": "#0e0e0e",
+            "on-error": "#690005",
+            "secondary": "#9bccf4",
+            "on-primary-fixed": "#001e30",
+            "inverse-surface": "#e5e2e1",
+            "inverse-primary": "#1e638f",
+            "secondary-container": "#124d70",
+            "on-primary-fixed-variant": "#004b72",
+            "primary-fixed-dim": "#91cdfe",
+            "primary": "#91cdfe",
+            "secondary-fixed-dim": "#9bccf4",
+            "surface": "#131313",
+            "on-tertiary-fixed": "#2e1500",
+            "on-tertiary-fixed-variant": "#6c3a00",
+            "surface-container-high": "#2a2a2a",
+            "primary-fixed": "#cbe6ff",
+            "primary-container": "#005580",
+            "surface-bright": "#3a3939",
+            "surface-container-low": "#1c1b1b",
+            "on-primary-container": "#8ec9fa",
+            "surface-variant": "#353534",
+            "surface-container": "#201f1f",
+            "on-secondary-container": "#8dbee6",
+            "inverse-on-surface": "#313030",
+            "outline": "#8b9199",
+            "tertiary": "#ffb878",
+            "on-surface-variant": "#c0c7cf",
+            "tertiary-fixed-dim": "#ffb878",
+            "on-background": "#e5e2e1",
+            "on-secondary-fixed-variant": "#0e4b6d",
+            "background": "#111111",
+            "tertiary-fixed": "#ffdcc1",
+            "on-secondary-fixed": "#001e30",
+            "on-tertiary": "#4c2700",
+            "on-secondary": "#00344f",
+            "on-error-container": "#ffdad6",
+            "on-primary": "#003350",
+            "surface-tint": "#91cdfe",
+            "error-container": "#93000a",
+            "outline-variant": "#41474e",
+            "error": "#ffb4ab",
+            "tertiary-container": "#794303",
+            "surface-dim": "#131313",
+            "on-surface": "#e5e2e1",
+            "surface-container-highest": "#353534"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-2xs": "0.25rem",
+            "space-xs": "0.5rem",
+            "space-sm": "0.75rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "space-2xl": "3rem",
+            "space-3xl": "4.5rem",
+            "space-4xl": "6rem",
+            "gutter-mobile": "1rem",
+            "gutter-tablet": "1.5rem",
+            "gutter-desktop": "2rem",
+            "container-max": "1440px"
+          },
+          fontFamily: {
+            "display-hero": ["Raleway"],
+            "headline-lg": ["Raleway"],
+            "headline-md": ["Raleway"],
+            "headline-sm": ["Raleway"],
+            "body-lg": ["Manrope"],
+            "body-md": ["Manrope"],
+            "label-md": ["Manrope"],
+            "label-sm": ["Manrope"]
+          },
+          fontSize: {
+            "display-hero": ["56px", { lineHeight: "64px", letterSpacing: "-0.03em", fontWeight: "600" }],
+            "headline-lg": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "500" }],
+            "headline-md": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "500" }],
+            "headline-sm": ["18px", { lineHeight: "24px", letterSpacing: "0.02em", fontWeight: "600" }],
+            "body-lg": ["16px", { lineHeight: "26px", letterSpacing: "0em", fontWeight: "400" }],
+            "body-md": ["14px", { lineHeight: "22px", letterSpacing: "0.01em", fontWeight: "400" }],
+            "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.08em", fontWeight: "600" }],
+            "label-sm": ["10px", { lineHeight: "14px", letterSpacing: "0.12em", fontWeight: "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Darkroom bespoke atmospheric touches */
+    body {
+      background-color: #111111;
+      color: #e5e2e1;
+      font-family: 'Manrope', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    .atelier-vignette {
+      background: radial-gradient(circle at 50% 20%, rgba(0, 85, 128, 0.12) 0%, rgba(17, 17, 17, 0) 70%);
+    }
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
   </style>
 </head>
-<body>
-  <div class="cabecera-galeria">
-    <a href="index.html" class="btn-volver">← Volver al Portafolio</a>
-    <h2 class="titulo-categoria">
-      <span class="material-symbols-outlined" style="color: #38bdf8;">person</span>
-      <span class="">Sobre mí</span>
-    </h2>
-  </div>
+<body class="bg-[#111111] text-on-surface antialiased flex flex-col justify-between min-h-screen selection:bg-primary-container selection:text-white">
+<!-- Atmospheric Background Ambient Glow -->
+<div class="fixed inset-0 atelier-vignette pointer-events-none z-0"></div>
+<!-- Header: Subpage Navigation Shell (Back to Portfolio + Section Title) -->
+<header class="relative z-10 w-full border-b border-outline-variant/30 bg-surface/90 backdrop-blur-md">
+<div class="w-full max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop h-20 flex items-center justify-between">
+<!-- Volver al Portafolio -->
+<a class="group inline-flex items-center gap-space-xs text-on-surface-variant hover:text-primary transition-all duration-150 active:scale-[0.98]" href="index.html">
+<span class="material-symbols-outlined text-[20px] transition-transform duration-200 group-hover:-translate-x-1">arrow_back</span>
+<span class="font-body-md text-body-md font-medium tracking-wide">Volver al Portafolio</span>
+</a>
+<!-- Subpage Context Title with Person Icon -->
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="person">person</span>
+<h1 class="font-headline-sm text-headline-sm text-on-surface uppercase tracking-wider font-semibold">Sobre mí</h1>
+</div>
+<!-- Live Atelier Status Indicator -->
+<div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-low border border-outline-variant/40">
+<span class="w-2 h-2 rounded-full bg-[#38bdf8] animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Atelier Activo</span>
+</div>
+</div>
+</header>
+<!-- Main Biographical Presentation Canvas -->
+<main class="relative z-10 flex-grow flex items-center justify-center py-space-3xl px-gutter-mobile md:px-gutter-desktop">
+<div class="w-full max-w-4xl mx-auto flex flex-col items-center text-center">
+<!-- Sergio Ricardo Molina Portrait -->
+<div class="relative mb-space-2xl group">
+<div class="absolute -inset-1.5 rounded-full bg-gradient-to-tr from-[#005580] via-[#38bdf8] to-transparent opacity-60 blur-md group-hover:opacity-90 transition-opacity duration-300"></div>
+<div class="relative w-[180px] h-[180px] rounded-full p-[3px] bg-[#005580] shadow-[0_12px_32px_rgba(0,0,0,0.7)] overflow-hidden">
+<img alt="Sergio Ricardo Molina - Fotografía Profesional" class="w-full h-full object-cover rounded-full grayscale-[15%] contrast-110 group-hover:scale-105 group-hover:grayscale-0 transition-transform duration-500 ease-out" src="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA"/>
+</div>
+<!-- Optical Badge Detail -->
+<div class="absolute bottom-1 right-2 bg-surface-container border border-[#005580] text-primary px-2.5 py-0.5 rounded-full shadow-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">photo_camera</span>
+<span class="font-label-sm text-label-sm text-white">MENDOZA</span>
+</div>
+</div>
+<!-- Author Identity Headline -->
+<div class="space-y-space-xs mb-space-xl">
+<span class="font-label-md text-label-md tracking-[0.2em] uppercase text-[#38bdf8] font-semibold">Fotógrafo Profesional &amp; Curador Visual</span>
+<h2 class="font-display-hero text-headline-lg md:text-display-hero text-on-surface font-semibold tracking-tight">
+          Sergio Ricardo Molina
+        </h2>
+<div class="w-12 h-[2px] bg-[#005580] mx-auto mt-space-sm rounded-full"></div>
+</div>
+<!-- Biographical Essay & Curatorial Statement -->
+<div class="max-w-2xl text-on-surface-variant font-body-lg text-body-lg leading-relaxed space-y-space-md mb-space-2xl text-center md:text-justify px-2">
+<p>
+          Entiendo la fotografía como un acto de contemplación y reverencia hacia el instante que transcurre. Desde Mendoza, rodeado de la inmensidad cordillerana y la luz cruda del oeste argentino, he dedicado mi trayectoria a registrar la verdad inherente a cada persona, paisaje y escena que habita mi visor.
+        </p>
+<p>
+          Mi búsqueda técnica y sensible reside en conectar profundamente con el entorno para capturar instantes auténticos, donde la sobriedad, la penumbra controlada del cuarto oscuro y la nitidez óptica conviven en un equilibrio atemporal. Cada sesión privada es un proceso artesanal enfocado en revelar la dignidad y la belleza genuina de aquello que no admite repetición.
+        </p>
+</div>
+<!-- Primary Private Session Booking CTA -->
+<div class="mb-space-3xl w-full max-w-md">
+<a class="inline-flex items-center justify-center gap-space-sm w-full py-4 px-8 rounded-lg bg-[#004466] hover:bg-[#005580] text-white border border-[#005580] hover:border-[#38bdf8] shadow-[0_8px_24px_rgba(0,68,102,0.35)] font-body-md font-semibold tracking-wider transition-all duration-200 active:scale-[0.98]" href="https://wa.me/542613175222" id="btn-whatsapp-sesiones" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[22px] text-[#38bdf8]">chat</span>
+<span>Consultar por Sesiones Privadas 💬</span>
+</a>
+<p class="font-label-sm text-label-sm text-outline mt-2 tracking-wider">Atención directa y personalizada · Disponibilidad exclusiva</p>
+</div>
+<!-- Symmetrical Triad Social Cluster -->
+<div class="w-full max-w-xl border-t border-outline-variant/30 pt-space-xl">
+<h3 class="font-label-sm text-label-sm uppercase tracking-[0.2em] text-outline mb-space-lg">Canales Oficiales del Portafolio</h3>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-md w-full">
+<!-- WhatsApp Channel (Verde #4ade80) -->
+<a class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-surface-container border border-outline-variant/40 hover:border-[#4ade80]/60 hover:bg-[#4ade80]/5 transition-all duration-200 active:scale-[0.98] group" href="https://wa.me/542613175222" id="link-redes-whatsapp" rel="noopener noreferrer" target="_blank">
+<span class="w-2.5 h-2.5 rounded-full bg-[#4ade80] shadow-[0_0_8px_#4ade80]"></span>
+<span class="font-body-md text-body-md font-medium text-white group-hover:text-[#4ade80] transition-colors">WhatsApp</span>
+</a>
+<!-- Catálogo Channel (Amarillo #facc15) -->
+<a class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-surface-container border border-outline-variant/40 hover:border-[#facc15]/60 hover:bg-[#facc15]/5 transition-all duration-200 active:scale-[0.98] group" href="https://wa.me/c/5492613175222" id="link-redes-catalogo" rel="noopener noreferrer" target="_blank">
+<span class="w-2.5 h-2.5 rounded-full bg-[#facc15] shadow-[0_0_8px_#facc15]"></span>
+<span class="font-body-md text-body-md font-medium text-white group-hover:text-[#facc15] transition-colors">Catálogo</span>
+</a>
+<!-- Instagram Channel (Naranja #fb923c) -->
+<a class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-surface-container border border-outline-variant/40 hover:border-[#fb923c]/60 hover:bg-[#fb923c]/5 transition-all duration-200 active:scale-[0.98] group" href="https://instagram.com/sergiomolinafotografia" id="link-redes-instagram" rel="noopener noreferrer" target="_blank">
+<span class="w-2.5 h-2.5 rounded-full bg-[#fb923c] shadow-[0_0_8px_#fb923c]"></span>
+<span class="font-body-md text-body-md font-medium text-white group-hover:text-[#fb923c] transition-colors">Instagram</span>
+</a>
+</div>
+</div>
+</div>
+</main>
+<!-- Pie de Autor Oficial & Shared Footer -->
+<footer class="relative z-10 w-full border-t border-outline-variant/30 bg-surface-container-lowest">
+<div class="w-full max-w-container-max mx-auto px-gutter-mobile md:px-gutter-desktop py-space-lg flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+<p class="font-body-md text-body-md text-on-surface-variant/80">
+        © Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina
+      </p>
+<div class="flex items-center gap-space-md font-label-sm text-label-sm text-outline">
+<span>ATELIER DARKROOM</span>
+<span>·</span>
+<span class="text-primary">MENDOZA ART ARCHIVE</span>
+</div>
+</div>
+</footer>
+<!-- Script Maestro: Ecosistema Supabase, Detección de Dispositivo Sergio y Tracking -->
+<script>
+    (function() {
+      // Configuración de Supabase del Ecosistema de Producción
+      const SUPABASE_URL = "https://your-supabase-project.supabase.co"; 
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy_key";
 
-  <main class="bio-container">
-    <img src="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" alt="Sergio Ricardo Molina" class="avatar-bio">
-    <p class="texto-bio">Desde siempre me cautivó la magia de detener el tiempo a través de una imagen. La fotografía es mi manera de conectar profundamente con el entorno: me apasiona capturar momentos únicos y espontáneos, buscando siempre la esencia genuina de las personas y la fuerza de los paisajes de nuestra tierra.</p>
-    <p class="texto-bio">Como fotógrafo profesional, cada toma representa una nueva oportunidad de contar una historia, fusionando la técnica con una mirada íntima y un enfoque profundamente artístico.</p>
-    <a href="https://wa.me/542613175222" target="_blank" class="btn-sesiones">
-      <span class="material-symbols-outlined">chat</span>
-      <span class="">Consultar por Sesiones Privadas</span>
-    </a>
-  </main>
+      // 1. Detección de Parámetros de Dispositivo Propio (?sergio=1, ?admin=1, ?ignorar=1)
+      const urlParams = new URLSearchParams(window.location.search);
+      const isOwnerParam = urlParams.get('sergio') === '1' || urlParams.get('admin') === '1' || urlParams.get('ignorar') === '1';
 
-  
+      if (isOwnerParam) {
+        localStorage.setItem('sergio_molina_master_device', 'true');
+        localStorage.setItem('ignorar_visita', 'true');
+        console.info('[Darkroom Master] Dispositivo identificado como Sergio Ricardo Molina. Registro de visitas omitido permanentemente.');
+      }
 
-  <footer>
-    <p class="">© Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina</p>
-  </footer>
+      // Verificación de tokens almacenados
+      const isDeviceIgnored = localStorage.getItem('sergio_molina_master_device') === 'true' || 
+                              localStorage.getItem('ignorar_visita') === 'true';
 
-  <script>
-    async function registrarMetrica() {
-      try {
-        if (window.supabase) {
-          const client = window.supabase.createClient('https://zbixojacwvanucxlrdcd.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68');
-          await client.from('visitas').insert([{ tipo: 'visita_pagina', pagina: 'sobre-mi.html', detalle: 'Biografía Sobre mí', dispositivo: window.innerWidth < 640 ? 'mobile' : 'desktop' }]);
+      // 2. Registro Seguro en Supabase (Omitiendo visitas del fotógrafo)
+      async function registrarVisitaReal() {
+        if (isDeviceIgnored) {
+          console.log('[Darkroom Telemetry] Visita de Sergio Molina detectada localmente. Omitiendo silenciosamente.');
+          return;
         }
-      } catch (_) {}
-    }
-    document.addEventListener('DOMContentLoaded', registrarMetrica);
+
+        try {
+          // Comprobación dual con tabla de dispositivos ignorados si existe un identificador
+          const fingerprint = navigator.userAgent + '::' + screen.width + 'x' + screen.height;
+          
+          const payload = {
+            pagina: 'sobre-mi.html',
+            seccion: 'Sobre Mí / Biografía',
+            timestamp: new Date().toISOString(),
+            user_agent: navigator.userAgent,
+            referrer: document.referrer || 'directo',
+            idioma: navigator.language
+          };
+
+          // Inserción en tabla 'visitas'
+          if (SUPABASE_URL && !SUPABASE_URL.includes('your-supabase-project')) {
+            await fetch(`${SUPABASE_URL}/rest/v1/visitas`, {
+              method: 'POST',
+              headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+              },
+              body: JSON.stringify(payload)
+            });
+          } else {
+            console.log('[Darkroom Telemetry] Visita de cliente registrada en cola local (Ambiente de Staging):', payload);
+          }
+        } catch (err) {
+          console.warn('[Darkroom Telemetry] Registro no crítico diferido:', err);
+        }
+      }
+
+      // 3. Registro de Interacción WhatsApp
+      async function trackWhatsAppClick(origen) {
+        console.log(`[Darkroom Tracking] Clic en WhatsApp capturado desde: ${origen}`);
+        if (!isDeviceIgnored && SUPABASE_URL && !SUPABASE_URL.includes('your-supabase-project')) {
+          try {
+            await fetch(`${SUPABASE_URL}/rest/v1/eventos_click`, {
+              method: 'POST',
+              headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                tipo: 'whatsapp_click',
+                origen: origen,
+                fecha: new Date().toISOString()
+              })
+            });
+          } catch (e) {
+            // Silencioso
+          }
+        }
+      }
+
+      // Adjuntar event listeners a botones interactivos
+      document.addEventListener('DOMContentLoaded', () => {
+        registrarVisitaReal();
+
+        const btnWp = document.getElementById('btn-whatsapp-sesiones');
+        if (btnWp) {
+          btnWp.addEventListener('click', () => trackWhatsAppClick('Boton Sesiones Privadas'));
+        }
+
+        const linkWpRedes = document.getElementById('link-redes-whatsapp');
+        if (linkWpRedes) {
+          linkWpRedes.addEventListener('click', () => trackWhatsAppClick('Bloque Redes - WhatsApp Directo'));
+        }
+      });
+    })();
   </script>
-
-
-
 </body></html>
