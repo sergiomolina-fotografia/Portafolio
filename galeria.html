@@ -7,861 +7,860 @@
 <link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Raleway:wght@500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Raleway:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-    * { 
-      box-sizing: border-box; 
-      -webkit-tap-highlight-color: transparent;
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        screens: {
+          'xs': '480px',
+          'sm': '640px',
+          'md': '768px',
+          'lg': '1024px',
+          'xl': '1280px'
+        },
+        extend: {
+          colors: {
+            "primary": "#91cdfe",
+            "primary-container": "#005580",
+            "surface": "#131313",
+            "surface-container": "#181818",
+            "surface-container-high": "#222222",
+            "outline": "#8b9199",
+            "on-surface": "#e5e2e1",
+            "on-surface-variant": "#c0c7cf"
+          },
+          fontFamily: {
+            sans: ['Manrope', 'sans-serif'],
+            headline: ['Raleway', 'sans-serif']
+          }
+        }
+      }
     }
+  </script>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background-color: #111111;
       color: #e5e2e1;
       font-family: 'Manrope', sans-serif;
-      min-height: 100vh;
+      -webkit-tap-highlight-color: transparent;
       user-select: none;
       -webkit-user-select: none;
-      -webkit-touch-callout: none;
-      overscroll-behavior-y: contain;
     }
-    
-    .shield-protected {
-      user-select: none;
+
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #141414;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #2b2b2b;
+      border-radius: 4px;
+    }
+
+    /* Blindaje anti-descarga y anti-copia */
+    .unselectable {
       -webkit-user-drag: none;
-      pointer-events: auto;
+      user-select: none;
+      pointer-events: none;
     }
 
-    /* Estado de blackout temporal inteligente */
-    .blackout-active {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-      transition: none !important;
-    }
-
-    /* Impresión estrictamente bloqueada */
-    @media print {
-      body * {
-        visibility: hidden !important;
-        display: none !important;
-      }
-      body::before {
-        content: "FOTOGRAFÍA PROTEGIDA • SERGIO RICARDO MOLINA • DERECHOS RESERVADOS";
-        visibility: visible !important;
-        display: flex !important;
-        position: fixed;
-        inset: 0;
-        background: #000000 !important;
-        color: #ffffff !important;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Manrope', sans-serif;
-        font-size: 18px;
-        text-align: center;
-        padding: 40px;
-      }
+    /* Marca de agua agresiva con trama diagonal */
+    .watermark-pattern {
+      background-image: repeating-linear-gradient(
+        -35deg,
+        rgba(0, 0, 0, 0) 0,
+        rgba(0, 0, 0, 0) 40px,
+        rgba(255, 255, 255, 0.12) 41px,
+        rgba(0, 0, 0, 0) 43px
+      );
     }
   </style>
 </head>
-<body class="bg-[#111111] text-[#e5e2e1] min-h-screen flex flex-col justify-between selection:bg-[#005580] selection:text-white pb-36">
-<!-- Cortina Negra Inteligente Anti-Screenshot -->
-<div class="hidden fixed inset-0 z-[99999] bg-[#000000] flex flex-col items-center justify-center p-6 text-center select-none" id="blackoutShieldOverlay">
-<div class="w-16 h-16 rounded-full bg-[#161616] border border-red-500/80 flex items-center justify-center text-red-500 mb-4 animate-pulse shadow-2xl">
-<span class="material-symbols-outlined text-[32px]">shield</span>
-</div>
-<h3 class="text-xl sm:text-2xl font-bold font-['Raleway'] text-white mb-2 tracking-wide uppercase">
-      FOTOGRAFÍA PROTEGIDA
-    </h3>
-<p class="text-xs sm:text-sm text-[#888888] max-w-md leading-relaxed font-mono mb-4">
-      SERGIO RICARDO MOLINA · CONTENIDO BLOQUEADO POR DERECHOS DE AUTOR.<br/>
-      Para obtener copias en alta resolución, encargá tu pedido impreso o digital oficial.
-    </p>
-<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#181818] border border-[#333333] text-xs font-mono text-[#38bdf8] mb-6">
-<span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-<span>Captura neutralizada por el sistema</span>
-</div>
-<button class="px-5 py-2.5 rounded-xl bg-[#1c1c1c] hover:bg-[#252525] text-[#c0c7cf] hover:text-white text-xs font-semibold border border-[#333333] transition-all active:scale-95 cursor-pointer" onclick="desactivarBlackoutManual()">
-      Continuar viendo la galería
-    </button>
-</div>
-<!-- Toast Disuasivo de Seguridad con Alerta Técnica -->
-<div class="fixed top-4 left-1/2 -translate-x-1/2 z-[10000] -translate-y-28 opacity-0 transition-all duration-200 pointer-events-none flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#141414]/95 border border-red-500/80 text-white shadow-2xl backdrop-blur-md max-w-[90vw]" id="toastSecurity">
-<span class="material-symbols-outlined text-red-400 text-[20px] shrink-0">security</span>
-<span class="text-xs font-mono font-medium leading-tight text-left" id="toastSecurityMsg">Escudo Anti-Screenshot: Captura bloqueada a negro.</span>
-</div>
-<!-- Header Superior -->
-<header class="w-full bg-[#141414] border-b border-[#242424] sticky top-0 z-40">
+<body class="bg-[#111111] text-[#e5e2e1] min-h-screen flex flex-col antialiased selection:bg-[#005580] selection:text-white pb-28 md:pb-32">
+<!-- Header Superior con Logo y Retorno -->
+<header class="w-full bg-[#131313] border-b border-[#222222] sticky top-0 z-40">
 <div class="flex justify-between items-center w-full px-4 md:px-6 max-w-7xl mx-auto h-16">
-<div class="flex items-center gap-2.5">
-<span class="material-symbols-outlined text-[#38bdf8] text-[24px]">photo_camera</span>
-<span class="text-white font-['Raleway'] font-bold text-base sm:text-lg tracking-tight">SERGIO RICARDO MOLINA</span>
-</div>
-<a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#2a2a2a] hover:border-[#38bdf8] bg-[#181818] hover:bg-[#202020] text-xs font-semibold text-[#c0c7cf] hover:text-white transition-all shadow-sm active:scale-95" href="eventos.html">
-<span class="material-symbols-outlined text-[16px]">arrow_back</span>
-<span>Volver a Eventos</span>
+<div class="flex items-center gap-3">
+<a class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#333333] hover:border-[#444444] bg-[#181818] text-xs font-medium text-[#c0c7cf] hover:text-white transition-all" href="eventos.html">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span class="hidden sm:inline">Volver a Eventos</span>
+<span class="sm:hidden">Eventos</span>
+</a>
+<div class="h-5 w-[1px] bg-[#222222]"></div>
+<a class="flex items-center gap-2 hover:opacity-80 transition-opacity" href="index.html">
+<img alt="Sergio Ricardo Molina" class="w-7 h-7 rounded-full object-cover border border-[#333333]" src="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA"/>
+<span class="text-xs sm:text-sm font-semibold text-white tracking-wide truncate max-w-[150px] sm:max-w-xs md:max-w-md" id="headerTitle">
+          SERGIO RICARDO MOLINA
+        </span>
 </a>
 </div>
+<div class="flex items-center gap-2 sm:gap-3">
+<!-- Indicador de Dispositivo Excluido si está en modo admin / ignorar -->
+<div class="hidden items-center gap-1.5 px-2 py-0.5 bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-mono rounded" id="badge-dispositivo-ignorado">
+<span class="material-symbols-outlined text-[12px]">visibility_off</span>
+<span>ADMIN OMITIDO</span>
+</div>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#181818] border border-sky-800/60 text-[#38bdf8] text-[11px] font-semibold rounded-full uppercase tracking-wider">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+<span class="hidden xs:inline">Galería Oficial</span>
+<span class="xs:hidden">Oficial</span>
+</div>
+</div>
+</div>
 </header>
-<!-- Contenido Central -->
-<main class="w-full max-w-7xl mx-auto p-4 sm:p-6 md:p-8 space-y-6 flex-1">
-<!-- Hero / Título de Galería -->
-<div class="space-y-2">
-<div class="flex flex-wrap items-center gap-2">
-<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-[#004466]/40 border border-[#0088cc]/60 text-[#38bdf8] uppercase tracking-wider">
-<span class="material-symbols-outlined text-[13px]">shield</span>
-<span>Galería Oficial Protegida</span>
-</span>
-<span class="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 bg-emerald-950/30 px-2 py-0.5 rounded border border-emerald-800/40">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-<span>Protección Inteligente Activa</span>
-</span>
+<!-- Contenido Principal -->
+<main class="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 md:p-8">
+<!-- Encabezado de la Galería -->
+<div class="mb-6">
+<div class="flex flex-wrap items-center gap-2 mb-2">
+<span class="px-2.5 py-0.5 bg-[#005580]/40 border border-[#005580] text-[#38bdf8] text-[11px] font-semibold rounded uppercase tracking-wider">
+          Catálogo Escolar Oficial
+        </span>
+<span class="text-xs text-[#8b9199]" id="albumSubtitle">Fotografía Profesional de Laboratorio</span>
 </div>
-<h1 class="text-2xl sm:text-4xl font-['Raleway'] font-bold text-white tracking-tight" id="lblTituloGaleria">
-        Cargando Galería Oficial...
+<h1 class="text-xl sm:text-2xl md:text-3xl font-headline font-bold text-white tracking-tight" id="galleryTitle">
+        Cargando álbum...
       </h1>
-<p class="text-xs sm:text-sm text-[#888888] max-w-2xl leading-relaxed">
-        Seleccione las fotografías deseadas en copia impresa, archivo digital o ambas modalidades. Confirme su pedido directo al WhatsApp oficial de Sergio Ricardo Molina.
+<p class="text-xs sm:text-sm text-[#c0c7cf] mt-1.5 max-w-3xl leading-relaxed">
+        Seleccioná tus fotografías en formato impreso químico o digital HD. Podés marcar ambas opciones en cada imagen. Al finalizar, confirmá tu pedido directo por WhatsApp con comprobante instantáneo.
       </p>
+<!-- Banner de Tarifas Sincronizado en Vivo -->
+<div class="mt-4 p-3 sm:p-4 rounded-xl bg-[#181818] border border-[#222222] flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-[#111111] border border-[#292929] flex items-center justify-center text-[#38bdf8]">
+<span class="material-symbols-outlined text-[20px]">payments</span>
 </div>
-<!-- Banner Informativo de Navegación y Calidad -->
-<div class="bg-[#141d24] border border-[#005580]/50 rounded-2xl p-3.5 sm:p-4 text-xs font-mono text-[#9bccf4] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg"><div class="flex items-start gap-2.5">
-<span class="material-symbols-outlined text-[#38bdf8] text-[20px] shrink-0 mt-0.5">shield_with_heart</span>
 <div>
-<span class="font-bold text-white uppercase tracking-wider block text-[11px]">Protección Calibrada &amp; Navegación Total</span>
-<span class="text-[#8dbee6] text-[11px] block mt-0.5">
-            Deslice verticalmente con total fluidez. Toque cualquier foto para enfocarla o ampliarla en alta fidelidad. Escudo anti-captura activo en 0ms.
+<div class="text-[#8b9199] text-[11px] uppercase tracking-wider font-semibold">Tarifas Vigentes</div>
+<div class="font-bold text-white flex items-center gap-2 mt-0.5">
+<span>Copia Impresa 15x21: <strong class="text-[#facc15]" id="lbl-tarifa-impresa">$7.500</strong></span>
+<span class="text-[#8b9199]">•</span>
+<span>Digital HD: <strong class="text-[#38bdf8]" id="lbl-tarifa-digital">$2.500</strong></span>
+</div>
+</div>
+</div>
+<div class="text-[11px] text-[#8b9199] hidden md:flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-emerald-400">check_circle</span>
+<span>Valores sincronizados con base de datos</span>
+</div>
+</div>
+</div>
+<!-- Estado de Carga -->
+<div class="text-center py-16 px-4 bg-[#141414] border border-[#222222] rounded-2xl" id="loadingBox">
+<div class="w-10 h-10 border-2 border-[#38bdf8] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+<h3 class="text-sm sm:text-base font-semibold text-white">Sincronizando fotografías oficiales...</h3>
+<p class="text-xs text-[#8b9199] mt-1">Consultando repositorio de alta resolución en Google Drive y Supabase</p>
+</div>
+<!-- Estado de Error o Vacío -->
+<div class="hidden text-center py-16 px-4 bg-[#141414] border border-[#222222] rounded-2xl" id="emptyBox">
+<span class="material-symbols-outlined text-4xl text-[#8b9199] mb-2">hide_image</span>
+<h3 class="text-base font-semibold text-white">No se encontraron fotografías disponibles</h3>
+<p class="text-xs text-[#8b9199] mt-1 max-w-md mx-auto">La carpeta especificada no contiene imágenes públicas o los permisos de Google Drive aún no se han propagado.</p>
+<div class="mt-4 flex items-center justify-center gap-3">
+<button class="px-4 py-2 bg-[#181818] border border-[#333333] hover:border-[#555555] text-xs font-semibold rounded-lg text-white" onclick="location.reload()">
+          Reintentar
+        </button>
+<a class="px-4 py-2 bg-[#005580] text-xs font-semibold rounded-lg text-white" href="eventos.html">
+          Ver Otros Eventos
+        </a>
+</div>
+</div>
+<!-- Cuadrícula de Fotografías (2 Columnas en Móvil, 4 en Desktop) -->
+<div class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4" id="galleryGrid">
+<!-- Inyectado dinámicamente -->
+</div>
+</main>
+<!-- Barra Fija Inferior de Pedido y WhatsApp -->
+<div class="fixed bottom-0 left-0 right-0 z-40 bg-[#131313]/95 backdrop-blur-md border-t border-[#222222] p-3 sm:p-4 shadow-2xl" id="bottomOrderBar">
+<div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+<!-- Resumen de Selección -->
+<div class="flex items-center justify-between w-full sm:w-auto gap-4">
+<div class="flex items-center gap-2 text-xs sm:text-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-[#38bdf8] animate-pulse"></span>
+<span class="font-bold text-white" id="selectionCountText">0 fotos seleccionadas</span>
+<span class="text-[#8b9199] font-mono font-semibold" id="selectionTotalText">($0)</span>
+</div>
+<button class="text-[11px] text-[#8b9199] hover:text-red-400 underline transition-colors" onclick="limpiarSeleccion()" type="button">Vaciar todo</button>
+</div>
+<!-- Botón de Envío Directo WhatsApp -->
+<div class="w-full sm:w-auto flex items-center gap-2">
+<button class="w-full sm:w-auto px-5 py-2.5 min-h-[44px] rounded-xl bg-[#25d366] hover:bg-[#20ba5a] text-black font-headline font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-black/50 active:scale-95 transition-all" onclick="enviarPedidoWhatsApp()" type="button"><span class="material-symbols-outlined text-[20px]">chat</span><span>Enviar Pedido por WhatsApp</span></button>
+</div>
+</div>
+</div>
+<!-- Modal Visor Ampliado con Blindaje y Marca de Agua -->
+<div class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between items-center p-4" id="photoModal">
+<!-- Barra superior del visor -->
+<div class="w-full flex items-center justify-between text-xs text-[#8b9199] z-50">
+<span class="font-mono text-white truncate max-w-[200px] sm:max-w-md" id="modalFilename">Foto</span>
+<button class="w-10 h-10 rounded-full bg-[#181818] border border-[#292929] flex items-center justify-center text-white hover:text-red-400 active:scale-90 transition-all" onclick="cerrarVisor()" type="button">
+<span class="material-symbols-outlined text-[22px]">close</span>
+</button>
+</div>
+<!-- Área de imagen con marca de agua agresiva y blur protector -->
+<div class="relative flex-1 w-full max-h-[78vh] flex items-center justify-center my-2 overflow-hidden" onclick="cerrarVisorFondo(event)">
+<!-- Imagen -->
+<img alt="Vista previa oficial" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl unselectable pointer-events-none" id="modalImage" src=""/>
+<!-- Trama protectora y texto de marca de agua -->
+<div class="absolute inset-0 watermark-pattern pointer-events-none flex flex-col items-center justify-center gap-2">
+<div class="bg-black/60 border border-white/20 backdrop-blur-xs px-4 py-2 rounded-lg -rotate-12 text-center shadow-2xl">
+<span class="block font-headline font-extrabold text-white text-xs sm:text-base tracking-widest uppercase">
+            MUESTRA OFICIAL • SERGIO MOLINA
+          </span>
+<span class="block text-[10px] sm:text-xs text-[#38bdf8] font-semibold tracking-wider uppercase mt-0.5">
+            PROHIBIDA SU COPIA O CAPTURA
           </span>
 </div>
 </div>
-<div class="shrink-0 flex items-center gap-1.5 text-[10px] text-emerald-400 bg-black/40 px-2.5 py-1 rounded-lg border border-emerald-500/30 font-semibold self-end sm:self-auto">
-<span class="material-symbols-outlined text-[14px]">verified_user</span>
-<span>Escudo Equilibrado Activo</span>
-</div></div>
-<!-- Banner Oficial de Tarifas -->
-<div class="bg-[#181818] border border-[#262626] rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-[#141414] border border-[#2e2e2e] flex items-center justify-center text-[#38bdf8]">
-<span class="material-symbols-outlined text-[22px]">payments</span>
-</div>
-<div>
-<span class="text-[10px] font-mono text-[#888888] uppercase tracking-wider block">Lista de Precios y Tarifas Oficiales</span>
-<p class="text-xs sm:text-sm text-white font-semibold flex flex-wrap items-center gap-x-3 gap-y-1 mt-0.5">
-<span>📷 Copia Impresa 15x21 cm: <strong class="text-[#facc15] font-mono font-bold" id="lblTarifaImpresa">$7.500</strong></span>
-<span class="text-[#444444]">•</span>
-<span>☁️ Archivo Digital HD: <strong class="text-[#38bdf8] font-mono font-bold" id="lblTarifaDigital">$2.500</strong></span>
-</p>
-</div>
-</div>
-<div class="flex items-center gap-2 text-xs font-mono text-[#777777] border-t md:border-t-0 pt-2 md:pt-0 border-[#222222]">
-<span class="material-symbols-outlined text-amber-400 text-[18px]">workspace_premium</span>
-<span>Papel fotográfico químico Fuji Crystal Archive • Garantía Sergio Molina</span>
-</div>
-</div>
-<!-- Cuadrícula Dinámica de Fotos Reales (Google Drive) con Desplazamiento Fluido -->
-<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 pt-2" id="gridFotos">
-<div class="col-span-full py-20 text-center text-[#888888]">
-<div class="w-8 h-8 border-2 border-[#38bdf8] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-<p class="text-sm font-semibold text-white">Conectando con álbum oficial de Drive...</p>
-</div>
-</div>
-</main>
-<!-- Barra Fija Flotante Inferior de Pedido y WhatsApp -->
-<div class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-24px)] max-w-4xl z-40 bg-[#161616]/95 border border-[#005580] rounded-2xl p-3 sm:p-4 shadow-2xl backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-3 transition-all duration-300" id="barraFlotantePedido">
-<div class="flex items-center justify-between w-full sm:w-auto gap-4">
-<div class="flex items-center gap-2.5">
-<span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-<div class="flex flex-col text-left font-mono">
-<span class="text-xs text-white font-bold" id="lblConteoSeleccion">0 fotos seleccionadas</span>
-<span class="text-[11px] text-[#888888]" id="lblTotalCalculado">Total: $0</span>
-</div>
-</div>
-<button class="text-xs font-mono text-[#888888] hover:text-white underline transition-colors cursor-pointer" onclick="limpiarSeleccion()">
-        Vaciar
-      </button>
-</div>
-<div class="flex items-center gap-2.5 w-full sm:w-auto">
-<button class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#22c55e] hover:bg-[#16a34a] text-black font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95 cursor-pointer" onclick="enviarPedidoWhatsApp()">
-<span class="material-symbols-outlined text-[18px]">chat</span>
-<span>Enviar Pedido por WhatsApp</span>
+<!-- Navegación lateral táctil y desktop -->
+<button class="absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center z-50 active:scale-90 transition-all" onclick="cambiarFoto(-1, event)" type="button">
+<span class="material-symbols-outlined text-[26px]">chevron_left</span>
+</button>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center z-50 active:scale-90 transition-all" onclick="cambiarFoto(1, event)" type="button">
+<span class="material-symbols-outlined text-[26px]">chevron_right</span>
 </button>
 </div>
+<!-- Controles de selección dentro del visor -->
+<div class="w-full max-w-sm flex items-center justify-center gap-2 p-2 bg-[#181818] border border-[#292929] rounded-xl z-50" id="modalControlsBox">
+<!-- Se inyecta botón dual según la foto activa -->
 </div>
-<!-- Visor Modal Ampliado en Alta Resolución 100% Limpio y Nítido (Sin marcas invasivas) -->
-<div class="hidden fixed inset-0 z-50 bg-[#000000]/95 backdrop-blur-2xl flex items-center justify-center p-2 sm:p-4" id="modalVisor" onclick="cerrarVisorFondo(event)">
-<button class="absolute top-4 right-4 z-50 p-2.5 rounded-full bg-[#181818]/90 text-[#aaaaaa] hover:text-white border border-[#333333] transition-colors cursor-pointer shadow-lg" onclick="cerrarVisor()">
-<span class="material-symbols-outlined text-[20px]">close</span>
-</button>
-<button class="absolute left-3 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-[#181818]/90 hover:bg-[#222222] text-white border border-[#333333] hidden sm:flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-lg" onclick="cambiarFoto(-1, event)">
-<span class="material-symbols-outlined text-[24px]">chevron_left</span>
-</button>
-<button class="absolute right-3 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-[#181818]/90 hover:bg-[#222222] text-white border border-[#333333] hidden sm:flex items-center justify-center transition-all active:scale-90 cursor-pointer shadow-lg" onclick="cambiarFoto(1, event)">
-<span class="material-symbols-outlined text-[24px]">chevron_right</span>
-</button>
-<!-- Contenedor Interactivo de Imagen con Swipe Táctil -->
-<div class="relative max-w-4xl max-h-[85vh] overflow-hidden rounded-xl bg-black border border-[#242424] shadow-2xl flex items-center justify-center select-none" id="visorTouchContainer"><!-- Imagen de Alta Calidad con renderizado protegido -->
-<img alt="Fotografía Oficial" class="shield-protected max-w-full max-h-[85vh] object-contain transition-opacity duration-150" id="imgVisorAmpliada" src=""/>
-<!-- Malla óptica sutil de interferencia sobre el visor -->
-<div class="absolute inset-0 pointer-events-none z-10 flex items-center justify-center overflow-hidden select-none" style="background: repeating-linear-gradient(45deg, rgba(255,255,255,0.035), rgba(255,255,255,0.035) 1px, transparent 1px, transparent 28px), repeating-linear-gradient(-45deg, rgba(0,0,0,0.18), rgba(0,0,0,0.18) 1px, transparent 1px, transparent 28px);"><div class="text-center transform -rotate-45 px-4 py-2 border border-white/20 bg-black/60 backdrop-blur-sm rounded-lg shadow-2xl"><p class="text-[11px] sm:text-xs font-mono font-bold tracking-widest text-white/80 uppercase">MUESTRA OFICIAL • SERGIO MOLINA</p><p class="text-[9px] sm:text-[10px] font-mono tracking-wider text-[#38bdf8]/80 uppercase mt-0.5">PROHIBIDA SU REPRODUCCIÓN O DESCARGA</p></div></div>
-<!-- Firma sutil institucional en la esquina inferior izquierda -->
-<div class="absolute bottom-3 left-3 pointer-events-none z-20 flex items-center gap-1.5 px-2.5 py-1 rounded bg-black/80 backdrop-blur-sm border border-white/10 text-white font-mono text-[11px]">
-<span class="text-[#38bdf8]">Sergio Ricardo Molina</span>
-<span>•</span>
-<span id="lblVisorNombreArchivo">#foto.jpg</span>
-</div>
-<!-- Botones táctiles inferiores para móviles (Anterior / Siguiente) -->
-<div class="absolute bottom-3 right-3 z-30 flex sm:hidden items-center gap-2">
-<button class="w-8 h-8 rounded-full bg-black/80 border border-white/20 text-white flex items-center justify-center text-xs active:scale-90" onclick="cambiarFoto(-1, event)">
-<span class="material-symbols-outlined text-[16px]">chevron_left</span>
-</button>
-<button class="w-8 h-8 rounded-full bg-black/80 border border-white/20 text-white flex items-center justify-center text-xs active:scale-90" onclick="cambiarFoto(1, event)">
-<span class="material-symbols-outlined text-[16px]">chevron_right</span>
-</button>
-</div></div>
 </div>
 <script>
-    // =========================================================================
-    // CREDENCIALES OFICIALES (SUPABASE & GOOGLE DRIVE API)
-    // =========================================================================
-    const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
+    // Configuración centralizada y credenciales
+    const SUPABASE_URL = 'https://zbixojacwvbanucxlrdcd.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
     const API_KEY_DRIVE = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
 
     let TARIFA_IMPRESA = 7500;
     let TARIFA_DIGITAL = 2500;
-    let WHATSAPP_NUMERO = '5492613175222';
+    let WHATSAPP_OFICIAL = '5492613175222';
 
-    let listaFotos = [];
-    let carrito = new Map();
-    let indiceVisor = 0;
-    let tituloEvento = 'Galería Oficial';
-    let folderIdActual = '';
-
-    // Coordenadas táctiles para swipe fluido en modal visor móvil
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchEndX = 0;
-    let touchEndY = 0;
-
-    // =========================================================================
-    // 🛡️ 1. SISTEMA ANTI-SCREENSHOT INTELIGENTE Y FLUIDO (SIN BLOQUEO AL HACER SCROLL)
-    // =========================================================================
-    function activarEfectoPantallaNegra() {
-      // Bloqueo de menú contextual
-      document.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        mostrarToastSeguridad('⚠️ Clic secundario bloqueado: Fotografías protegidas por autor.');
-      });
-
-      // Bloqueo de arrastre de imágenes
-      document.addEventListener('dragstart', (e) => {
-        if (e.target.tagName === 'IMG' || e.target.closest('.shield-protected')) {
-          e.preventDefault();
-        }
-      });
-
-      // Teclas físicas y atajos de captura en Desktop
-      window.addEventListener('keyup', (e) => {
-        if (e.key === 'PrintScreen' || e.key === 'Snapshot') {
-          activarBlackoutTemporal();
-          mostrarToastSeguridad('🛡️ Captura bloqueada a negro (Blackout Shield Activo).');
-          limpiarPortapapeles();
-        }
-      });
-
-      window.addEventListener('keydown', (e) => {
-        const key = e.key;
-        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-        const ctrlOrMeta = isMac ? e.metaKey : e.ctrlKey;
-
-        if (key === 'PrintScreen' || key === 'Snapshot') {
-          activarBlackoutTemporal();
-          mostrarToastSeguridad('🛡️ Captura neutralizada por el sistema.');
-          limpiarPortapapeles();
-        }
-
-        // Intercepción de comandos de guardado, impresión o herramientas dev
-        if (
-          (ctrlOrMeta && (key === 'p' || key === 'P' || key === 's' || key === 'S' || key === 'u' || key === 'U')) ||
-          (ctrlOrMeta && e.shiftKey && (key === 'I' || key === 'i' || key === 'S' || key === 's' || key === 'C' || key === 'c')) ||
-          e.key === 'F12'
-        ) {
-          e.preventDefault();
-          activarBlackoutTemporal();
-          mostrarToastSeguridad('🛡️ Acción bloqueada por derechos de autor.');
-          return false;
-        }
-      });
-
-      // En 'visibilitychange', si document.hidden es true oscurece la vista,
-      // pero cuando el usuario regresa a la app (document.hidden === false), la pantalla se restaura automáticamente
-      document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-          colapsarTodasLasFotos();
-        } else {
-          desactivarBlackoutManual();
-        }
-      });
+    let supabaseClient = null;
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
 
-    function colapsarTodasLasFotos() {
-      document.querySelectorAll('#gridFotos img, #modalVisor img').forEach(img => {
-        img.classList.add('blackout-active');
-      });
-      const shield = document.getElementById('blackoutShieldOverlay');
-      if (shield) shield.classList.remove('hidden');
+    // ==========================================
+    // BLOQUE MAESTRO DE EXCLUSIÓN DE DISPOSITIVOS
+    // ==========================================
+    let ES_DISPOSITIVO_IGNORADO = false;
+    let dispositivoToken = localStorage.getItem('dispositivo_token') || '';
+
+    if (!dispositivoToken) {
+      dispositivoToken = 'dev_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now().toString(36);
+      localStorage.setItem('dispositivo_token', dispositivoToken);
     }
 
-    function activarBlackoutTemporal() {
-      colapsarTodasLasFotos();
-    }
+    async function verificarExclusionDispositivo() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isMagicParam = urlParams.get('sergio') === '1' || 
+                           urlParams.get('admin') === '1' || 
+                           urlParams.get('ignorar') === '1';
 
-    function desactivarBlackoutManual() {
-      document.querySelectorAll('#gridFotos img, #modalVisor img').forEach(img => {
-        img.classList.remove('blackout-active');
-      });
-      const shield = document.getElementById('blackoutShieldOverlay');
-      if (shield) shield.classList.add('hidden');
-    }
-
-    function limpiarPortapapeles() {
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText('');
-        }
-      } catch (_) {}
-    }
-
-    let toastTimer = null;
-    function mostrarToastSeguridad(msg) {
-      const toast = document.getElementById('toastSecurity');
-      const txt = document.getElementById('toastSecurityMsg');
-      if (!toast || !txt) return;
-
-      txt.textContent = msg;
-      toast.classList.remove('-translate-y-28', 'opacity-0');
-      toast.classList.add('translate-y-0', 'opacity-100');
-
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('-translate-y-28', 'opacity-0');
-      }, 3500);
-    }
-
-    // =========================================================================
-    // 2. SINCRONIZACIÓN DE TARIFAS Y CARGA RESILIENTE DE FOTOS
-    // =========================================================================
-    async function sincronizarTarifas() {
-      try {
-        const storedImp = localStorage.getItem('tarifa_impresa');
-        const storedDig = localStorage.getItem('tarifa_digital');
-        if (storedImp && !isNaN(storedImp)) TARIFA_IMPRESA = Number(storedImp);
-        if (storedDig && !isNaN(storedDig)) TARIFA_DIGITAL = Number(storedDig);
-
-        if (window.supabase) {
-          const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-          const { data } = await client.from('configuracion').select('*').limit(1);
-          if (data && data.length > 0) {
-            const conf = data[0];
-            if (conf.tarifa_impresa) TARIFA_IMPRESA = Number(conf.tarifa_impresa);
-            if (conf.tarifa_digital) TARIFA_DIGITAL = Number(conf.tarifa_digital);
-            if (conf.whatsapp) WHATSAPP_NUMERO = String(conf.whatsapp).replace(/\D/g, '');
-          }
-        }
-      } catch (e) {
-        console.warn('Tarifas fallback:', e);
+      if (isMagicParam) {
+        localStorage.setItem('ignorar_visita', 'true');
+        localStorage.setItem('sergio_master_admin', 'true');
+        dispositivoToken = 'sergio_molina_master_device';
+        localStorage.setItem('dispositivo_token', dispositivoToken);
+        ES_DISPOSITIVO_IGNORADO = true;
       }
 
-      document.getElementById('lblTarifaImpresa').textContent = `$${TARIFA_IMPRESA.toLocaleString('es-AR')}`;
-      document.getElementById('lblTarifaDigital').textContent = `$${TARIFA_DIGITAL.toLocaleString('es-AR')}`;
+      if (localStorage.getItem('ignorar_visita') === 'true' || 
+          localStorage.getItem('sergio_master_admin') === 'true' || 
+          dispositivoToken === 'sergio_molina_master_device') {
+        ES_DISPOSITIVO_IGNORADO = true;
+      }
+
+      // Verificación en Supabase contra tabla dispositivos_ignorados
+      if (supabaseClient && !ES_DISPOSITIVO_IGNORADO) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('dispositivos_ignorados')
+            .select('token')
+            .eq('token', dispositivoToken)
+            .limit(1);
+
+          if (!error && data && data.length > 0) {
+            ES_DISPOSITIVO_IGNORADO = true;
+            localStorage.setItem('ignorar_visita', 'true');
+          }
+        } catch (e) {
+          // Silencioso
+        }
+      }
+
+      // Mostrar badge discreto al dueño/administrador si está excluido
+      if (ES_DISPOSITIVO_IGNORADO) {
+        const badge = document.getElementById('badge-dispositivo-ignorado');
+        if (badge) {
+          badge.classList.remove('hidden');
+          badge.classList.add('inline-flex');
+        }
+      }
+
+      return ES_DISPOSITIVO_IGNORADO;
     }
 
-    // Extractor universal de ID de Google Drive
-    function extraerIdDrive(input) {
+    // Registrador seguro y filtrado de métricas en tabla 'visitas'
+    async function registrarMetrica(tipo, metadata = {}) {
+      if (ES_DISPOSITIVO_IGNORADO) {
+        console.debug(`[Métricas Sergio Molina] Dispositivo propio/admin omitido: "${tipo}"`);
+        return;
+      }
+      if (!supabaseClient) return;
+
+      try {
+        const payload = {
+          evento: tipo, // 'visita_galeria', 'foto_visor_hd', 'clic_whatsapp'
+          galeria_titulo: currentAlbumTitle || 'Evento Escolar Oficial',
+          dispositivo_token: dispositivoToken,
+          url: window.location.href,
+          referrer: document.referrer || '',
+          metadata: metadata,
+          creado_el: new Date().toISOString()
+        };
+
+        await supabaseClient.from('visitas').insert([payload]);
+      } catch (err) {
+        console.warn('Error al registrar métrica:', err);
+      }
+    }
+
+    // Estado local
+    let fotosList = [];
+    let selecciones = {}; // { [id]: { impresa: boolean, digital: boolean, name: string } }
+    let modalIndex = 0;
+    let currentAlbumTitle = 'Evento Escolar Oficial';
+
+    // Parseo seguro de números
+    function parseNumeric(val) {
+      const clean = String(val).replace(/\D/g, '');
+      return clean ? parseInt(clean, 10) : 0;
+    }
+
+    function formatPrice(val) {
+      return '$' + (parseNumeric(val) || 0).toLocaleString('es-AR');
+    }
+
+    function actualizarEtiquetasPrecios() {
+      const elImp = document.getElementById('lbl-tarifa-impresa');
+      const elDig = document.getElementById('lbl-tarifa-digital');
+      if (elImp) elImp.textContent = formatPrice(TARIFA_IMPRESA);
+      if (elDig) elDig.textContent = formatPrice(TARIFA_DIGITAL);
+      actualizarResumenSeleccion();
+    }
+
+    // 1. Sincronización en vivo de Tarifas desde Supabase (tabla configuracion con id=1)
+    async function sincronizarTarifasEnVivo() {
+      // Carga inmediata de respaldo local
+      const localImp = localStorage.getItem('tarifa_impresa');
+      const localDig = localStorage.getItem('tarifa_digital');
+      const localWa = localStorage.getItem('numero_whatsapp');
+
+      if (localImp) TARIFA_IMPRESA = parseNumeric(localImp) || 7500;
+      if (localDig) TARIFA_DIGITAL = parseNumeric(localDig) || 2500;
+      if (localWa) WHATSAPP_OFICIAL = localWa.replace(/\D/g, '');
+
+      actualizarEtiquetasPrecios();
+
+      if (!supabaseClient) return;
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('configuracion')
+          .select('*')
+          .eq('id', 1)
+          .limit(1);
+
+        if (!error && data && data.length > 0) {
+          const conf = data[0];
+          if (conf.tarifa_impresa !== undefined) {
+            TARIFA_IMPRESA = parseNumeric(conf.tarifa_impresa) || 7500;
+            localStorage.setItem('tarifa_impresa', String(TARIFA_IMPRESA));
+          }
+          if (conf.tarifa_digital !== undefined) {
+            TARIFA_DIGITAL = parseNumeric(conf.tarifa_digital) || 2500;
+            localStorage.setItem('tarifa_digital', String(TARIFA_DIGITAL));
+          }
+          if (conf.whatsapp) {
+            WHATSAPP_OFICIAL = String(conf.whatsapp).replace(/\D/g, '');
+            localStorage.setItem('numero_whatsapp', WHATSAPP_OFICIAL);
+          }
+          actualizarEtiquetasPrecios();
+        }
+      } catch (err) {
+        console.warn('Consulta en vivo de tarifas falló, usando local:', err);
+      }
+    }
+
+    // Escuchar sincronizaciones entre pestañas
+    try {
+      if ('BroadcastChannel' in window) {
+        const channel = new BroadcastChannel('tarifas_escolar_channel');
+        channel.onmessage = (e) => {
+          if (e.data && e.data.type === 'TARIFAS_UPDATED') {
+            if (e.data.tarifa_impresa) TARIFA_IMPRESA = parseNumeric(e.data.tarifa_impresa);
+            if (e.data.tarifa_digital) TARIFA_DIGITAL = parseNumeric(e.data.tarifa_digital);
+            if (e.data.whatsapp) WHATSAPP_OFICIAL = String(e.data.whatsapp).replace(/\D/g, '');
+            actualizarEtiquetasPrecios();
+          }
+        };
+      }
+    } catch (_) {}
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'tarifa_impresa' || e.key === 'tarifa_digital' || e.key === 'numero_whatsapp') {
+        sincronizarTarifasEnVivo();
+      }
+    });
+
+    // 2. Extracción de ID de Google Drive
+    function extraerFolderId(input) {
       if (!input) return '';
-      const str = decodeURIComponent(String(input)).trim();
+      const str = String(input).trim();
       const matchFolder = str.match(/folders\/([a-zA-Z0-9_-]+)/);
       if (matchFolder && matchFolder[1]) return matchFolder[1];
       const matchId = str.match(/[?&]id=([a-zA-Z0-9_-]+)/);
       if (matchId && matchId[1]) return matchId[1];
       const matchD = str.match(/\/d\/([a-zA-Z0-9_-]+)/);
       if (matchD && matchD[1]) return matchD[1];
-      const matchLimpio = str.match(/^[a-zA-Z0-9_-]{20,}$/);
-      if (matchLimpio) return matchLimpio[0];
       return str.split('?')[0].split('#')[0].replace(/.*drive\.google\.com\//, '').trim();
     }
 
-    async function cargarGaleria() {
-      await sincronizarTarifas();
-      activarEfectoPantallaNegra();
-      configurarSwipeModal();
+    // 3. Inicialización del Álbum
+    async function inicializarGaleria() {
+      await verificarExclusionDispositivo();
+      await sincronizarTarifasEnVivo();
 
       const params = new URLSearchParams(window.location.search);
-      const paramTitulo = params.get('titulo');
       const paramId = params.get('id');
       const paramFolder = params.get('folder');
-      const paramDrive = params.get('drive');
+      const paramTitulo = params.get('titulo');
       const paramKey = params.get('key');
 
-      // Si viene con clave asignada, redirigir a la vista privada
-      if (paramKey && paramKey.trim().length > 0) {
-        window.location.href = `privadas.html?key=${encodeURIComponent(paramKey)}&id=${encodeURIComponent(paramId || paramFolder || '')}&titulo=${encodeURIComponent(paramTitulo || '')}`;
-        return;
+      if (paramTitulo) {
+        currentAlbumTitle = decodeURIComponent(paramTitulo);
+        const gTitle = document.getElementById('galleryTitle');
+        if (gTitle) gTitle.textContent = currentAlbumTitle;
       }
 
-      if (paramTitulo) {
-        tituloEvento = decodeURIComponent(paramTitulo);
-        document.getElementById('lblTituloGaleria').textContent = tituloEvento;
+      // Si tiene clave privada, redirigir formalmente a privadas.html
+      if (paramKey && paramKey.trim() !== '') {
+        window.location.href = `privadas.html?key=${encodeURIComponent(paramKey)}&id=${encodeURIComponent(paramId || '')}&titulo=${encodeURIComponent(currentAlbumTitle)}`;
+        return;
       }
 
       let folderId = '';
-
-      // 1. Extraer ID directo de parámetros ?folder= o ?drive=
-      if (paramFolder && paramFolder.trim().length > 5) {
-        folderId = extraerIdDrive(paramFolder);
-      } else if (paramDrive && paramDrive.trim().length > 5) {
-        folderId = extraerIdDrive(paramDrive);
+      if (paramFolder) {
+        folderId = extraerFolderId(paramFolder);
+      } else if (paramId) {
+        folderId = extraerFolderId(paramId);
       }
 
-      // 2. Si ?id= es un ID largo de Drive directo (> 18 caracteres no numérico puro)
-      if (!folderId && paramId && paramId.trim().length > 18 && isNaN(paramId)) {
-        folderId = extraerIdDrive(paramId);
-      }
-
-      // 3. Consultar Supabase por ID numérico o identificador
-      if (!folderId && paramId) {
+      // Si el id es numérico de Supabase, consultar la base para obtener el folder_id real
+      if (paramId && !isNaN(paramId) && supabaseClient) {
         try {
-          if (window.supabase) {
-            const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-            let { data } = await client.from('galeria').select('*').eq('id', paramId).maybeSingle();
-            if (!data) {
-              const r = await client.from('galerias').select('*').eq('id', paramId).maybeSingle();
-              if (r && r.data) data = r.data;
+          const { data, error } = await supabaseClient
+            .from('galeria')
+            .select('*')
+            .eq('id', paramId)
+            .maybeSingle();
+
+          if (!error && data) {
+            if (data.titulo && !paramTitulo) {
+              currentAlbumTitle = data.titulo;
+              document.getElementById('galleryTitle').textContent = currentAlbumTitle;
             }
-            if (data) {
-              if (data.titulo && !paramTitulo) {
-                tituloEvento = data.titulo;
-                document.getElementById('lblTituloGaleria').textContent = tituloEvento;
-              }
-              folderId = extraerIdDrive(data.drive_url || data.enlace_drive);
-            }
+            const driveEnlace = data.drive_url || data.url_drive || data.enlace_drive || data.folder_id || '';
+            folderId = extraerFolderId(driveEnlace);
           }
-        } catch (errSupa) {
-          console.warn('Consulta Supabase por ID:', errSupa);
+        } catch (e) {
+          console.warn('Consulta en Supabase por ID:', e);
         }
       }
 
-      // 4. Si aún no hay folderId, tomar la última galería pública registrada en Supabase
-      if (!folderId && window.supabase) {
-        try {
-          const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-          let { data } = await client.from('galeria').select('*').eq('es_privada', false).order('created_at', { ascending: false }).limit(1);
-          if (!data || data.length === 0) {
-            const r = await client.from('galerias').select('*').eq('es_privada', false).order('created_at', { ascending: false }).limit(1);
-            if (r && r.data) data = r.data;
-          }
-          if (data && data.length > 0) {
-            const evento = data[0];
-            folderId = extraerIdDrive(evento.drive_url || evento.enlace_drive);
-            if (evento.titulo && !paramTitulo) {
-              tituloEvento = evento.titulo;
-              document.getElementById('lblTituloGaleria').textContent = tituloEvento;
-            }
-          }
-        } catch (_) {}
-      }
+      // Registrar métrica de apertura de galería (sólo visitas reales)
+      registrarMetrica('visita_galeria', { folder_id: folderId });
 
-      // 5. Fallback a Respaldo Local (localStorage 'galerias_locales')
       if (!folderId) {
-        try {
-          const locales = JSON.parse(localStorage.getItem('galerias_locales') || '[]');
-          if (Array.isArray(locales) && locales.length > 0) {
-            const matchLocal = locales.find(g => !g.es_privada && (paramId ? (String(g.id) === String(paramId) || g.drive_url === paramId) : true));
-            if (matchLocal) {
-              folderId = extraerIdDrive(matchLocal.drive_url || matchLocal.enlace_drive);
-              if (matchLocal.titulo && !paramTitulo) {
-                tituloEvento = matchLocal.titulo;
-                document.getElementById('lblTituloGaleria').textContent = tituloEvento;
-              }
-            }
-          }
-        } catch (_) {}
-      }
-
-      // 6. Fallback final si paramId era una URL directa
-      if (!folderId && paramId) {
-        folderId = extraerIdDrive(paramId);
-      }
-
-      folderIdActual = folderId;
-
-      if (folderId && folderId.length > 10) {
-        await cargarFotosCompletas(folderId);
-      } else {
-        mostrarEstadoVacio(folderId);
-      }
-    }
-
-    // =========================================================================
-    // 3. CARGA COMPLETA Y ROBUSTA DE FOTOS DESDE GOOGLE DRIVE (HASTA 2000 FOTOS)
-    // =========================================================================
-    async function cargarFotosCompletas(folderId) {
-      listaFotos = [];
-      let pageToken = '';
-      let totalCargadas = 0;
-
-      try {
-        do {
-          let urlApi = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&pageSize=1000&orderBy=name&key=${API_KEY_DRIVE}&fields=nextPageToken,files(id,name)`;
-          if (pageToken) {
-            urlApi += `&pageToken=${encodeURIComponent(pageToken)}`;
-          }
-
-          const res = await fetch(urlApi);
-          const data = await res.json();
-
-          if (data && data.error) {
-            console.error('Error Drive API:', data.error);
-            mostrarErrorDrive(data.error.message || 'Permisos insuficientes en la carpeta de Google Drive.');
-            return;
-          }
-
-          if (data && data.files && data.files.length > 0) {
-            data.files.forEach(f => {
-              listaFotos.push({
-                id: f.id,
-                name: f.name || `Foto_${f.id}.jpg`,
-                thumb: `https://lh3.googleusercontent.com/d/${f.id}=w600`,
-                full: `https://lh3.googleusercontent.com/d/${f.id}=w1600`
-              });
-            });
-            totalCargadas += data.files.length;
-          }
-
-          pageToken = data.nextPageToken || '';
-        } while (pageToken && totalCargadas < 2000);
-
-        if (listaFotos.length === 0) {
-          mostrarEstadoVacio(folderId);
-          return;
-        }
-
-        renderizarCuadricula();
-        registrarMetricaVisita('visita_galeria', `Exploración de ${listaFotos.length} fotos`, tituloEvento, folderId);
-
-      } catch (e) {
-        console.error('Error al consultar Drive:', e);
-        mostrarErrorDrive('No se pudieron descargar las fotos de Drive. Verificá que la carpeta esté compartida en modo público ("Cualquier persona que tenga el vínculo puede ver").');
-      }
-    }
-
-    function mostrarEstadoVacio(folderId) {
-      const grid = document.getElementById('gridFotos');
-      grid.innerHTML = `
-        <div class="col-span-full py-20 text-center border border-dashed border-[#262626] rounded-2xl bg-[#141414]/50 p-6 space-y-3">
-          <span class="material-symbols-outlined text-[44px] text-[#555555]">hide_image</span>
-          <h3 class="text-base font-bold text-white">Sin fotografías cargadas en esta galería</h3>
-          <p class="text-xs text-[#888888] max-w-sm mx-auto leading-relaxed">
-            No se ha encontrado ninguna foto en la carpeta de Google Drive o el identificador no existe en la base de datos.
-          </p>
-          ${folderId ? `<p class="font-mono text-[11px] text-[#555555]">Carpeta ID: ${folderId}</p>` : ''}
-          <div class="pt-2">
-            <a href="eventos.html" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#005580] hover:bg-[#0077b3] text-white text-xs font-semibold transition-all">
-              <span class="material-symbols-outlined text-[16px]">arrow_back</span>
-              <span>Volver a Eventos</span>
-            </a>
-          </div>
-        </div>
-      `;
-    }
-
-    function mostrarErrorDrive(detalle) {
-      const grid = document.getElementById('gridFotos');
-      grid.innerHTML = `
-        <div class="col-span-full py-16 text-center border border-red-500/30 rounded-2xl bg-red-950/20 p-6 space-y-3">
-          <span class="material-symbols-outlined text-[44px] text-red-400">cloud_off</span>
-          <h3 class="text-base font-bold text-white">Permisos de Google Drive requeridos</h3>
-          <p class="text-xs text-[#aaaaaa] max-w-md mx-auto leading-relaxed">
-            La carpeta de Google Drive debe estar compartida como: <br>
-            <strong class="text-white">"Cualquier persona que tenga el vínculo puede ver"</strong> en modo Lector.
-          </p>
-          <p class="text-[11px] text-[#777777] font-mono">${detalle}</p>
-          <div class="pt-3 flex items-center justify-center gap-2">
-            <button onclick="cargarGaleria()" class="px-4 py-2 bg-[#005580] hover:bg-[#0077b3] text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all">
-              <span class="material-symbols-outlined text-[16px]">refresh</span>
-              <span>Reintentar</span>
-            </button>
-            <a href="https://wa.me/${WHATSAPP_NUMERO}?text=Hola%20Sergio,%20tengo%20un%20inconveniente%20para%20ver%20la%20galeria" target="_blank" class="px-4 py-2 bg-[#16a34a] hover:bg-[#15803d] text-black font-bold rounded-xl text-xs flex items-center gap-1.5 transition-all">
-              <span class="material-symbols-outlined text-[16px]">chat</span>
-              <span>Soporte WhatsApp</span>
-            </a>
-          </div>
-        </div>
-      `;
-    }
-
-    // =========================================================================
-    // 4. RENDERIZADO FLUIDO, LIMPIO Y NÍTIDO (MINIATURAS VISIBLES SIN CORTINAS)
-    // =========================================================================
-    function renderizarCuadricula() {
-      const grid = document.getElementById('gridFotos');
-      grid.innerHTML = '';
-
-      listaFotos.forEach((foto, index) => {
-        const itemCarrito = carrito.get(foto.id) || { impresa: false, digital: false };
-        const nombreDisplay = foto.name.startsWith('#') ? foto.name : `#${foto.name}`;
-
-        const card = document.createElement('div');
-        card.className = `tarjeta-foto relative bg-[#181818] border rounded-2xl overflow-hidden flex flex-col justify-between transition-all shadow-md select-none ${itemCarrito.impresa || itemCarrito.digital ? 'border-[#38bdf8] bg-[#14222d]' : 'border-[#262626] hover:border-[#005580]'}`;
-        card.id = `card-foto-${foto.id}`;
-
-        card.innerHTML = `
-          <!-- Área de Visualización Limpia y Nítida -->
-          <div class="visor-area relative aspect-[3/4] bg-[#0c0c0c] overflow-hidden cursor-pointer select-none group" onclick="abrirVisor(${index}, event)">
-            
-            <!-- Imagen real de Drive sin velos ni censuras -->
-            <img src="${foto.thumb}" alt="${foto.name}" loading="lazy" class="shield-protected w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.src='https://lh3.googleusercontent.com/d/${foto.id}'">
-
-            <!-- Etiqueta superior con nombre de archivo -->
-            <div class="absolute top-2.5 left-2.5 z-20 pointer-events-none">
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-black/80 border border-white/10 text-white backdrop-blur-md">
-                ${nombreDisplay}
-              </span>
-            </div>
-
-            <!-- Botón de apertura a pantalla completa (Visor HD) -->
-            <button type="button" onclick="abrirVisor(${index}, event)" title="Ampliar en pantalla completa" class="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full bg-black/80 hover:bg-[#005580] text-white flex items-center justify-center transition-colors cursor-pointer border border-white/10 shadow-lg">
-              <span class="material-symbols-outlined text-[15px]">zoom_in</span>
-            </button>
-          </div>
-
-          <!-- Botonera de Compra Dual (Impresa / Digital) -->
-          <div class="p-2.5 sm:p-3 bg-[#181818] border-t border-[#222222] space-y-2 select-none">
-            <div class="grid grid-cols-2 gap-1.5">
-              <button type="button" onclick="toggleOpcion('${foto.id}', 'impresa', '${foto.name}', event)" id="btn-imp-${foto.id}" class="py-2 px-1 rounded-xl border text-[11px] font-mono font-bold flex flex-col items-center justify-center gap-0.5 transition-all active:scale-95 cursor-pointer ${itemCarrito.impresa ? 'bg-[#facc15] border-[#facc15] text-black shadow-md' : 'bg-[#141414] border-[#facc15]/60 hover:border-[#facc15] text-[#facc15]'}">
-                <div class="flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[13px]">${itemCarrito.impresa ? 'check_box' : 'print'}</span>
-                  <span>Impresa</span>
-                </div>
-                <span class="text-[10px] opacity-90">$${TARIFA_IMPRESA.toLocaleString('es-AR')}</span>
-              </button>
-
-              <button type="button" onclick="toggleOpcion('${foto.id}', 'digital', '${foto.name}', event)" id="btn-dig-${foto.id}" class="py-2 px-1 rounded-xl border text-[11px] font-mono font-bold flex flex-col items-center justify-center gap-0.5 transition-all active:scale-95 cursor-pointer ${itemCarrito.digital ? 'bg-[#38bdf8] border-[#38bdf8] text-black shadow-md' : 'bg-[#141414] border-[#0088cc]/60 hover:border-[#38bdf8] text-[#38bdf8]'}">
-                <div class="flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[13px]">${itemCarrito.digital ? 'check_box' : 'cloud_download'}</span>
-                  <span>Digital</span>
-                </div>
-                <span class="text-[10px] opacity-90">$${TARIFA_DIGITAL.toLocaleString('es-AR')}</span>
-              </button>
-            </div>
-
-            ${itemCarrito.impresa || itemCarrito.digital ? `
-              <div class="text-center pt-0.5">
-                <button type="button" onclick="quitarFoto('${foto.id}', event)" class="text-[10px] font-mono text-red-400 hover:text-red-300 flex items-center justify-center gap-1 mx-auto underline cursor-pointer">
-                  <span class="material-symbols-outlined text-[12px]">delete</span>
-                  <span>Quitar de la lista</span>
-                </button>
-              </div>
-            ` : ''}
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-
-      actualizarBarraPedido();
-    }
-
-    function toggleOpcion(fotoId, tipo, nombre, event) {
-      if (event) event.stopPropagation();
-      let item = carrito.get(fotoId) || { nombre: nombre, impresa: false, digital: false };
-
-      if (tipo === 'impresa') {
-        item.impresa = !item.impresa;
-      } else if (tipo === 'digital') {
-        item.digital = !item.digital;
-      }
-
-      if (!item.impresa && !item.digital) {
-        carrito.delete(fotoId);
-      } else {
-        carrito.set(fotoId, item);
-      }
-
-      renderizarCuadricula();
-    }
-
-    function quitarFoto(fotoId, event) {
-      if (event) event.stopPropagation();
-      carrito.delete(fotoId);
-      renderizarCuadricula();
-    }
-
-    function limpiarSeleccion() {
-      carrito.clear();
-      renderizarCuadricula();
-    }
-
-    function actualizarBarraPedido() {
-      const barra = document.getElementById('barraFlotantePedido');
-      const totalFotos = carrito.size;
-
-      let subtotal = 0;
-      carrito.forEach(val => {
-        if (val.impresa) subtotal += TARIFA_IMPRESA;
-        if (val.digital) subtotal += TARIFA_DIGITAL;
-      });
-
-      document.getElementById('lblConteoSeleccion').textContent = `${totalFotos} foto${totalFotos === 1 ? '' : 's'} seleccionada${totalFotos === 1 ? '' : 's'}`;
-      document.getElementById('lblTotalCalculado').textContent = `Total: $${subtotal.toLocaleString('es-AR')}`;
-
-      if (totalFotos > 0) {
-        barra.classList.remove('hidden');
-      } else {
-        barra.classList.add('hidden');
-      }
-    }
-
-    // =========================================================================
-    // 5. ENVÍO DE PEDIDO A WHATSAPP
-    // =========================================================================
-    function enviarPedidoWhatsApp() {
-      if (carrito.size === 0) {
-        alert('Por favor seleccioná al menos una foto (Impresa o Digital) para enviar tu encargo.');
+        document.getElementById('loadingBox').classList.add('hidden');
+        document.getElementById('emptyBox').classList.remove('hidden');
         return;
       }
 
-      let lineasFotos = [];
-      let subtotal = 0;
-      let totalImpresas = 0;
-      let totalDigitales = 0;
-
-      carrito.forEach((item) => {
-        let modalidades = [];
-        if (item.impresa) {
-          modalidades.push('Impresa 15x21');
-          subtotal += TARIFA_IMPRESA;
-          totalImpresas++;
-        }
-        if (item.digital) {
-          modalidades.push('Digital HD');
-          subtotal += TARIFA_DIGITAL;
-          totalDigitales++;
-        }
-        lineasFotos.push(`• ${item.nombre}: [${modalidades.join(' + ')}]`);
-      });
-
-      const mensaje = 
-`Hola Sergio Ricardo Molina, quiero encargarte estas fotos:
-Evento: ${tituloEvento}
-Cantidad de fotos: ${carrito.size} (${totalImpresas} impresas, ${totalDigitales} digitales)
-
-Detalle de Selección:
-${lineasFotos.join('\n')}
-
-Total estimado: $${subtotal.toLocaleString('es-AR')}
-¿Me confirmas los datos de pago por transferencia y los plazos de entrega? Muchas gracias.`;
-
-      registrarMetricaVisita('clic_whatsapp', `Pedido WhatsApp: ${carrito.size} fotos ($${subtotal})`, tituloEvento, folderIdActual);
-
-      const urlWhatsApp = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensaje)}`;
-      window.open(urlWhatsApp, '_blank');
+      await cargarFotosDrivePaginadas(folderId);
     }
 
-    // =========================================================================
-    // 6. VISOR MODAL AMPLIO Y LIMPIO CON SWIPE FLUIDO
-    // =========================================================================
-    function abrirVisor(index, event) {
-      if (event) event.stopPropagation();
-      indiceVisor = index;
-      const foto = listaFotos[indiceVisor];
-      if (!foto) return;
+    // 4. Paginación completa de Google Drive (> 350 fotos sin límite de 100)
+    async function cargarFotosDrivePaginadas(folderId) {
+      const loadingBox = document.getElementById('loadingBox');
+      const emptyBox = document.getElementById('emptyBox');
+      const galleryGrid = document.getElementById('galleryGrid');
 
-      const img = document.getElementById('imgVisorAmpliada');
-      img.classList.remove('blackout-active');
-      img.src = foto.full;
-      document.getElementById('lblVisorNombreArchivo').textContent = foto.name;
-      document.getElementById('modalVisor').classList.remove('hidden');
+      fotosList = [];
+      let pageToken = '';
+      let errorEncountered = false;
 
-      registrarMetricaVisita('foto_visor_hd', `Apertura HD de ${foto.name}`, tituloEvento, folderIdActual);
-    }
+      try {
+        do {
+          let url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image/'&orderBy=name&pageSize=100&key=${API_KEY_DRIVE}&fields=nextPageToken,files(id,name)`;
+          if (pageToken) {
+            url += `&pageToken=${encodeURIComponent(pageToken)}`;
+          }
 
-    function cerrarVisor() {
-      document.getElementById('modalVisor').classList.add('hidden');
-      document.getElementById('imgVisorAmpliada').src = '';
-    }
+          const response = await fetch(url);
+          const data = await response.json();
 
-    function cerrarVisorFondo(e) {
-      if (e.target.id === 'modalVisor') cerrarVisor();
-    }
+          if (data.error) {
+            console.error('Error Google Drive API:', data.error);
+            errorEncountered = true;
+            break;
+          }
 
-    function cambiarFoto(delta, event) {
-      if (event) event.stopPropagation();
-      if (listaFotos.length === 0) return;
-      indiceVisor += delta;
-      if (indiceVisor < 0) indiceVisor = listaFotos.length - 1;
-      if (indiceVisor >= listaFotos.length) indiceVisor = 0;
-      abrirVisor(indiceVisor);
-    }
+          if (data.files && data.files.length > 0) {
+            data.files.forEach(file => {
+              fotosList.push({
+                id: file.id,
+                name: file.name || `Foto_${file.id}`,
+                thumb: `https://lh3.googleusercontent.com/d/${file.id}=w600`,
+                highRes: `https://lh3.googleusercontent.com/d/${file.id}=w1600`
+              });
+            });
+          }
 
-    function configurarSwipeModal() {
-      const modal = document.getElementById('modalVisor');
-      if (!modal) return;
+          pageToken = data.nextPageToken || '';
+        } while (pageToken);
 
-      modal.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) {
-          touchStartX = e.touches[0].clientX;
-          touchStartY = e.touches[0].clientY;
-        }
-      }, { passive: true });
+      } catch (err) {
+        console.error('Error de conexión a Drive:', err);
+        errorEncountered = true;
+      }
 
-      modal.addEventListener('touchend', (e) => {
-        if (e.changedTouches.length === 1) {
-          touchEndX = e.changedTouches[0].clientX;
-          touchEndY = e.changedTouches[0].clientY;
-          handleSwipeGesture();
-        }
-      }, { passive: true });
-    }
+      loadingBox.classList.add('hidden');
 
-    function handleSwipeGesture() {
-      const diffX = touchEndX - touchStartX;
-      const diffY = touchEndY - touchStartY;
-
-      // Priorizar swipe horizontal si el movimiento horizontal supera al vertical
-      if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
-        if (diffX < 0) {
-          cambiarFoto(1); // Deslizar izquierda -> siguiente
-        } else {
-          cambiarFoto(-1); // Deslizar derecha -> anterior
-        }
+      if (errorEncountered || fotosList.length === 0) {
+        emptyBox.classList.remove('hidden');
+      } else {
+        renderizarGridFotos();
       }
     }
 
-    // =========================================================================
-    // 7. REGISTRADOR DE MÉTRICAS SILENCIOSO
-    // =========================================================================
-    function registrarMetricaVisita(tipo, detalle, albumTitulo, albumId) {
-      try {
-        const esAdmin = sessionStorage.getItem('admin_auth') === 'true';
-        if (esAdmin) return;
+    // 5. Renderizar cuadrícula con selección dual e información clara
+    function renderizarGridFotos() {
+      const grid = document.getElementById('galleryGrid');
+      grid.innerHTML = '';
+      grid.classList.remove('hidden');
 
-        if (window.supabase) {
-          const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-          client.from('visitas').insert([{
-            tipo: tipo || 'visita_pagina',
-            pagina: 'galeria.html',
-            album_id: String(albumId || folderIdActual || 'galeria'),
-            album_titulo: albumTitulo || tituloEvento,
-            detalle: detalle || 'Exploración de Galería',
-            dispositivo: window.innerWidth < 800 ? 'mobile' : 'desktop',
-            origen: document.referrer ? new URL(document.referrer).hostname : 'directo'
-          }]).then(() => {});
-        }
-      } catch (_) {}
+      fotosList.forEach((foto, idx) => {
+        const sel = selecciones[foto.id] || { impresa: false, digital: false };
+        const card = document.createElement('div');
+        card.className = 'bg-[#181818] border border-[#242424] hover:border-[#38bdf8]/40 rounded-xl overflow-hidden flex flex-col justify-between transition-all group';
+        card.id = `card-${foto.id}`;
+
+        card.innerHTML = `
+          <!-- Miniatura con Blindaje y Marca de Agua -->
+          <div class="relative aspect-[3/2] sm:aspect-square bg-black overflow-hidden cursor-pointer" onclick="abrirVisor(${idx})">
+            <img 
+              src="${foto.thumb}" 
+              alt="${foto.name}" 
+              loading="lazy" 
+              class="w-full h-full object-cover unselectable group-hover:scale-105 transition-transform duration-300"
+              onerror="this.src='https://lh3.googleusercontent.com/d/${foto.id}'"
+            />
+            
+            <!-- Trama y texto marca de agua -->
+            <div class="absolute inset-0 watermark-pattern pointer-events-none flex items-center justify-center p-2">
+              <div class="bg-black/50 border border-white/20 px-2 py-1 rounded -rotate-12 text-center">
+                <span class="block text-[9px] sm:text-[11px] font-bold text-white uppercase tracking-wider">
+                  Muestra • Sergio Molina
+                </span>
+              </div>
+            </div>
+
+            <!-- Identificador de Foto -->
+            <div class="absolute bottom-1.5 left-1.5 bg-black/70 backdrop-blur-xs px-2 py-0.5 rounded text-[10px] sm:text-[11px] font-mono text-white">
+              #${foto.name.replace(/\.[^/.]+$/, "")}
+            </div>
+          </div>
+
+          <!-- Controles de Selección Dual -->
+          <div class="p-2 sm:p-2.5 flex flex-col gap-1.5 bg-[#181818]">
+            <div class="grid grid-cols-2 gap-1.5">
+              
+              <!-- Botón Impresa (Dorado Permanente) -->
+              <button 
+                type="button"
+                id="btn-imp-${foto.id}"
+                onclick="toggleModalidad('${foto.id}', 'impresa')"
+                class="py-1.5 px-1 rounded-lg border text-[11px] font-semibold flex flex-col items-center justify-center transition-all ${sel.impresa ? 'bg-[#facc15] text-black border-[#facc15] font-bold shadow-md shadow-amber-950/40' : 'bg-[#121212] text-[#facc15] border-[#facc15]/40 hover:border-[#facc15]'}"
+              >
+                <span class="flex items-center gap-0.5">
+                  <span class="material-symbols-outlined text-[13px]">${sel.impresa ? 'check_box' : 'check_box_outline_blank'}</span>
+                  <span>Impresa</span>
+                </span>
+                <span class="text-[10px] opacity-90">${formatPrice(TARIFA_IMPRESA)}</span>
+              </button>
+
+              <!-- Botón Digital HD -->
+              <button 
+                type="button"
+                id="btn-dig-${foto.id}"
+                onclick="toggleModalidad('${foto.id}', 'digital')"
+                class="py-1.5 px-1 rounded-lg border text-[11px] font-semibold flex flex-col items-center justify-center transition-all ${sel.digital ? 'bg-[#38bdf8] text-black border-[#38bdf8] font-bold shadow-md shadow-sky-950/40' : 'bg-[#121212] text-[#38bdf8] border-[#38bdf8]/40 hover:border-[#38bdf8]'}"
+              >
+                <span class="flex items-center gap-0.5">
+                  <span class="material-symbols-outlined text-[13px]">${sel.digital ? 'check_box' : 'check_box_outline_blank'}</span>
+                  <span>Digital</span>
+                </span>
+                <span class="text-[10px] opacity-90">${formatPrice(TARIFA_DIGITAL)}</span>
+              </button>
+
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      actualizarResumenSeleccion();
     }
 
-    window.addEventListener('DOMContentLoaded', cargarGaleria);
+    // 6. Manejo de Selección Dual por Fotografía
+    function toggleModalidad(fotoId, modalidad) {
+      const foto = fotosList.find(f => f.id === fotoId);
+      if (!foto) return;
+
+      if (!selecciones[fotoId]) {
+        selecciones[fotoId] = { impresa: false, digital: false, name: foto.name };
+      }
+
+      selecciones[fotoId][modalidad] = !selecciones[fotoId][modalidad];
+
+      // Si ninguna está marcada, deseleccionar
+      if (!selecciones[fotoId].impresa && !selecciones[fotoId].digital) {
+        delete selecciones[fotoId];
+      }
+
+      // Actualizar tarjeta
+      actualizarBotonCard(fotoId);
+      actualizarResumenSeleccion();
+      actualizarModalControls();
+    }
+
+    function actualizarBotonCard(fotoId) {
+      const sel = selecciones[fotoId] || { impresa: false, digital: false };
+      const btnImp = document.getElementById(`btn-imp-${fotoId}`);
+      const btnDig = document.getElementById(`btn-dig-${fotoId}`);
+
+      if (btnImp) {
+        btnImp.className = `py-1.5 px-1 rounded-lg border text-[11px] font-semibold flex flex-col items-center justify-center transition-all ${sel.impresa ? 'bg-[#facc15] text-black border-[#facc15] font-bold shadow-md shadow-amber-950/40' : 'bg-[#121212] text-[#facc15] border-[#facc15]/40 hover:border-[#facc15]'}`;
+        btnImp.innerHTML = `
+          <span class="flex items-center gap-0.5">
+            <span class="material-symbols-outlined text-[13px]">${sel.impresa ? 'check_box' : 'check_box_outline_blank'}</span>
+            <span>Impresa</span>
+          </span>
+          <span class="text-[10px] opacity-90">${formatPrice(TARIFA_IMPRESA)}</span>
+        `;
+      }
+
+      if (btnDig) {
+        btnDig.className = `py-1.5 px-1 rounded-lg border text-[11px] font-semibold flex flex-col items-center justify-center transition-all ${sel.digital ? 'bg-[#38bdf8] text-black border-[#38bdf8] font-bold shadow-md shadow-sky-950/40' : 'bg-[#121212] text-[#38bdf8] border-[#38bdf8]/40 hover:border-[#38bdf8]'}`;
+        btnDig.innerHTML = `
+          <span class="flex items-center gap-0.5">
+            <span class="material-symbols-outlined text-[13px]">${sel.digital ? 'check_box' : 'check_box_outline_blank'}</span>
+            <span>Digital</span>
+          </span>
+          <span class="text-[10px] opacity-90">${formatPrice(TARIFA_DIGITAL)}</span>
+        `;
+      }
+    }
+
+    function limpiarSeleccion() {
+      selecciones = {};
+      fotosList.forEach(foto => actualizarBotonCard(foto.id));
+      actualizarResumenSeleccion();
+      actualizarModalControls();
+    }
+
+    // 7. Cálculo y Resumen Total
+    function actualizarResumenSeleccion() {
+      let cantImpresas = 0;
+      let cantDigitales = 0;
+
+      Object.values(selecciones).forEach(s => {
+        if (s.impresa) cantImpresas++;
+        if (s.digital) cantDigitales++;
+      });
+
+      const totalFotos = Object.keys(selecciones).length;
+      const montoTotal = (cantImpresas * TARIFA_IMPRESA) + (cantDigitales * TARIFA_DIGITAL);
+
+      const countText = document.getElementById('selectionCountText');
+      const totalText = document.getElementById('selectionTotalText');
+
+      if (countText) {
+        countText.textContent = `${totalFotos} ${totalFotos === 1 ? 'foto elegida' : 'fotos elegidas'} (${cantImpresas} imp. / ${cantDigitales} dig.)`;
+      }
+      if (totalText) {
+        totalText.textContent = formatPrice(montoTotal);
+      }
+    }
+
+    // 8. Visor Modal
+    function abrirVisor(idx) {
+      if (idx < 0 || idx >= fotosList.length) return;
+      modalIndex = idx;
+      const foto = fotosList[modalIndex];
+
+      const modal = document.getElementById('photoModal');
+      const modalImg = document.getElementById('modalImage');
+      const modalFn = document.getElementById('modalFilename');
+
+      if (modalImg) modalImg.src = foto.highRes;
+      if (modalFn) modalFn.textContent = `${foto.name} (${modalIndex + 1} de ${fotosList.length})`;
+
+      // Registrar métrica de visor ampliado
+      registrarMetrica('foto_visor_hd', { foto_id: foto.id, foto_nombre: foto.name });
+
+      actualizarModalControls();
+      modal.classList.remove('hidden');
+    }
+
+    function cerrarVisor() {
+      const modal = document.getElementById('photoModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function cerrarVisorFondo(e) {
+      if (e.target.id === 'photoModal' || e.target.classList.contains('overflow-hidden')) {
+        cerrarVisor();
+      }
+    }
+
+    function cambiarFoto(delta, e) {
+      if (e) e.stopPropagation();
+      let nextIdx = modalIndex + delta;
+      if (nextIdx < 0) nextIdx = fotosList.length - 1;
+      if (nextIdx >= fotosList.length) nextIdx = 0;
+      abrirVisor(nextIdx);
+    }
+
+    function actualizarModalControls() {
+      const box = document.getElementById('modalControlsBox');
+      if (!box || fotosList.length === 0) return;
+      const foto = fotosList[modalIndex];
+      if (!foto) return;
+      const sel = selecciones[foto.id] || { impresa: false, digital: false };
+
+      box.innerHTML = `
+        <button 
+          type="button" 
+          onclick="toggleModalidad('${foto.id}', 'impresa')"
+          class="flex-1 py-2 px-3 rounded-lg border text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${sel.impresa ? 'bg-[#facc15] text-black border-[#facc15] font-bold' : 'bg-[#121212] text-[#facc15] border-[#facc15]/50'}"
+        >
+          <span class="material-symbols-outlined text-[16px]">${sel.impresa ? 'check_box' : 'check_box_outline_blank'}</span>
+          <span>Impresa 15x21 (${formatPrice(TARIFA_IMPRESA)})</span>
+        </button>
+        <button 
+          type="button" 
+          onclick="toggleModalidad('${foto.id}', 'digital')"
+          class="flex-1 py-2 px-3 rounded-lg border text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${sel.digital ? 'bg-[#38bdf8] text-black border-[#38bdf8] font-bold' : 'bg-[#121212] text-[#38bdf8] border-[#38bdf8]/50'}"
+        >
+          <span class="material-symbols-outlined text-[16px]">${sel.digital ? 'check_box' : 'check_box_outline_blank'}</span>
+          <span>Digital HD (${formatPrice(TARIFA_DIGITAL)})</span>
+        </button>
+      `;
+    }
+
+    // Teclado físico para visor
+    document.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('photoModal');
+      if (modal && !modal.classList.contains('hidden')) {
+        if (e.key === 'Escape') cerrarVisor();
+        if (e.key === 'ArrowLeft') cambiarFoto(-1);
+        if (e.key === 'ArrowRight') cambiarFoto(1);
+      }
+    });
+
+    // 9. Confirmación y Envío Formal de Pedido vía WhatsApp
+    function enviarPedidoWhatsApp() {
+      const totalSeleccionadas = Object.keys(selecciones).length;
+      if (totalSeleccionadas === 0) {
+        alert('Por favor, seleccioná al menos una fotografía (impresa o digital) antes de confirmar tu encargo.');
+        return;
+      }
+
+      const listaImpresas = [];
+      const listaDigitales = [];
+
+      Object.values(selecciones).forEach(s => {
+        if (s.impresa) listaImpresas.push(s.name);
+        if (s.digital) listaDigitales.push(s.name);
+      });
+
+      const montoImpresas = listaImpresas.length * TARIFA_IMPRESA;
+      const montoDigitales = listaDigitales.length * TARIFA_DIGITAL;
+      const totalFinal = montoImpresas + montoDigitales;
+
+      // Registrar métrica de clic a WhatsApp
+      registrarMetrica('clic_whatsapp', {
+        total_fotos: totalSeleccionadas,
+        cant_impresas: listaImpresas.length,
+        cant_digitales: listaDigitales.length,
+        monto_estimado: totalFinal
+      });
+
+      let mensaje = `Hola Sergio Ricardo Molina, quiero encargarte estas fotos:\n`;
+      mensaje += `*Evento:* ${currentAlbumTitle}\n\n`;
+
+      if (listaImpresas.length > 0) {
+        mensaje += `📸 *COPIAS IMPRESAS 15x21 cm* (${formatPrice(TARIFA_IMPRESA)} c/u):\n`;
+        mensaje += `• Cantidad: ${listaImpresas.length} foto(s)\n`;
+        mensaje += `• Archivos: ${listaImpresas.join(', ')}\n`;
+        mensaje += `• Subtotal: ${formatPrice(montoImpresas)}\n\n`;
+      }
+
+      if (listaDigitales.length > 0) {
+        mensaje += `💻 *ARCHIVOS DIGITALES HD* (${formatPrice(TARIFA_DIGITAL)} c/u):\n`;
+        mensaje += `• Cantidad: ${listaDigitales.length} foto(s)\n`;
+        mensaje += `• Archivos: ${listaDigitales.join(', ')}\n`;
+        mensaje += `• Subtotal: ${formatPrice(montoDigitales)}\n\n`;
+      }
+
+      mensaje += `💰 *TOTAL ESTIMADO:* ${formatPrice(totalFinal)}\n\n`;
+      mensaje += `¿Me confirmas los datos de pago y plazos de entrega? Muchas gracias.`;
+
+      const urlWa = `https://wa.me/${WHATSAPP_OFICIAL}?text=${encodeURIComponent(mensaje)}`;
+      window.open(urlWa, '_blank');
+    }
+
+    // 10. Bloqueos Anti-Copia / Anti-Descarga
+    document.addEventListener('contextmenu', (e) => {
+      if (e.target.tagName === 'IMG' || e.target.closest('.watermark-pattern') || e.target.closest('#galleryGrid')) {
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    document.addEventListener('dragstart', (e) => {
+      if (e.target.tagName === 'IMG') {
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    // Iniciar al cargar
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', inicializarGaleria);
+    } else {
+      inicializarGaleria();
+    }
   </script>
 </body></html>
