@@ -1,330 +1,533 @@
 <!DOCTYPE html>
-
-<html class="dark" lang="es">
+<html lang="es">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>Sergio Ricardo Molina | Fotografía Profesional</title>
-<link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Raleway:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-    * { box-sizing: border-box; }
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Sergio Ricardo Molina | Fotografía</title>
+  <link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <!-- Supabase JS Client oficial para validación de claves y métricas reales -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: #111111;
-      color: #e5e2e1;
-      font-family: 'Manrope', sans-serif;
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #111111;
+      color: #ffffff;
+      padding: 20px 16px 40px;
+      max-width: 960px;
+      margin: 0 auto;
       min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      padding: 24px 0 20px;
+    }
+    .avatar-header {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 12px;
+      border: 2px solid #005580;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      display: block;
+      pointer-events: none;
+      user-select: none;
+    }
+    h1 {
+      font-size: 1.65rem;
+      letter-spacing: 1.5px;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+    h1 span {
+      display: block;
+      font-size: 0.95rem;
+      color: #aaaaaa;
+      margin-top: 5px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    /* GRID DE CATEGORÍAS (2 columnas en móviles, 3 en web) */
+    .grid-categorias {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+    @media (min-width: 768px) {
+      .grid-categorias {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+    }
+    .card-categoria {
+      background: #222222;
+      border: 2px solid #005580;
+      border-radius: 12px;
+      min-height: 110px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
-      padding: 1rem;
+      gap: 8px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+      text-decoration: none;
+      user-select: none;
+    }
+    .card-categoria:hover {
+      background: #282828;
+      border-color: #0077b3;
+    }
+    .card-categoria:active {
+      transform: scale(0.96);
+      background: #1f1f1f;
+    }
+    .card-icon {
+      font-size: 28px;
+      color: #0088cc;
+    }
+
+    /* BOTÓN ESPECIAL CLIENTES CON UN SOLO CANDADO AZUL A LA DERECHA */
+    .btn-clientes {
+      grid-column: 1 / -1;
+      background: #004466;
+      border: 2px solid #005580;
+      box-shadow: inset 0 0 0 3px #222222, 0 4px 12px rgba(0,0,0,0.35);
+      min-height: 80px;
+      flex-direction: row;
+      gap: 10px;
+    }
+    .btn-clientes:hover {
+      background: #005580;
+      border-color: #38bdf8;
+    }
+
+    /* SECCIÓN REDES Y CATÁLOGO */
+    .redes-sociales {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .btn-red {
+      background: #222222;
+      border-radius: 12px;
+      padding: 14px 6px;
+      text-align: center;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .btn-red:active {
+      transform: scale(0.96);
+      background: #2a2a2a;
+    }
+    .btn-wsp { border: 2px solid #4ade80; color: #4ade80; }
+    .btn-cat { border: 2px solid #facc15; color: #facc15; }
+    .btn-ig  { border: 2px solid #fb923c; color: #fb923c; }
+
+    /* FILA CONSOLA PROPIETARIO DISCRETA */
+    .fila-consola {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .btn-consola-prop {
+      grid-column: 2 / 3;
+      background: #181818;
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      padding: 7px 10px;
+      color: #777777;
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-consola-prop:hover {
+      background: #222222;
+      border-color: #005580;
+      color: #38bdf8;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid #222222;
+      color: #666666;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* MODAL CLIENTE */
+    #modal-cliente {
+      display: none;
+      position: fixed;
+      inset: 0px;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-box {
+      background: #181818;
+      border: 1px solid #005580;
+      border-radius: 16px;
+      max-width: 440px;
+      width: 100%;
+      padding: 28px 24px;
+      box-shadow: 0 10px 35px rgba(0, 85, 128, 0.25);
+      text-align: center;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      color: #888888;
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .modal-icon-wrap {
+      width: 52px;
+      height: 52px;
+      background: rgba(0, 85, 128, 0.2);
+      border: 1px solid #005580;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .modal-input {
+      background: #101010;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #ffffff;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      outline: none;
+      text-align: center;
+      letter-spacing: 2px;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .modal-input:focus {
+      border-color: #38bdf8;
+    }
+    .modal-btn {
+      background: #005580;
+      color: #ffffff;
+      border: 1px solid #38bdf8;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+      width: 100%;
+    }
+    .modal-btn:hover {
+      background: #0077b3;
     }
   </style>
 </head>
-<body class="bg-[#111111] text-[#e5e2e1] min-h-screen flex flex-col justify-between items-center p-4 selection:bg-[#005580] selection:text-white">
-<!-- Header Portafolio -->
-<header class="w-full max-w-xl text-center pt-6 sm:pt-10 pb-4">
-<div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 rounded-full border-2 border-[#005580] overflow-hidden shadow-2xl">
-<img alt="Sergio Ricardo Molina" class="w-full h-full object-cover select-none pointer-events-none" src="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA"/>
-</div>
-<h1 class="text-2xl sm:text-3xl font-headline font-bold text-white tracking-wide">
-      Sergio Ricardo Molina
-    </h1>
-<p class="text-xs sm:text-sm font-mono text-[#8b9199] tracking-widest uppercase mt-1">
-      FOTOGRAFÍA PROFESIONAL
-    </p>
-</header>
-<!-- Módulos Principales -->
-<main class="w-full max-w-xl space-y-3.5 my-auto">
-<!-- Grid 6 Módulos -->
-<div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3">
-<a class="flex flex-col items-center justify-center gap-1.5 p-4 rounded-xl bg-[#161616] border-[#005580] hover:border-[#38bdf8] hover:bg-[#1a1a1a] transition-all shadow-md active:scale-95 group border-2" href="sobre-mi.html">
-<span class="material-symbols-outlined text-[#38bdf8] text-[22px] group-hover:scale-110 transition-transform">person</span>
-<span class="text-sm sm:text-base font-semibold text-white">Sobre mí</span>
-</a>
-<a class="flex flex-col items-center justify-center gap-1.5 p-4 rounded-xl bg-[#161616] border-[#005580] hover:border-[#38bdf8] hover:bg-[#1a1a1a] transition-all shadow-md active:scale-95 group border-2" href="ensayos.html">
-<span class="material-symbols-outlined text-[#38bdf8] text-[22px] group-hover:scale-110 transition-transform">auto_awesome</span>
-<span class="text-sm sm:text-base font-semibold text-white">Ensayos</span>
-</a>
-<a class="flex flex-col items-center justify-center gap-1.5 p-4 rounded-xl bg-[#161616] border-[#005580] hover:border-[#38bdf8] hover:bg-[#1a1a1a] transition-all shadow-md active:scale-95 group border-2" href="postales.html">
-<span class="material-symbols-outlined text-[#38bdf8] text-[22px] group-hover:scale-110 transition-transform">landscape</span>
-<span class="text-sm sm:text-base font-semibold text-white">Postales</span>
-</a>
-<a class="flex flex-col items-center justify-center gap-1.5 p-4 rounded-xl bg-[#161616] border-[#005580] hover:border-[#38bdf8] hover:bg-[#1a1a1a] transition-all shadow-md active:scale-95 group border-2" href="miscelaneas.html">
-<span class="material-symbols-outlined text-[#38bdf8] text-[22px] group-hover:scale-110 transition-transform">grain</span>
-<span class="text-sm sm:text-base font-semibold text-white">Misceláneas</span>
-</a>
-<a class="flex flex-col items-center justify-center gap-1.5 p-4 rounded-xl bg-[#161616] border-[#005580] hover:border-[#38bdf8] hover:bg-[#1a1a1a] transition-all shadow-md active:scale-95 group border-2" href="sesiones.html">
-<span class="material-symbols-outlined text-[#38bdf8] text-[22px] group-hover:scale-110 transition-transform">photo_camera</span>
-<span class="text-sm sm:text-base font-semibold text-white">Sesiones</span>
-</a>
-<a class="flex flex-col items-center justify-center gap-1.5 p-4 rounded-xl bg-[#161616] border-[#005580] hover:border-[#38bdf8] hover:bg-[#1a1a1a] transition-all shadow-md active:scale-95 group border-2" href="eventos.html">
-<span class="material-symbols-outlined text-[#38bdf8] text-[22px] group-hover:scale-110 transition-transform">school</span>
-<span class="text-sm sm:text-base font-semibold text-white">Eventos</span>
-</a>
-</div>
-<!-- Botón Destacado: Acceso Privado Clientes -->
-<div class="pt-1">
-<button class="w-full py-4 px-4 rounded-xl bg-[#004466] hover:bg-[#005580] border-2 border-[#005580] hover:border-[#38bdf8] text-white flex items-center justify-center gap-2 transition-all shadow-lg active:scale-[0.99] group cursor-pointer" onclick="abrirModalCliente()" type="button">
-<span class="text-sm sm:text-base font-headline font-bold tracking-wide">Acceso Privado Clientes</span>
-<span class="material-symbols-outlined text-[#38bdf8] text-[20px] group-hover:scale-110 transition-transform">lock</span>
-</button>
-</div>
-<!-- Bloque Redes Sociales Oficiales (3 Columnas) -->
-<div class="grid grid-cols-3 gap-2.5 sm:gap-3 pt-1">
-<!-- WhatsApp -->
-<a class="flex flex-col items-center justify-center gap-1.5 p-3 sm:p-3.5 rounded-xl bg-[#161616] border-2 border-[#4ade80] hover:bg-[#4ade80]/10 transition-all shadow-md active:scale-95 text-[#4ade80]" href="https://wa.me/542613175222" rel="noopener noreferrer" target="_blank">
-<span class="material-symbols-outlined text-[20px]">chat</span>
-<span class="text-xs sm:text-sm font-bold">Chat WhatsApp</span>
-</a>
-<!-- Catálogo -->
-<a class="flex flex-col items-center justify-center gap-1.5 p-3 sm:p-3.5 rounded-xl bg-[#161616] border-2 border-[#facc15] hover:bg-[#facc15]/10 transition-all shadow-md active:scale-95 text-[#facc15]" href="https://wa.me/c/5492613175222" rel="noopener noreferrer" target="_blank">
-<span class="material-symbols-outlined text-[20px]">inventory_2</span>
-<span class="text-xs sm:text-sm font-bold">Catálogo</span>
-</a>
-<!-- Instagram -->
-<a class="flex flex-col items-center justify-center gap-1.5 p-3 sm:p-3.5 rounded-xl bg-[#161616] border-2 border-[#fb923c] hover:bg-[#fb923c]/10 transition-all shadow-md active:scale-95 text-[#fb923c]" href="https://www.instagram.com/sergioricardo.molina?igsi=OG84bTUxanllMnh4" rel="noopener noreferrer" target="_blank">
-<span class="material-symbols-outlined text-[20px]">photo_camera_back</span>
-<span class="text-xs sm:text-sm font-bold">Instagram</span>
-</a>
-</div>
-<!-- Consola Propietario (Discreta y Centrada) -->
-<div class="pt-2 text-center">
-<a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#222222] hover:border-[#005580] bg-[#141414] hover:bg-[#1a1a1a] text-[11px] font-mono text-[#666666] hover:text-[#38bdf8] transition-all" href="https://sergiomolina-fotografia.github.io/panel/index.html">
-<span class="material-symbols-outlined text-[14px]">admin_panel_settings</span>
-<span>Consola Propietario</span>
-</a>
-</div>
-</main>
-<!-- Footer -->
-<footer class="w-full max-w-xl text-center py-4 border-t border-[#1e1e1e] text-[11px] font-mono text-[#666666]">
-    © Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina
-  </footer>
-<!-- Modal Acceso Privado Clientes -->
-<div class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4" id="modalCliente">
-<div class="bg-[#181818] border border-[#005580] max-w-md w-full rounded-2xl p-6 sm:p-8 shadow-2xl relative text-center space-y-4">
-<!-- Botón Cerrar -->
-<button class="absolute top-4 right-4 text-[#888888] hover:text-white transition-colors" onclick="cerrarModalCliente()" type="button">
-<span class="material-symbols-outlined text-[20px]">close</span>
-</button>
-<!-- Ícono Candado -->
-<div class="w-12 h-12 rounded-full bg-[#004466]/40 border border-[#0088cc] flex items-center justify-center text-[#38bdf8] mx-auto">
-<span class="material-symbols-outlined text-[24px]">lock</span>
-</div>
-<!-- Título -->
-<div>
-<h3 class="text-lg font-headline font-bold text-white">Acceso Privado a Clientes</h3>
-<p class="text-xs text-[#888888] mt-1">
-          Ingresá la clave de tu evento o sesión privada para acceder a tu álbum en alta resolución sin marcas de agua.
-        </p>
-</div>
-<!-- Formulario de Clave -->
-<form class="space-y-3" onsubmit="validarClaveAcceso(event)">
-<div class="relative">
-<input autocomplete="off" class="w-full py-3 px-4 bg-[#111111] border border-[#2e2e2e] focus:border-[#38bdf8] rounded-xl text-center font-mono text-sm text-white tracking-widest outline-none transition-colors" id="inputClaveModal" placeholder="********" required="" type="password"/>
-</div>
-<!-- Mensaje de Error Dinámico -->
-<div class="hidden text-xs text-red-400 font-medium" id="errorModalClave">
-          Contraseña incorrecta o álbum no encontrado.
+<body>
+
+  <!-- VISTA: PORTAFOLIO OFICIAL (HOME MODULAR) -->
+  <div id="vista-menu">
+    <header>
+      <img alt="Sergio Ricardo Molina" class="avatar-header" src="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA">
+      <h1>Sergio Ricardo Molina<span>Fotografía Profesional</span></h1>
+    </header>
+
+    <main>
+      <!-- CUADRÍCULA DE 6 MÓDULOS + ACCESO CLIENTES -->
+      <div class="grid-categorias">
+        <a class="card-categoria" href="sobre-mi.html">
+          <span class="material-symbols-outlined card-icon">person</span>
+          <span>Sobre mí</span>
+        </a>
+        <a class="card-categoria" href="ensayos.html">
+          <span class="material-symbols-outlined card-icon">auto_awesome</span>
+          <span>Ensayos</span>
+        </a>
+        <a class="card-categoria" href="postales.html">
+          <span class="material-symbols-outlined card-icon">landscape</span>
+          <span>Postales</span>
+        </a>
+        <a class="card-categoria" href="miscelaneas.html">
+          <span class="material-symbols-outlined card-icon">grain</span>
+          <span>Misceláneas</span>
+        </a>
+        <a class="card-categoria" href="sesiones.html">
+          <span class="material-symbols-outlined card-icon">photo_camera</span>
+          <span>Sesiones</span>
+        </a>
+        <a class="card-categoria" href="eventos.html">
+          <span class="material-symbols-outlined card-icon" style="color: #38bdf8;">school</span>
+          <span>Eventos</span>
+        </a>
+
+        <!-- BOTÓN ACCESO PRIVADO CLIENTES CON UN SOLO CANDADO AZUL A LA DERECHA -->
+        <div class="card-categoria btn-clientes" onclick="abrirModalCliente()">
+          <span style="font-size: 1.15rem; font-weight: 600;">Acceso Privado Clientes</span>
+          <span class="material-symbols-outlined" style="font-size: 24px; color: #38bdf8;">lock</span>
         </div>
-<button class="w-full py-3 px-4 bg-[#005580] hover:bg-[#0077b3] border border-[#0088cc] rounded-xl text-xs sm:text-sm font-semibold text-white flex items-center justify-center gap-2 transition-all shadow-lg active:scale-98 cursor-pointer" id="btnDesbloquearModal" type="submit">
-<span class="material-symbols-outlined text-[18px]">key</span>
-<span id="btnDesbloquearTexto">Desbloquear Álbum</span>
-</button>
-</form>
-</div>
-</div>
-<script>
+      </div>
+
+      <!-- REDES SOCIALES Y CONTACTO DIRECTO (3 COLUMNAS SIMÉTRICAS) -->
+      <div class="redes-sociales">
+        <a class="btn-red btn-wsp" href="https://wa.me/542613175222" target="_blank" onclick="registrarClicWhatsApp()">
+          <span class="material-symbols-outlined">chat</span>
+          <span>Chat WhatsApp</span>
+        </a>
+        <a class="btn-red btn-cat" href="https://wa.me/c/5492613175222" target="_blank">
+          <span class="material-symbols-outlined">inventory_2</span>
+          <span>Catálogo</span>
+        </a>
+        <a class="btn-red btn-ig" href="https://www.instagram.com/sergioricardo.molina?igsi=OG84bTUxanllMnh4" target="_blank">
+          <span class="material-symbols-outlined">photo_camera_back</span>
+          <span>Instagram</span>
+        </a>
+      </div>
+
+      <!-- BOTÓN DISCRETO: CONSOLA DEL PROPIETARIO -->
+      <div class="fila-consola">
+        <a href="https://sergiomolina-fotografia.github.io/panel/index.html" class="btn-consola-prop" title="Consola de Administración Privada">
+          <span class="material-symbols-outlined" style="font-size: 15px;">admin_panel_settings</span>
+          <span>Consola Propietario</span>
+        </a>
+      </div>
+    </main>
+
+    <footer>
+      <p>© Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina</p>
+    </footer>
+  </div>
+
+  <!-- MODAL DE ACCESO PRIVADO A CLIENTES (PLACEHOLDER DISCRETO *******) -->
+  <div id="modal-cliente" onclick="cerrarModalFondo(event)">
+    <div class="modal-box">
+      <span class="modal-close" onclick="cerrarModalCliente()">×</span>
+      <div class="modal-icon-wrap">
+        <span class="material-symbols-outlined" style="font-size: 28px; color: #38bdf8;">lock</span>
+      </div>
+      <h3 style="font-size: 1.3rem; font-weight: 600; color: #ffffff; margin-bottom: 8px;">Acceso Privado a Clientes</h3>
+      <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 22px; line-height: 1.4;">
+        Ingresá la clave o PIN de tu evento o sesión privada para acceder a tu galería en alta resolución.
+      </p>
+      <form onsubmit="validarClaveAcceso(event)" style="display: flex; flex-direction: column; gap: 14px;">
+        <input autocomplete="off" id="input-clave-cliente" class="modal-input" placeholder="*******" type="password" required>
+        <div id="error-clave-cliente" style="display: none; color: #f87171; font-size: 0.82rem; margin-top: -6px;">
+          Contraseña incorrecta o álbum no encontrado. Verificá con el fotógrafo.
+        </div>
+        <button id="btn-submit-clave" class="modal-btn" type="submit">
+          <span class="material-symbols-outlined" style="font-size: 20px;">key</span>
+          <span id="texto-btn-clave">Desbloquear Álbum</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SCRIPT MAESTRO: SUPABASE + EXCLUSIÓN DE DISPOSITIVOS PROPIOS + VALIDACIÓN -->
+  <script>
     const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
 
-    // 1. Apertura y Cierre del Modal
+    // 1. DETECCIÓN AUTOMÁTICA DE DISPOSITIVOS PROPIOS (?sergio=1 o ?admin=1 o ?ignorar=1)
+    (function detectarDispositivoMaestro() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('sergio') === '1' || params.get('admin') === '1' || params.get('ignorar') === '1') {
+          localStorage.setItem('dispositivo_token', 'sergio_molina_master_device');
+          localStorage.setItem('ignorar_visita', 'true');
+          window.history.replaceState({}, document.title, window.location.pathname);
+          console.log('🛡️ Dispositivo personal marcado como propio. Visitas excluidas.');
+        }
+      } catch (_) {}
+    })();
+
+    // 2. REGISTRADOR DE VISITAS BLINDADO (Comprueba dispositivo_token y tabla dispositivos_ignorados)
+    async function registrarVisita(tipo = 'visita_pagina', detalle = 'Inicio Portafolio') {
+      // A) Filtro local instantáneo
+      if (localStorage.getItem('ignorar_visita') === 'true' || 
+          localStorage.getItem('dispositivo_token') === 'sergio_molina_master_device' ||
+          sessionStorage.getItem('admin_auth') === 'true') {
+        return;
+      }
+
+      try {
+        if (!window.supabase) return;
+        const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // B) Filtro en la nube contra tabla dispositivos_ignorados
+        const tokenLocal = localStorage.getItem('dispositivo_token');
+        if (tokenLocal) {
+          const { data: ignorados } = await client
+            .from('dispositivos_ignorados')
+            .select('token')
+            .eq('token', tokenLocal);
+
+          if (ignorados && ignorados.length > 0) {
+            localStorage.setItem('ignorar_visita', 'true');
+            return;
+          }
+        }
+
+        // C) Inserción de visita real
+        const esMovil = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+        await client.from('visitas').insert([{
+          tipo: tipo,
+          pagina: 'index.html',
+          detalle: detalle,
+          dispositivo: esMovil ? 'mobile' : 'desktop',
+          origen: document.referrer ? (new URL(document.referrer).hostname || 'directo') : 'directo'
+        }]);
+      } catch (_) {}
+    }
+
+    function registrarClicWhatsApp() {
+      registrarVisita('clic_whatsapp', 'Contacto WhatsApp desde Portafolio');
+    }
+
+    // 3. MODAL ACCESO PRIVADO A CLIENTES
     function abrirModalCliente() {
-      const modal = document.getElementById('modalCliente');
-      const input = document.getElementById('inputClaveModal');
-      const error = document.getElementById('errorModalClave');
-      const btnTxt = document.getElementById('btnDesbloquearTexto');
-      const btn = document.getElementById('btnDesbloquearModal');
-
-      if (modal) modal.classList.remove('hidden');
-      if (error) error.classList.add('hidden');
-      if (btnTxt) btnTxt.textContent = 'Desbloquear Álbum';
-      if (btn) btn.disabled = false;
-      if (input) {
-        input.value = '';
-        setTimeout(() => input.focus(), 150);
+      const m = document.getElementById('modal-cliente');
+      if (m) {
+        m.style.display = 'flex';
+        const inp = document.getElementById('input-clave-cliente');
+        if (inp) {
+          inp.value = '';
+          inp.focus();
+        }
+        const err = document.getElementById('error-clave-cliente');
+        if (err) err.style.display = 'none';
       }
     }
 
     function cerrarModalCliente() {
-      const modal = document.getElementById('modalCliente');
-      if (modal) modal.classList.add('hidden');
+      const m = document.getElementById('modal-cliente');
+      if (m) m.style.display = 'none';
     }
 
-    // 2. Extraer ID de Drive
-    function extraerIdDrive(input) {
-      if (!input) return '';
-      const str = String(input).trim();
-      const matchFolder = str.match(/folders\/([a-zA-Z0-9_-]+)/);
-      if (matchFolder && matchFolder[1]) return matchFolder[1];
-      const matchId = str.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (matchId && matchId[1]) return matchId[1];
-      const matchD = str.match(/\/d\/([a-zA-Z0-9_-]+)/);
-      if (matchD && matchD[1]) return matchD[1];
-      return str.split('?')[0].split('#')[0].replace(/.*drive\.google\.com\//, '').trim();
+    function cerrarModalFondo(e) {
+      if (e.target && e.target.id === 'modal-cliente') {
+        cerrarModalCliente();
+      }
     }
 
-    // 3. Validación Ultra-Resiliente de Clave
+    // 4. VALIDACIÓN DE CLAVES DINÁMICA CON SUPABASE
     async function validarClaveAcceso(e) {
       if (e) e.preventDefault();
+      const inp = document.getElementById('input-clave-cliente');
+      const pass = inp ? inp.value.trim() : '';
+      const err = document.getElementById('error-clave-cliente');
+      const btnTxt = document.getElementById('texto-btn-clave');
 
-      const input = document.getElementById('inputClaveModal');
-      const clave = input ? input.value.trim() : '';
-      const error = document.getElementById('errorModalClave');
-      const btn = document.getElementById('btnDesbloquearModal');
-      const btnTxt = document.getElementById('btnDesbloquearTexto');
-
-      if (!clave) return;
-
-      if (error) error.classList.add('hidden');
-      btn.disabled = true;
-      btnTxt.textContent = 'Verificando...';
+      if (!pass) return;
+      if (err) err.style.display = 'none';
+      if (btnTxt) btnTxt.innerText = 'Verificando...';
 
       let albumEncontrado = null;
-      const claveNormalizada = clave.toLowerCase().trim();
 
-      // PASO 1: Consulta Universal en Supabase (trae todas las filas privadas y busca coincidencias limpias)
+      // Consulta directa a Supabase (galeria y galerias)
       if (window.supabase) {
         try {
-          const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-          // Buscar en tabla galeria
-          let { data: itemsGaleria, error: errGal } = await client
+          const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          let { data, error } = await client
             .from('galeria')
-            .select('*');
+            .select('*')
+            .or(`password.eq.${pass},clave.eq.${pass},codigo.eq.${pass}`);
 
-          if (errGal || !itemsGaleria || itemsGaleria.length === 0) {
-            const res2 = await client.from('galerias').select('*');
-            if (res2.data) itemsGaleria = res2.data;
+          if (!data || data.length === 0 || error) {
+            const fallback = await client
+              .from('galerias')
+              .select('*')
+              .or(`password.eq.${pass},clave.eq.${pass},codigo.eq.${pass}`);
+            if (fallback.data && fallback.data.length > 0) data = fallback.data;
           }
 
-          if (itemsGaleria && Array.isArray(itemsGaleria)) {
-            albumEncontrado = itemsGaleria.find(item => {
-              const p = String(item.password || item.clave || item.codigo || item.pass || '').trim().toLowerCase();
-              return p === claveNormalizada;
-            });
+          if (data && data.length > 0) {
+            albumEncontrado = data[0];
           }
         } catch (ex) {
-          console.warn('Error consulta Supabase:', ex);
+          console.warn('Consulta Supabase error:', ex);
         }
       }
 
-      // PASO 2: Respaldo REST directo por si el SDK falla o hay bloqueo de red
+      // Respaldo local adicional
       if (!albumEncontrado) {
         try {
-          const endpoint = `${SUPABASE_URL}/rest/v1/galeria?select=*`;
-          const resRest = await fetch(endpoint, {
-            method: 'GET',
-            headers: {
-              'apikey': SUPABASE_KEY,
-              'Authorization': `Bearer ${SUPABASE_KEY}`
-            }
-          });
-          if (resRest.ok) {
-            const filas = await resRest.json();
-            if (Array.isArray(filas)) {
-              albumEncontrado = filas.find(item => {
-                const p = String(item.password || item.clave || item.codigo || item.pass || '').trim().toLowerCase();
-                return p === claveNormalizada;
-              });
+          const raw = localStorage.getItem('galerias_locales');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+              const match = parsed.find(g => (g.password === pass || g.clave === pass || g.codigo === pass));
+              if (match) albumEncontrado = match;
             }
           }
         } catch (_) {}
       }
 
-      // PASO 3: Búsqueda en Respaldo Local (localStorage 'galerias_locales')
-      if (!albumEncontrado) {
-        try {
-          const locales = JSON.parse(localStorage.getItem('galerias_locales') || '[]');
-          albumEncontrado = locales.find(item => {
-            const p = String(item.password || item.clave || item.codigo || item.pass || '').trim().toLowerCase();
-            return p === claveNormalizada;
-          });
-        } catch (_) {}
-      }
-
-      // PASO 4: Claves maestras / históricas
-      if (!albumEncontrado) {
-        const clavesLocales = {
-          'brenda': { drive_url: '1eOEv13s4iM3K58eO64vSknD1U9Pj3hXQ', titulo: 'Sesión Privada Brenda' },
-          'familia2026': { drive_url: 'familia-2026', titulo: 'Sesión Familia 2026' },
-          'miprueba': { drive_url: '1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA', titulo: 'Álbum Privado de Muestra' }
-        };
-        if (clavesLocales[claveNormalizada]) {
-          albumEncontrado = clavesLocales[claveNormalizada];
-        }
-      }
-
-      // PASO 5: Resultado
       if (albumEncontrado) {
-        btnTxt.textContent = '¡Acceso Concedido!';
-        
-        const enlaceDrive = albumEncontrado.drive_url || albumEncontrado.url_drive || albumEncontrado.enlace_drive || albumEncontrado.folder_id || albumEncontrado.id || 'privado';
-        const folderId = extraerIdDrive(enlaceDrive) || enlaceDrive;
-        const titulo = albumEncontrado.titulo || 'Sesión Privada';
+        const folderId = albumEncontrado.drive_url || albumEncontrado.folder_id || albumEncontrado.id || 'privado';
+        const titulo = albumEncontrado.titulo || 'Tu Sesión Privada';
+        window.location.href = `privadas.html?id=${encodeURIComponent(folderId)}&titulo=${encodeURIComponent(titulo)}&key=${encodeURIComponent(pass)}`;
+        return;
+      }
 
-        // Registrar métrica de visita privada en Supabase si está disponible
-        try {
-          if (window.supabase) {
-            const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-            client.from('visitas').insert([{
-              tipo: 'desbloqueo_privado',
-              pagina: 'index.html',
-              album_id: String(albumEncontrado.id || folderId),
-              album_titulo: titulo,
-              detalle: `Acceso concedido con clave "${clave}"`,
-              dispositivo: window.innerWidth < 768 ? 'mobile' : 'desktop',
-              origen: 'portafolio'
-            }]).then(() => {}).catch(() => {});
-          }
-        } catch (_) {}
-
-        setTimeout(() => {
-          window.location.href = `privadas.html?id=${encodeURIComponent(folderId)}&titulo=${encodeURIComponent(titulo)}&key=${encodeURIComponent(clave)}`;
-        }, 350);
-      } else {
-        btn.disabled = false;
-        btnTxt.textContent = 'Desbloquear Álbum';
-        if (error) {
-          error.textContent = `Contraseña "${clave}" incorrecta o álbum no encontrado.`;
-          error.classList.remove('hidden');
-        }
-        if (input) {
-          input.select();
-        }
+      // Si no fue encontrado
+      if (err) err.style.display = 'block';
+      if (btnTxt) btnTxt.innerText = 'Desbloquear Álbum';
+      if (inp) {
+        inp.value = '';
+        inp.focus();
       }
     }
 
-    // Registrar visita de página oficial silenciosamente
-    window.addEventListener('DOMContentLoaded', () => {
-      try {
-        if (window.supabase) {
-          const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-          client.from('visitas').insert([{
-            tipo: 'visita_pagina',
-            pagina: 'index.html',
-            detalle: 'Ingreso a Portafolio Principal',
-            dispositivo: window.innerWidth < 768 ? 'mobile' : 'desktop',
-            origen: document.referrer || 'directo'
-          }]).then(() => {}).catch(() => {});
-        }
-      } catch (_) {}
+    // ESC para cerrar modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') cerrarModalCliente();
+    });
+
+    // Inicializar visita
+    document.addEventListener('DOMContentLoaded', () => {
+      registrarVisita('visita_pagina', 'Inicio Portafolio');
     });
   </script>
 </body>
