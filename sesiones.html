@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-
-<html lang="es"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Sesiones | Sergio Ricardo Molina</title>
-<link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Sesiones | Sergio Ricardo Molina</title>
+  <link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -20,7 +20,6 @@
       max-width: 960px;
       margin: 0 auto;
       min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
     }
     header {
       display: flex;
@@ -67,18 +66,13 @@
     .subcarpeta-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 8px;
       margin-bottom: 14px;
       padding-bottom: 6px;
       border-bottom: 1px solid rgba(56, 189, 248, 0.2);
     }
-    .subcarpeta-titulo-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
     .subcarpeta-header .material-symbols-outlined {
-      font-size: 19px;
+      font-size: 18px;
       color: #38bdf8;
     }
     .subcarpeta-titulo {
@@ -88,13 +82,14 @@
       color: #38bdf8;
     }
     .subcarpeta-contador {
+      margin-left: auto;
       font-size: 0.78rem;
       color: #888888;
-      font-family: monospace;
       background: #181818;
-      padding: 3px 9px;
-      border-radius: 6px;
       border: 1px solid #282828;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-family: monospace;
     }
     .galeria {
       display: grid;
@@ -129,8 +124,6 @@
       display: block;
       user-select: none;
       -webkit-user-drag: none;
-      background-color: #1a1a1a;
-      transition: opacity 0.3s ease;
     }
     .badge-likes-thumb {
       position: absolute;
@@ -138,7 +131,6 @@
       left: 8px;
       background: rgba(18, 18, 18, 0.78);
       backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       padding: 3px 8px;
       border-radius: 12px;
@@ -163,7 +155,6 @@
     }
     .badge-likes-thumb .material-symbols-outlined {
       font-size: 14px;
-      transition: transform 0.2s ease;
     }
     .badge-likes-thumb.liked .material-symbols-outlined {
       font-variation-settings: 'FILL' 1;
@@ -204,7 +195,6 @@
       left: 14px;
       background: rgba(18, 18, 18, 0.85);
       backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-left: 3px solid #38bdf8;
       padding: 6px 12px;
@@ -217,25 +207,19 @@
       pointer-events: none;
       z-index: 1002;
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      max-width: 65%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     .firma-visor .material-symbols-outlined {
       font-size: 15px;
       color: #38bdf8;
-      flex-shrink: 0;
     }
     .btn-like-visor {
       position: absolute;
-      bottom: 14px;
-      right: 14px;
+      bottom: 20px;
+      right: 24px;
       background: rgba(18, 18, 18, 0.85);
       backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.18);
-      padding: 6px 14px;
+      padding: 8px 14px;
       border-radius: 20px;
       display: flex;
       align-items: center;
@@ -261,12 +245,10 @@
     }
     .btn-like-visor .material-symbols-outlined {
       font-size: 18px;
-      transition: transform 0.2s ease;
     }
     .btn-like-visor.liked .material-symbols-outlined {
       font-variation-settings: 'FILL' 1;
       color: #f43f5e;
-      transform: scale(1.15);
     }
     .btn-nav {
       position: absolute;
@@ -278,12 +260,11 @@
       cursor: pointer;
       background: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
       border-radius: 50%;
       user-select: none;
       z-index: 1001;
       border: 1px solid rgba(255, 255, 255, 0.18);
-      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      transition: background 0.2s ease, border-color 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -292,7 +273,6 @@
     .btn-nav:hover {
       background: rgba(0, 85, 128, 0.75);
       border-color: #38bdf8;
-      transform: translateY(-50%) scale(1.08);
     }
     .btn-prev { left: 16px; }
     .btn-next { right: 16px; }
@@ -307,12 +287,9 @@
       padding: 4px 14px;
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
       border-radius: 50%;
       line-height: 1;
-      transition: background 0.2s ease;
     }
-    .btn-cerrar:hover { background: rgba(255, 255, 255, 0.25); }
     .redes-sociales {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -329,7 +306,7 @@
       font-size: 0.88rem;
       font-weight: 600;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+      transition: background 0.2s ease, transform 0.2s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -370,62 +347,67 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     @media (max-width: 640px) {
       .btn-nav { display: none; }
-      .firma-visor { font-size: 0.7rem; padding: 4px 8px; left: 8px; bottom: 8px; max-width: 58%; }
-      .btn-like-visor { font-size: 0.78rem; padding: 6px 10px; right: 8px; bottom: 8px; }
+      .firma-visor { font-size: 0.7rem; padding: 4px 8px; left: 8px; bottom: 8px; }
+      .btn-like-visor { font-size: 0.78rem; padding: 6px 10px; right: 12px; bottom: 12px; }
     }
   </style>
 </head>
 <body oncontextmenu="return false;">
-<header>
-<a class="btn-volver" href="index.html">
-<span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span>
-<span>Volver al Portafolio</span>
-</a>
-<h1 class="titulo-categoria">
-<span class="material-symbols-outlined">photo_camera</span>
-<span>Sesiones</span>
-</h1>
-</header>
-<main id="contenedor-sesiones">
-<div class="cargando">
-<div class="cargando-spinner"></div>
-<p>Cargando fotografías desde Google Drive...</p>
-</div>
-</main>
-<section class="redes-sociales">
-<a class="btn-red btn-wsp" href="https://wa.me/542613175222" rel="noopener noreferrer" target="_blank">
-<span class="material-symbols-outlined">chat</span>
-<span>WhatsApp</span>
-</a>
-<a class="btn-red btn-cat" href="https://wa.me/c/5492613175222" rel="noopener noreferrer" target="_blank">
-<span class="material-symbols-outlined">inventory_2</span>
-<span>Catálogo</span>
-</a>
-<a class="btn-red btn-ig" href="https://www.instagram.com/sergioricardo.molina?igsi=OG84bTUxanllMnh4" rel="noopener noreferrer" target="_blank">
-<span class="material-symbols-outlined">photo_camera_back</span>
-<span>Instagram</span>
-</a>
-</section>
-<footer>
-<p>© Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina</p>
-</footer>
-<div class="modal" id="modal" onclick="cerrarVisorFondo(event)">
-<span class="btn-cerrar" onclick="cerrarVisor()">×</span>
-<span class="btn-nav btn-prev" onclick="cambiarFoto(-1, event)">❮</span>
-<div class="modal-contenido" onclick="event.stopPropagation()">
-<img alt="Fotografía ampliada" id="img-ampliada" src=""/>
-<div class="firma-visor" id="firma-visor">
-<span class="material-symbols-outlined">photo_camera</span>
-<span id="texto-firma">Sergio Molina</span>
-</div>
-<button class="btn-like-visor" id="btn-like-visor" onclick="toggleCorazonVisor(event)" type="button">
-<span class="material-symbols-outlined" id="ico-like-visor">favorite</span>
-<span id="txt-like-visor">0</span>
-</button>
-</div>
-<span class="btn-nav btn-next" onclick="cambiarFoto(1, event)">❯</span>
-</div>
-<script>
+  <header>
+    <a class="btn-volver" href="index.html">
+      <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span>
+      <span>Volver al Portafolio</span>
+    </a>
+    <h1 class="titulo-categoria">
+      <span class="material-symbols-outlined">photo_camera</span>
+      <span>Sesiones</span>
+    </h1>
+  </header>
+
+  <main id="contenedor-sesiones">
+    <div class="cargando">
+      <div class="cargando-spinner"></div>
+      <p>Cargando fotografías desde Google Drive...</p>
+    </div>
+  </main>
+
+  <section class="redes-sociales">
+    <a class="btn-red btn-wsp" href="https://wa.me/542613175222" target="_blank" rel="noopener noreferrer">
+      <span class="material-symbols-outlined">chat</span>
+      <span>WhatsApp</span>
+    </a>
+    <a class="btn-red btn-cat" href="https://wa.me/c/5492613175222" target="_blank" rel="noopener noreferrer">
+      <span class="material-symbols-outlined">inventory_2</span>
+      <span>Catálogo</span>
+    </a>
+    <a class="btn-red btn-ig" href="https://www.instagram.com/sergioricardo.molina?igsi=OG84bTUxanllMnh4" target="_blank" rel="noopener noreferrer">
+      <span class="material-symbols-outlined">photo_camera_back</span>
+      <span>Instagram</span>
+    </a>
+  </section>
+
+  <footer>
+    <p>© Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina</p>
+  </footer>
+
+  <div class="modal" id="modal" onclick="cerrarVisorFondo(event)">
+    <span class="btn-cerrar" onclick="cerrarVisor()">×</span>
+    <span class="btn-nav btn-prev" onclick="cambiarFoto(-1, event)">❮</span>
+    <div class="modal-contenido" onclick="event.stopPropagation()">
+      <img alt="Fotografía ampliada" id="img-ampliada" src="">
+      <div class="firma-visor" id="firma-visor">
+        <span class="material-symbols-outlined">photo_camera</span>
+        <span id="texto-firma">Sergio Molina</span>
+      </div>
+    </div>
+    <button class="btn-like-visor" id="btn-like-visor" onclick="toggleCorazonVisor(event)" type="button">
+      <span class="material-symbols-outlined" id="ico-like-visor">favorite</span>
+      <span id="txt-like-visor">0</span>
+    </button>
+    <span class="btn-nav btn-next" onclick="cambiarFoto(1, event)">❯</span>
+  </div>
+
+  <script>
     const FOLDER_SESIONES = '1IReNcUgPTRAa9nj3-u38QstyZWV9n6RY';
     const API_KEY_DRIVE = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
     const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
@@ -450,7 +432,6 @@
     let votosLocales = JSON.parse(localStorage.getItem('votos_sesiones') || '{}');
     let likesMemoria = {};
 
-    // Carga no bloqueante de likes desde Supabase
     async function cargarLikesDesdeSupabase() {
       if (!supabase) return;
       try {
@@ -458,14 +439,14 @@
           .from('likes_fotos')
           .select('foto_id, conteo')
           .eq('galeria', 'sesiones');
-        if (!error && Array.isArray(data)) {
+        if (!error && data) {
           data.forEach(item => {
             likesMemoria[item.foto_id] = item.conteo;
           });
           actualizarTodosLosBadgesEnPantalla();
         }
       } catch (err) {
-        console.warn('Carga likes Supabase diferida:', err);
+        console.warn('Carga likes Supabase:', err);
       }
     }
 
@@ -513,7 +494,7 @@
             }
           }
         } catch (rpcErr) {
-          console.warn('RPC toggle_corazon diferido:', rpcErr);
+          console.warn('RPC toggle_corazon:', rpcErr);
         }
       }
     }
@@ -542,10 +523,6 @@
         const isLiked = !!votosLocales[fotoId];
         actualizarBadgeFoto(fotoId, likesMemoria[fotoId], isLiked);
       });
-      if (document.getElementById('modal').style.display === 'flex' && fotosActuales[indiceFotoActual]) {
-        const f = fotosActuales[indiceFotoActual];
-        actualizarBotonVisor(likesMemoria[f.id] || 0, !!votosLocales[f.id]);
-      }
     }
 
     function actualizarBotonVisor(conteo, isLiked) {
@@ -561,74 +538,59 @@
       }
     }
 
-    async function obtenerFotosDeCarpeta(folderId) {
-      try {
-        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        return (data.files && Array.isArray(data.files)) ? data.files : [];
-      } catch (err) {
-        console.warn(`Error obteniendo fotos de carpeta ${folderId}:`, err);
-        return [];
-      }
-    }
-
     async function cargarSesiones() {
       const contenedor = document.getElementById('contenedor-sesiones');
       fotosActuales = [];
 
       try {
-        // Consultar directamente subcarpetas de Sesiones
-        const urlSub = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_SESIONES}'+in+parents+and+mimeType='application/vnd.google-apps.folder'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
-        const resSub = await fetch(urlSub);
-        if (!resSub.ok) throw new Error(`Error HTTP ${resSub.status} en Drive API`);
-        const dataSub = await resSub.json();
-        const carpetas = (dataSub.files && Array.isArray(dataSub.files)) ? dataSub.files : [];
+        // Consulta unificada directa a Drive con timeout de seguridad
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 9000);
+
+        const urlDrive = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_SESIONES}'+in+parents+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name,mimeType)`;
+        const res = await fetch(urlDrive, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        const data = await res.json();
+        const items = data.files || [];
 
         contenedor.innerHTML = '';
 
-        if (carpetas.length === 0) {
-          // Si no hay subcarpetas, buscar fotos directas en la raíz de Sesiones
-          const fotosRaiz = await obtenerFotosDeCarpeta(FOLDER_SESIONES);
-          if (fotosRaiz.length > 0) {
-            renderizarSeccion('Sesiones', fotosRaiz, contenedor);
-          } else {
-            contenedor.innerHTML = '<p class="cargando">No se encontraron fotografías en Google Drive.</p>';
-          }
-        } else {
-          // Obtener fotos de todas las subcarpetas en paralelo para carga ultra rápida y sin bloqueos
-          const resultadosCarpetas = await Promise.all(
-            carpetas.map(async carpeta => ({
-              nombre: carpeta.name,
-              archivos: await obtenerFotosDeCarpeta(carpeta.id)
-            }))
-          );
+        if (items.length === 0) {
+          contenedor.innerHTML = '<p class="cargando">No se encontraron fotografías en Google Drive.</p>';
+          return;
+        }
 
-          let totalRenderizadas = 0;
-          for (const item of resultadosCarpetas) {
-            if (item.archivos && item.archivos.length > 0) {
-              renderizarSeccion(item.nombre, item.archivos, contenedor);
-              totalRenderizadas++;
+        const carpetas = items.filter(f => f.mimeType === 'application/vnd.google-apps.folder');
+        const fotosDirectas = items.filter(f => f.mimeType && f.mimeType.startsWith('image/'));
+
+        // 1. Si hay fotos directas en la raíz, mostrarlas al instante
+        if (fotosDirectas.length > 0) {
+          renderizarSeccion('Sesiones de Estudio y Recitales', fotosDirectas, contenedor);
+        }
+
+        // 2. Si hay subcarpetas, traer las fotos de cada una sin bloquear la vista
+        if (carpetas.length > 0) {
+          for (const carpeta of carpetas) {
+            try {
+              const urlFotos = `https://www.googleapis.com/drive/v3/files?q='${carpeta.id}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
+              const resFotos = await fetch(urlFotos);
+              const dataFotos = await resFotos.json();
+              if (dataFotos.files && dataFotos.files.length > 0) {
+                renderizarSeccion(carpeta.name, dataFotos.files, contenedor);
+              }
+            } catch (errSub) {
+              console.warn(`Subcarpeta ${carpeta.name}:`, errSub);
             }
-          }
-
-          if (totalRenderizadas === 0) {
-            contenedor.innerHTML = '<p class="cargando">No se encontraron imágenes en las carpetas de sesiones.</p>';
           }
         }
 
-        // Carga diferida no bloqueante de Supabase
+        // Cargar ranking de corazones de Supabase en segundo plano
         cargarLikesDesdeSupabase();
+
       } catch (err) {
         console.error('Error al cargar Sesiones:', err);
-        contenedor.innerHTML = `
-          <div class="cargando">
-            <span class="material-symbols-outlined" style="font-size: 38px; color: #f87171;">cloud_off</span>
-            <p style="color:#ef4444;">Error al conectar con Google Drive. Reintentando en breve...</p>
-          </div>
-        `;
-        setTimeout(cargarSesiones, 4000);
+        contenedor.innerHTML = '<p class="cargando" style="color:#ef4444;">No se pudieron cargar las fotografías de Google Drive. Verificá que la carpeta tenga permiso público de lectura.</p>';
       }
     }
 
@@ -639,10 +601,8 @@
       const cabecera = document.createElement('div');
       cabecera.className = 'subcarpeta-header';
       cabecera.innerHTML = `
-        <div class="subcarpeta-titulo-wrap">
-          <span class="material-symbols-outlined">folder</span>
-          <h2 class="subcarpeta-titulo">${nombreCarpeta}</h2>
-        </div>
+        <span class="material-symbols-outlined">folder</span>
+        <h2 class="subcarpeta-titulo">${nombreCarpeta}</h2>
         <span class="subcarpeta-contador">${archivos.length} ${archivos.length === 1 ? 'foto' : 'fotos'}</span>
       `;
       seccion.appendChild(cabecera);
@@ -670,7 +630,7 @@
         const yaLiked = !!votosLocales[archivo.id];
 
         card.innerHTML = `
-          <img src="${urlThumb}" alt="${archivo.name}" loading="lazy" onerror="this.src='https://lh3.googleusercontent.com/d/${archivo.id}'">
+          <img src="${urlThumb}" alt="${archivo.name}" loading="lazy">
           <button class="badge-likes-thumb ${yaLiked ? 'liked' : ''}" id="badge-like-${archivo.id}" onclick="toggleLikeFoto('${archivo.id}', '${archivo.name}', event)" type="button" title="Me gusta">
             <span class="material-symbols-outlined">favorite</span>
             <span id="txt-like-${archivo.id}">${conteoInicial}</span>
@@ -689,8 +649,7 @@
       indiceFotoActual = index;
       const f = fotosActuales[indiceFotoActual];
 
-      const imgElem = document.getElementById('img-ampliada');
-      imgElem.src = f.urlFull;
+      document.getElementById('img-ampliada').src = f.urlFull;
       document.getElementById('texto-firma').textContent = `Sergio Molina • ${f.carpeta} • #${f.nombre}`;
 
       const conteo = likesMemoria[f.id] || 0;
@@ -726,7 +685,7 @@
 
     document.addEventListener('keydown', (e) => {
       const modal = document.getElementById('modal');
-      if (modal && modal.style.display === 'flex') {
+      if (modal.style.display === 'flex') {
         if (e.key === 'Escape') cerrarVisor();
         else if (e.key === 'ArrowLeft') cambiarFoto(-1);
         else if (e.key === 'ArrowRight') cambiarFoto(1);
@@ -736,12 +695,12 @@
     let touchStartX = 0;
     let touchEndX = 0;
     const modal = document.getElementById('modal');
-    modal.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    modal.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
     modal.addEventListener('touchend', e => {
       touchEndX = e.changedTouches[0].screenX;
       if (touchEndX + 45 < touchStartX) cambiarFoto(1);
       else if (touchEndX > touchStartX + 45) cambiarFoto(-1);
-    }, { passive: true });
+    }, false);
 
     window.addEventListener('popstate', () => {
       if (document.getElementById('modal').style.display === 'flex') {
@@ -749,7 +708,6 @@
       }
     });
 
-    // Registrador de métricas en Supabase con exclusión de dispositivo maestro (?sergio=1)
     (async function registrarVisita() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
@@ -775,4 +733,5 @@
 
     document.addEventListener('DOMContentLoaded', cargarSesiones);
   </script>
-</body></html>
+</body>
+</html>
