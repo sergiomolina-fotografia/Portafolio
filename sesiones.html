@@ -540,57 +540,54 @@
 
     async function cargarSesiones() {
       const contenedor = document.getElementById('contenedor-sesiones');
-      fotosActuales = [];
-
+      const urlFolders = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_SESIONES}'+in+parents+and+mimeType='application/vnd.google-apps.folder'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
+      
       try {
-        // Consulta unificada directa a Drive con timeout de seguridad
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 9000);
-
-        const urlDrive = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_SESIONES}'+in+parents+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name,mimeType)`;
-        const res = await fetch(urlDrive, { signal: controller.signal });
-        clearTimeout(timeoutId);
-
+        const res = await fetch(urlFolders);
         const data = await res.json();
-        const items = data.files || [];
-
-        contenedor.innerHTML = '';
-
-        if (items.length === 0) {
-          contenedor.innerHTML = '<p class="cargando">No se encontraron fotografías en Google Drive.</p>';
-          return;
-        }
-
-        const carpetas = items.filter(f => f.mimeType === 'application/vnd.google-apps.folder');
-        const fotosDirectas = items.filter(f => f.mimeType && f.mimeType.startsWith('image/'));
-
-        // 1. Si hay fotos directas en la raíz, mostrarlas al instante
-        if (fotosDirectas.length > 0) {
-          renderizarSeccion('Sesiones de Estudio y Recitales', fotosDirectas, contenedor);
-        }
-
-        // 2. Si hay subcarpetas, traer las fotos de cada una sin bloquear la vista
-        if (carpetas.length > 0) {
-          for (const carpeta of carpetas) {
-            try {
-              const urlFotos = `https://www.googleapis.com/drive/v3/files?q='${carpeta.id}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
-              const resFotos = await fetch(urlFotos);
-              const dataFotos = await resFotos.json();
-              if (dataFotos.files && dataFotos.files.length > 0) {
-                renderizarSeccion(carpeta.name, dataFotos.files, contenedor);
-              }
-            } catch (errSub) {
-              console.warn(`Subcarpeta ${carpeta.name}:`, errSub);
-            }
+        
+        if (data.files && data.files.length > 0) {
+          contenedor.innerHTML = '';
+          for (const sub of data.files) {
+            await renderizarSubcarpeta(sub.id, sub.name);
           }
+        } else {
+          await renderizarFotosDirectas(FOLDER_SESIONES, 'Sesiones');
         }
-
-        // Cargar ranking de corazones de Supabase en segundo plano
-        cargarLikesDesdeSupabase();
-
       } catch (err) {
-        console.error('Error al cargar Sesiones:', err);
-        contenedor.innerHTML = '<p class="cargando" style="color:#ef4444;">No se pudieron cargar las fotografías de Google Drive. Verificá que la carpeta tenga permiso público de lectura.</p>';
+        console.warn('Error al buscar subcarpetas, intentando fotos directas:', err);
+        await renderizarFotosDirectas(FOLDER_SESIONES, 'Sesiones');
+      }
+      
+      try { cargarLikesDesdeSupabase(); } catch(_) {}
+    }
+
+    async function renderizarSubcarpeta(subId, subNombre) {
+      const contenedor = document.getElementById('contenedor-sesiones');
+      const urlFiles = `https://www.googleapis.com/drive/v3/files?q='${subId}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
+      try {
+        const res = await fetch(urlFiles);
+        const data = await res.json();
+        if (data.files && data.files.length > 0) {
+          renderizarSeccion(subNombre, data.files, contenedor);
+        }
+      } catch (_) {}
+    }
+
+    async function renderizarFotosDirectas(folderId, nombreCarpeta) {
+      const contenedor = document.getElementById('contenedor-sesiones');
+      const urlFiles = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
+      try {
+        const res = await fetch(urlFiles);
+        const data = await res.json();
+        if (data.files && data.files.length > 0) {
+          contenedor.innerHTML = '';
+          renderizarSeccion(nombreCarpeta, data.files, contenedor);
+        } else {
+          contenedor.innerHTML = '<div style="text-align:center; padding: 40px; color:#888;">No hay fotografías disponibles en esta carpeta de Google Drive.</div>';
+        }
+      } catch (_) {
+        contenedor.innerHTML = '<div style="text-align:center; padding: 40px; color:#f87171;">Error al conectar con Google Drive. Verifique permisos.</div>';
       }
     }
 
