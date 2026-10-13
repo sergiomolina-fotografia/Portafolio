@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-
-<html lang="es"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Sesiones | Sergio Ricardo Molina</title>
-<link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Sesiones | Sergio Ricardo Molina</title>
+  <link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -362,58 +362,63 @@
   </style>
 </head>
 <body oncontextmenu="return false;">
-<header>
-<a class="btn-volver" href="index.html">
-<span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span>
-<span>Volver al Portafolio</span>
-</a>
-<h1 class="titulo-categoria">
-<span class="material-symbols-outlined">photo_camera</span>
-<span>Sesiones</span>
-</h1>
-</header>
-<main id="contenedor-sesiones">
-<div class="cargando">
-<div class="cargando-spinner"></div>
-<p>Cargando fotografías desde Google Drive...</p>
-</div>
-</main>
-<section class="redes-sociales">
-<a class="btn-red btn-wsp" href="https://wa.me/542613175222" rel="noopener noreferrer" target="_blank">
-<span class="material-symbols-outlined">chat</span>
-<span>WhatsApp</span>
-</a>
-<a class="btn-red btn-cat" href="https://wa.me/c/5492613175222" rel="noopener noreferrer" target="_blank">
-<span class="material-symbols-outlined">inventory_2</span>
-<span>Catálogo</span>
-</a>
-<a class="btn-red btn-ig" href="https://www.instagram.com/sergioricardo.molina?igsi=OG84bTUxanllMnh4" rel="noopener noreferrer" target="_blank">
-<span class="material-symbols-outlined">photo_camera_back</span>
-<span>Instagram</span>
-</a>
-</section>
-<footer>
-<p>© Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina</p>
-</footer>
-<div class="modal" id="modal" onclick="cerrarVisorFondo(event)">
-<span class="btn-cerrar" onclick="cerrarVisor()">×</span>
-<span class="btn-nav btn-prev" onclick="cambiarFoto(-1, event)">❮</span>
-<div class="modal-contenido" onclick="event.stopPropagation()">
-<img alt="Fotografía ampliada" id="img-ampliada" src=""/>
-<div class="firma-visor" id="firma-visor">
-<span class="material-symbols-outlined">photo_camera</span>
-<span id="texto-firma">Sergio Molina</span>
-</div>
-</div>
-<button class="btn-like-visor" id="btn-like-visor" onclick="toggleCorazonVisor(event)" type="button">
-<span class="material-symbols-outlined" id="ico-like-visor">favorite</span>
-<span id="txt-like-visor">0</span>
-</button>
-<span class="btn-nav btn-next" onclick="cambiarFoto(1, event)">❯</span>
-</div>
-<script>
-    const API_KEY_DRIVE = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
+  <header>
+    <a class="btn-volver" href="index.html">
+      <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span>
+      <span>Volver al Portafolio</span>
+    </a>
+    <h1 class="titulo-categoria">
+      <span class="material-symbols-outlined">photo_camera</span>
+      <span>Sesiones</span>
+    </h1>
+  </header>
+
+  <main id="contenedor-sesiones">
+    <div class="cargando">
+      <div class="cargando-spinner"></div>
+      <p>Cargando fotografías desde Google Drive...</p>
+    </div>
+  </main>
+
+  <section class="redes-sociales">
+    <a class="btn-red btn-wsp" href="https://wa.me/542613175222" target="_blank" rel="noopener noreferrer">
+      <span class="material-symbols-outlined">chat</span>
+      <span>WhatsApp</span>
+    </a>
+    <a class="btn-red btn-cat" href="https://wa.me/c/5492613175222" target="_blank" rel="noopener noreferrer">
+      <span class="material-symbols-outlined">inventory_2</span>
+      <span>Catálogo</span>
+    </a>
+    <a class="btn-red btn-ig" href="https://www.instagram.com/sergioricardo.molina?igsi=OG84bTUxanllMnh4" target="_blank" rel="noopener noreferrer">
+      <span class="material-symbols-outlined">photo_camera_back</span>
+      <span>Instagram</span>
+    </a>
+  </section>
+
+  <footer>
+    <p>© Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina</p>
+  </footer>
+
+  <div class="modal" id="modal" onclick="cerrarVisorFondo(event)">
+    <span class="btn-cerrar" onclick="cerrarVisor()">×</span>
+    <span class="btn-nav btn-prev" onclick="cambiarFoto(-1, event)">❮</span>
+    <div class="modal-contenido" onclick="event.stopPropagation()">
+      <img alt="Fotografía ampliada" id="img-ampliada" src="">
+      <div class="firma-visor" id="firma-visor">
+        <span class="material-symbols-outlined">photo_camera</span>
+        <span id="texto-firma">Sergio Molina</span>
+      </div>
+    </div>
+    <button class="btn-like-visor" id="btn-like-visor" onclick="toggleCorazonVisor(event)" type="button">
+      <span class="material-symbols-outlined" id="ico-like-visor">favorite</span>
+      <span id="txt-like-visor">0</span>
+    </button>
+    <span class="btn-nav btn-next" onclick="cambiarFoto(1, event)">❯</span>
+  </div>
+
+  <script>
     const FOLDER_SESIONES = '1IReNcUgPTRAa9nj3-u38QstyZWV9n6RY';
+    const API_KEY_DRIVE = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
     const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
 
@@ -638,9 +643,7 @@
       indiceFotoActual = index;
       const f = fotosActuales[indiceFotoActual];
 
-      const imgVisor = document.getElementById('img-ampliada');
-      imgVisor.src = f.urlFull;
-
+      document.getElementById('img-ampliada').src = f.urlFull;
       document.getElementById('texto-firma').textContent = `Sergio Molina • ${f.carpeta} • #${f.nombre}`;
 
       const conteo = likesMemoria[f.id] || 0;
@@ -666,9 +669,7 @@
       else if (indiceFotoActual < 0) indiceFotoActual = fotosActuales.length - 1;
 
       const f = fotosActuales[indiceFotoActual];
-      const imgVisor = document.getElementById('img-ampliada');
-      imgVisor.src = f.urlFull;
-
+      document.getElementById('img-ampliada').src = f.urlFull;
       document.getElementById('texto-firma').textContent = `Sergio Molina • ${f.carpeta} • #${f.nombre}`;
 
       const conteo = likesMemoria[f.id] || 0;
@@ -688,12 +689,12 @@
     let touchStartX = 0;
     let touchEndX = 0;
     const modal = document.getElementById('modal');
-    modal.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    modal.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
     modal.addEventListener('touchend', e => {
       touchEndX = e.changedTouches[0].screenX;
       if (touchEndX + 45 < touchStartX) cambiarFoto(1);
       else if (touchEndX > touchStartX + 45) cambiarFoto(-1);
-    }, { passive: true });
+    }, false);
 
     window.addEventListener('popstate', () => {
       if (document.getElementById('modal').style.display === 'flex') {
@@ -727,4 +728,5 @@
 
     document.addEventListener('DOMContentLoaded', cargarSesiones);
   </script>
-</body></html>
+</body>
+</html>
