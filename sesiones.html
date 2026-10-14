@@ -457,92 +457,86 @@
 
     async function cargarSubcarpetas() {
       const contenedor = document.getElementById('contenedor-secciones');
-      const urlFolders = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType='application/vnd.google-apps.folder'+and+trashed=false&orderBy=name&key=${API_KEY}&fields=files(id,name)`;
+      const query = `'${FOLDER_ID}' in parents and trashed = false`;
+      const urlRaiz = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&orderBy=name&pageSize=100&key=${API_KEY}&fields=files(id,name,mimeType)`;
+      
       try {
-        const res = await fetch(urlFolders);
+        const res = await fetch(urlRaiz);
         const data = await res.json();
-        if (data.files && data.files.length > 0) {
-          contenedor.innerHTML = '';
-          for (const sub of data.files) {
-            await renderizarSubcarpeta(sub.id, sub.name);
+        const items = data.files || [];
+
+        const subcarpetas = items.filter(f => f.mimeType === 'application/vnd.google-apps.folder');
+        const fotosRaiz = items.filter(f => (f.mimeType && f.mimeType.startsWith('image/')) || /\.(jpe?g|png|webp|heic|raw)$/i.test(f.name));
+
+        if (subcarpetas.length === 0 && fotosRaiz.length === 0) {
+          contenedor.innerHTML = '<div style="text-align:center; padding: 40px; color:#888;">No hay fotografías disponibles en esta carpeta.</div>';
+          return;
+        }
+
+        contenedor.innerHTML = '';
+
+        if (fotosRaiz.length > 0) {
+          renderizarGrupoFotos(subcarpetas.length > 0 ? 'Sesiones Generales' : '', fotosRaiz, contenedor);
+        }
+
+        if (subcarpetas.length > 0) {
+          for (const sub of subcarpetas) {
+            try {
+              const querySub = `'${sub.id}' in parents and trashed = false`;
+              const urlSub = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(querySub)}&orderBy=name&pageSize=100&key=${API_KEY}&fields=files(id,name,mimeType)`;
+              const resSub = await fetch(urlSub);
+              const dataSub = await resSub.json();
+              const fotosSub = (dataSub.files || []).filter(f => (f.mimeType && f.mimeType.startsWith('image/')) || /\.(jpe?g|png|webp|heic|raw)$/i.test(f.name));
+              if (fotosSub.length > 0) {
+                renderizarGrupoFotos(sub.name, fotosSub, contenedor);
+              }
+            } catch (_) {}
           }
-        } else {
-          await renderizarFotosDirectas(FOLDER_ID, NOMBRE_SECCION);
         }
+
+        try { cargarLikesDesdeSupabase(); } catch(_) {}
       } catch (err) {
-        await renderizarFotosDirectas(FOLDER_ID, NOMBRE_SECCION);
+        contenedor.innerHTML = '<div style="text-align:center; padding: 40px; color:#f87171;">Error al conectar con Google Drive. Verificá permisos.</div>';
       }
-      try { cargarLikesDesdeSupabase(); } catch(_) {}
     }
 
-    async function renderizarSubcarpeta(subId, subNombre) {
-      const contenedor = document.getElementById('contenedor-secciones');
-      const urlFiles = `https://www.googleapis.com/drive/v3/files?q='${subId}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY}&fields=files(id,name)`;
-      try {
-        const res = await fetch(urlFiles);
-        const data = await res.json();
-        if (data.files && data.files.length > 0) {
-          const seccion = document.createElement('section');
-          seccion.innerHTML = `
-            <h3 class="titulo-subcarpeta">
-              <span class="material-symbols-outlined" style="font-size: 20px;">folder</span>
-              <span>${subNombre}</span>
-            </h3>
-            <div class="galeria" id="galeria-${subId}"></div>
-          `;
-          contenedor.appendChild(seccion);
-          const grid = seccion.querySelector('#galeria-' + subId);
-          data.files.forEach(f => {
-            const urlHD = `https://lh3.googleusercontent.com/d/${f.id}=w1600`;
-            const indexGlobal = fotosActuales.length;
-            fotosActuales.push({ id: f.id, url: urlHD, name: f.name || 'foto.jpg', subcarpeta: subNombre });
-            const card = document.createElement('div');
-            card.className = 'card-foto';
-            const conteo = likesMemoria[f.id] || 0;
-            const liked = !!votosLocales[f.id];
-            card.innerHTML = `
-              <img src="https://lh3.googleusercontent.com/d/${f.id}=w800" alt="${f.name}" loading="lazy">
-              <button class="badge-likes-thumb ${liked ? 'liked' : ''}" id="badge-like-${f.id}" onclick="toggleLikeFoto('${f.id}', '${f.name}', event)" type="button">
-                <span class="material-symbols-outlined">favorite</span>
-                <span id="txt-like-${f.id}">${conteo}</span>
-              </button>
-            `;
-            card.onclick = () => abrirVisor(indexGlobal);
-            grid.appendChild(card);
-          });
-        }
-      } catch (_) {}
-    }
+    function renderizarGrupoFotos(subNombre, listaArchivos, contenedorPadre) {
+      const seccion = document.createElement('section');
+      if (subNombre) {
+        seccion.innerHTML = `
+          <h3 class="titulo-subcarpeta">
+            <span class="material-symbols-outlined" style="font-size: 20px;">folder</span>
+            <span>${subNombre}</span>
+          </h3>
+          <div class="galeria"></div>
+        `;
+      } else {
+        seccion.innerHTML = `<div class="galeria"></div>`;
+      }
 
-    async function renderizarFotosDirectas(folderId, nombreCarpeta) {
-      const contenedor = document.getElementById('contenedor-secciones');
-      const urlFiles = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY}&fields=files(id,name)`;
-      try {
-        const res = await fetch(urlFiles);
-        const data = await res.json();
-        if (data.files && data.files.length > 0) {
-          contenedor.innerHTML = '<div class="galeria" id="galeria-directa"></div>';
-          const grid = document.getElementById('galeria-directa');
-          data.files.forEach(f => {
-            const urlHD = `https://lh3.googleusercontent.com/d/${f.id}=w1600`;
-            const indexGlobal = fotosActuales.length;
-            fotosActuales.push({ id: f.id, url: urlHD, name: f.name || 'foto.jpg', subcarpeta: nombreCarpeta });
-            const card = document.createElement('div');
-            card.className = 'card-foto';
-            const conteo = likesMemoria[f.id] || 0;
-            const liked = !!votosLocales[f.id];
-            card.innerHTML = `
-              <img src="https://lh3.googleusercontent.com/d/${f.id}=w800" alt="${f.name}" loading="lazy">
-              <button class="badge-likes-thumb ${liked ? 'liked' : ''}" id="badge-like-${f.id}" onclick="toggleLikeFoto('${f.id}', '${f.name}', event)" type="button">
-                <span class="material-symbols-outlined">favorite</span>
-                <span id="txt-like-${f.id}">${conteo}</span>
-              </button>
-            `;
-            card.onclick = () => abrirVisor(indexGlobal);
-            grid.appendChild(card);
-          });
-        }
-      } catch (_) {}
+      const grid = seccion.querySelector('.galeria');
+      listaArchivos.forEach(f => {
+        const urlHD = `https://lh3.googleusercontent.com/d/${f.id}=w1600`;
+        const indexGlobal = fotosActuales.length;
+        fotosActuales.push({ id: f.id, url: urlHD, name: f.name || 'foto.jpg', subcarpeta: subNombre });
+
+        const card = document.createElement('div');
+        card.className = 'card-foto';
+        const conteo = likesMemoria[f.id] || 0;
+        const liked = !!votosLocales[f.id];
+
+        card.innerHTML = `
+          <img src="https://lh3.googleusercontent.com/d/${f.id}=w800" alt="${f.name}" loading="lazy">
+          <button class="badge-likes-thumb ${liked ? 'liked' : ''}" id="badge-like-${f.id}" onclick="toggleLikeFoto('${f.id}', '${f.name}', event)" type="button">
+            <span class="material-symbols-outlined">favorite</span>
+            <span id="txt-like-${f.id}">${conteo}</span>
+          </button>
+        `;
+        card.onclick = () => abrirVisor(indexGlobal);
+        grid.appendChild(card);
+      });
+
+      contenedorPadre.appendChild(seccion);
     }
 
     function abrirVisor(index) {
@@ -556,7 +550,6 @@
       const liked = !!votosLocales[foto.id];
       actualizarBotonVisor(conteo, liked);
       document.getElementById('modal').style.display = 'flex';
-      registrarMetrica('foto_visor_hd', `Foto: #${foto.name} en ${foto.subcarpeta}`);
     }
 
     function cerrarVisor() { document.getElementById('modal').style.display = 'none'; }
@@ -595,18 +588,8 @@
       else if (touchEndX > touchStartX + 50) cambiarFoto(-1);
     }, false);
 
-    async function registrarMetrica(tipo, detalle) {
-      try {
-        if (window.supabase) {
-          const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-          await client.from('visitas').insert([{ tipo, pagina: 'sesiones.html', detalle, dispositivo: window.innerWidth < 640 ? 'mobile' : 'desktop' }]);
-        }
-      } catch (_) {}
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
       cargarSubcarpetas();
-      registrarMetrica('visita_pagina', 'Visita a galería Sesiones');
     });
   </script>
 </body>
