@@ -1,34 +1,31 @@
 <!DOCTYPE html>
-
-<html lang="es"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>Ensayos | Sergio Ricardo Molina</title>
-<link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Ensayos | Sergio Ricardo Molina</title>
+  <link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: #111111;
       color: #ffffff;
-      padding: 16px 12px 36px;
+      padding: 20px 16px 40px;
       max-width: 960px;
       margin: 0 auto;
       min-height: 100vh;
-      user-select: none;
     }
-    body.visor-abierto { overflow: hidden; }
-
     .cabecera-galeria {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       padding-bottom: 12px;
       border-bottom: 1px solid #282828;
     }
@@ -36,14 +33,14 @@
       background: #222222;
       color: #ffffff;
       border: 1px solid #005580;
-      padding: 7px 14px;
+      padding: 8px 16px;
       border-radius: 20px;
-      font-size: 0.82rem;
+      font-size: 0.88rem;
       font-weight: 500;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       text-decoration: none;
       transition: background 0.2s, border-color 0.2s;
     }
@@ -52,26 +49,24 @@
       border-color: #38bdf8;
     }
     .titulo-categoria {
-      font-size: 1.15rem;
-      font-weight: 500;
-      letter-spacing: 0.8px;
+      font-size: 1.3rem;
+      font-weight: 400;
+      letter-spacing: 1px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
-
     .titulo-subcarpeta {
-      font-size: 0.92rem;
-      font-weight: 600;
+      font-size: 1rem;
+      font-weight: 500;
       color: #38bdf8;
-      margin: 22px 0 10px;
+      margin: 26px 0 12px;
       display: flex;
       align-items: center;
-      gap: 6px;
-      border-bottom: 1px solid #222222;
-      padding-bottom: 5px;
+      gap: 8px;
+      border-bottom: 1px solid #222;
+      padding-bottom: 6px;
     }
-
     .galeria {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -83,25 +78,64 @@
     @media (min-width: 768px) {
       .galeria { grid-template-columns: repeat(4, 1fr); gap: 12px; }
     }
-    .galeria img {
+    .card-foto {
+      position: relative;
       width: 100%;
       aspect-ratio: 1 / 1;
-      object-fit: cover;
       background: #000000;
-      border-radius: 6px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #2a2a2a;
       cursor: pointer;
       transition: transform 0.2s, opacity 0.2s;
-      border: 1px solid #2a2a2a;
-      display: block;
     }
-    .galeria img:hover {
+    .card-foto:hover {
       transform: scale(1.02);
-      opacity: 0.95;
+      border-color: #0077b3;
     }
-    .galeria img:active {
-      transform: scale(0.97);
+    .card-foto img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
     }
-
+    .badge-likes-thumb {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(18, 18, 18, 0.78);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 3px 8px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #ffffff;
+      z-index: 5;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .badge-likes-thumb:hover {
+      background: rgba(0, 85, 128, 0.85);
+      border-color: #38bdf8;
+    }
+    .badge-likes-thumb.liked {
+      background: rgba(225, 29, 72, 0.25);
+      border-color: #fb7185;
+      color: #fb7185;
+    }
+    .badge-likes-thumb .material-symbols-outlined {
+      font-size: 14px;
+    }
+    .badge-likes-thumb.liked .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1;
+      color: #f43f5e;
+    }
     .modal {
       display: none;
       position: fixed;
@@ -109,18 +143,13 @@
       background: rgba(0,0,0,0.96);
       justify-content: center;
       align-items: center;
-      z-index: 2000;
-      touch-action: pan-y;
+      z-index: 1000;
     }
     .modal-contenido {
       position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      max-width: 95%;
+      display: inline-block;
+      max-width: 92%;
       max-height: 85vh;
-      width: 100%;
-      user-select: none;
     }
     .modal img {
       max-width: 100%;
@@ -129,111 +158,111 @@
       border-radius: 4px;
       display: block;
       box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-      pointer-events: auto;
+      user-select: none;
+      -webkit-user-drag: none;
     }
-
     .firma-visor {
       position: absolute;
-      bottom: 16px;
-      left: 16px;
-      z-index: 1002;
-      background: rgba(10, 10, 10, 0.78);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-width: 1px 1px 1px 3px;
-      border-style: solid;
-      border-color: rgba(255, 255, 255, 0.12) rgba(255, 255, 255, 0.12) rgba(255, 255, 255, 0.12) rgb(56, 189, 248);
-      border-radius: 8px;
-      padding: 6px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      text-align: left;
+      bottom: 12px;
+      left: 14px;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(4px);
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #e0e0e0;
+      font-family: monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
       pointer-events: none;
-      max-width: calc(100% - 32px);
-    }
-
-    .firma-visor .header-autor {
+      z-index: 1002;
       display: flex;
       align-items: center;
       gap: 6px;
     }
-
-    .firma-visor .header-autor span {
-      font-size: 12px;
-      font-weight: 600;
+    .firma-visor .dot { color: #38bdf8; }
+    .btn-like-visor {
+      position: absolute;
+      bottom: 20px;
+      right: 24px;
+      background: rgba(18, 18, 18, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 8px 14px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.85rem;
+      font-weight: 700;
       color: #ffffff;
+      cursor: pointer;
+      z-index: 1003;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+      user-select: none;
     }
-
-    .firma-visor .detalle-foto {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 11px;
-      color: #999999;
-      line-height: 1.2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .btn-like-visor:hover {
+      background: rgba(0, 85, 128, 0.9);
+      border-color: #38bdf8;
+      transform: scale(1.05);
     }
-
+    .btn-like-visor.liked {
+      background: rgba(225, 29, 72, 0.35);
+      border-color: #fb7185;
+      color: #fb7185;
+    }
+    .btn-like-visor .material-symbols-outlined {
+      font-size: 18px;
+    }
+    .btn-like-visor.liked .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1;
+      color: #f43f5e;
+    }
     .btn-nav {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      color: #ffffff;
-      font-size: 1.8rem;
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      color: white;
+      font-size: 2.2rem;
+      padding: 14px 20px;
       cursor: pointer;
-      background: rgba(0,0,0,0.45);
+      background: rgba(0,0,0,0.5);
       border-radius: 50%;
       user-select: none;
-      z-index: 2003;
-      border: 1px solid rgba(255,255,255,0.2);
-      transition: background 0.15s, transform 0.15s;
-    }
-    .btn-nav:hover { background: rgba(0,85,128,0.7); }
-    .btn-nav:active {
-      background: rgba(0,85,128,0.85);
-      transform: translateY(-50%) scale(0.92);
-    }
-    .btn-prev { left: 8px; }
-    .btn-next { right: 8px; }
-    .btn-cerrar {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      color: white;
-      font-size: 1.8rem;
-      cursor: pointer;
-      z-index: 2003;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255,255,255,0.12);
-      border-radius: 50%;
+      z-index: 1001;
+      border: 1px solid rgba(255,255,255,0.15);
       transition: background 0.2s;
     }
-    .btn-cerrar:hover { background: rgba(255,255,255,0.25); }
-
+    .btn-nav:hover { background: rgba(0,85,128,0.7); }
+    .btn-prev { left: 16px; }
+    .btn-next { right: 16px; }
+    .btn-cerrar {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 1001;
+      padding: 4px 14px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
     .redes-sociales {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 36px;
+      gap: 12px;
+      margin-top: 40px;
     }
     .btn-red {
       background: #222222;
       border-radius: 12px;
-      padding: 12px 4px;
+      padding: 14px 6px;
       text-align: center;
       color: #ffffff;
       text-decoration: none;
-      font-size: 0.8rem;
+      font-size: 0.88rem;
       font-weight: 600;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       display: flex;
@@ -241,140 +270,192 @@
       align-items: center;
       justify-content: center;
       gap: 4px;
-      transition: transform 0.15s;
+      transition: transform 0.2s;
     }
     .btn-red:active { transform: scale(0.96); }
     .btn-wsp { border: 2px solid #4ade80; color: #4ade80; }
     .btn-cat { border: 2px solid #facc15; color: #facc15; }
     .btn-ig  { border: 2px solid #fb923c; color: #fb923c; }
-
     footer {
       text-align: center;
-      margin-top: 36px;
+      margin-top: 40px;
       padding-top: 20px;
       border-top: 1px solid #222222;
       color: #666666;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
     }
+    @media (max-width: 600px) { .btn-nav { display: none; } }
   </style>
 </head>
 <body oncontextmenu="return false;">
-<div class="cabecera-galeria">
-<a class="btn-volver" href="index.html">← Volver al Portafolio</a>
-<h2 class="titulo-categoria">
-<span class="material-symbols-outlined" style="color: #38bdf8; font-size: 20px;">auto_awesome</span>
-<span>Ensayos</span>
-</h2>
-</div>
-<main id="contenedor-secciones"><section>
-<h3 class="titulo-subcarpeta">
-<span class="material-symbols-outlined" style="font-size: 18px;">folder</span>
-<span>35mm Análogo</span>
-</h3>
-<div class="galeria" id="galeria-17styNug7Fhc0obj8wjcATMrOJJRhvAdi"><img alt="image.jpg" loading="lazy" src="https://lh3.googleusercontent.com/d/1b2Z5OpW90mc3Tv2Z3C7-LQ_x8NPC-6J9=w800"/><img alt="image.jpg" loading="lazy" src="https://lh3.googleusercontent.com/d/1tkfgcDa6HFdHDbovYR3tmDevr_aQY5v3=w800"/><img alt="image.jpg" loading="lazy" src="https://lh3.googleusercontent.com/d/1vZ-wY9272m_5tXh1nSkUNueUrngFMkTO=w800"/><img alt="image.jpg" loading="lazy" src="https://lh3.googleusercontent.com/d/1pEx3Es5YiTWPVU3r9GbtBr_LGD7dnbIL=w800"/><img alt="image.jpg" loading="lazy" src="https://lh3.googleusercontent.com/d/1aS36vZ3v4U25QRgK8AAQGiKZwZxYaeML=w800"/><img alt="image.jpg" loading="lazy" src="https://lh3.googleusercontent.com/d/1TNPniMA_-PJZH3vx-6V_9FnZsm63oP0L=w800"/><img alt="image.jpg" loading="lazy" src="https://lh3.googleusercontent.com/d/1OAczhY7DeESzXTgb-JU8Y8O5Gep7FDJk=w800"/><img alt="image.jpg" loading="lazy" src="https://lh3.googleusercontent.com/d/1f0Zs03-3hIaHYt3d8p-2vYQxmQSvyzcz=w800"/></div>
-</section><section>
-<h3 class="titulo-subcarpeta">
-<span class="material-symbols-outlined" style="font-size: 18px;">folder</span>
-<span>Blanco y Negro - Galería San Martín </span>
-</h3>
-<div class="galeria" id="galeria-1N578b6CBboN_gQRU69Tx2joMR3LP_6TX"><img alt="Café de amigos" loading="lazy" src="https://lh3.googleusercontent.com/d/1f9TvQxESMWMOQOCfxV_1FPLjaPfW4tyd=w800"/><img alt="Luz en la calle" loading="lazy" src="https://lh3.googleusercontent.com/d/1E3SMQv8Vf28RRUvY1RY2D7qGABg9QrIp=w800"/><img alt="Portal" loading="lazy" src="https://lh3.googleusercontent.com/d/1fRX6iHZi0O4hvs5lOdkgIDHgEdFYojXR=w800"/><img alt="Reloj del tiempo" loading="lazy" src="https://lh3.googleusercontent.com/d/1HZIE9Ju5Iw9SLe6fZX2kzBhFCm4Ddg-7=w800"/></div>
-</section><section>
-<h3 class="titulo-subcarpeta">
-<span class="material-symbols-outlined" style="font-size: 18px;">folder</span>
-<span>Blanco y Negro - Galería Tonsa</span>
-</h3>
-<div class="galeria" id="galeria-1l0sq8fPJ55anaRpuGjV5QD-NFNfHBO7m"><img alt="Misterio" loading="lazy" src="https://lh3.googleusercontent.com/d/1rrioJAnxmuXXCG1djNpsScPwy8q10h7U=w800"/><img alt="Profundo" loading="lazy" src="https://lh3.googleusercontent.com/d/1fOvJ8q9RpTJbk1jlTM-X4Mq0S_9zM7Zx=w800"/><img alt="Reflejados" loading="lazy" src="https://lh3.googleusercontent.com/d/1z4oLWHKTvkb4OtPIiBMCSGYwzEfacy63=w800"/><img alt="Un te espero... " loading="lazy" src="https://lh3.googleusercontent.com/d/1yQGogU4AonTNJW0OP8ZKVV0jPff4ha6s=w800"/></div>
-</section><section>
-<h3 class="titulo-subcarpeta">
-<span class="material-symbols-outlined" style="font-size: 18px;">folder</span>
-<span>Estenopeicas digital</span>
-</h3>
-<div class="galeria" id="galeria-1Flcc7I-gc89NhJ5lY3g8NJ4AOREW-ppp"><img alt="V1" loading="lazy" src="https://lh3.googleusercontent.com/d/1QqJnfOpEl1Cp6aAEuCS_JVM-RvC6l8dd=w800"/><img alt="V2" loading="lazy" src="https://lh3.googleusercontent.com/d/1MW2ayawDaTyWvVtg6ereCLFBzFrk4EyH=w800"/><img alt="V3" loading="lazy" src="https://lh3.googleusercontent.com/d/1RKxN2wbnLmkkj6ObwbZEBpzSY4t0Akij=w800"/><img alt="V4" loading="lazy" src="https://lh3.googleusercontent.com/d/1ReA6CAGjqeddXqEcM-Dhpu_1wavHGeFU=w800"/></div>
-</section><section>
-<h3 class="titulo-subcarpeta">
-<span class="material-symbols-outlined" style="font-size: 18px;">folder</span>
-<span>Macro</span>
-</h3>
-<div class="galeria" id="galeria-17ncAK8KdTtARiPs0Svg1bvWrYYioM0lQ"><img alt="M1" loading="lazy" src="https://lh3.googleusercontent.com/d/1AdcjIvYkclDbEZHfEMcBXP4qntRwChN3=w800"/><img alt="M2" loading="lazy" src="https://lh3.googleusercontent.com/d/1bHzBiIAyck5x97iy2lmAfQ3ESF1NNC1W=w800"/><img alt="M3" loading="lazy" src="https://lh3.googleusercontent.com/d/1KFY9sRjnc9KvakROH6m2w6S41wEdLjPV=w800"/><img alt="M4" loading="lazy" src="https://lh3.googleusercontent.com/d/1HYoy8fvMQ72ZtdzitLjmOOqntkeHxY_J=w800"/><img alt="M5" loading="lazy" src="https://lh3.googleusercontent.com/d/1DFAnjUngBGZykklP4fvXGh_BDPes7S06=w800"/><img alt="M6" loading="lazy" src="https://lh3.googleusercontent.com/d/1-oCVei1AHMrET-PNEXDgknHMCpTs0wNf=w800"/><img alt="M7" loading="lazy" src="https://lh3.googleusercontent.com/d/1X40ZycKE1Wtp4sboUsL90G5pQaFBw6xR=w800"/><img alt="M8" loading="lazy" src="https://lh3.googleusercontent.com/d/1iBRVIF0--p25bgsylTtlatPxUXgY1hlN=w800"/></div>
-</section><section>
-<h3 class="titulo-subcarpeta">
-<span class="material-symbols-outlined" style="font-size: 18px;">folder</span>
-<span>Modelo en perspectiva</span>
-</h3>
-<div class="galeria" id="galeria-12Q_I4kppIgrZipf9d1wy_cTEEc5ckfM-"><img alt="M1" loading="lazy" src="https://lh3.googleusercontent.com/d/1pqYF24dKtrHKZFRkWOmgMwIs2HsE7aWM=w800"/><img alt="M2" loading="lazy" src="https://lh3.googleusercontent.com/d/1fRUlGZq0U2TiWxIh15KkYN7AUUs4o1ZZ=w800"/><img alt="M3" loading="lazy" src="https://lh3.googleusercontent.com/d/1ZB6JLlaCNEGUNTjOyzXOhF0ABGNgZWs0=w800"/><img alt="M4" loading="lazy" src="https://lh3.googleusercontent.com/d/19d_TxOFhN6dG6HGhiRCdL3zmXnDGDnKx=w800"/></div>
-</section><section>
-<h3 class="titulo-subcarpeta">
-<span class="material-symbols-outlined" style="font-size: 18px;">folder</span>
-<span>Muestra de Ceramicas</span>
-</h3>
-<div class="galeria" id="galeria-1BLF0gaR0F8ucDx4z5eZi6mJVYsCw7MvV"><img alt="MC1" loading="lazy" src="https://lh3.googleusercontent.com/d/1m-gkRBCNjsG4ZWhQg7eso-gpLb3Un3if=w800"/><img alt="MC2" loading="lazy" src="https://lh3.googleusercontent.com/d/1Jy_PvQmXQdDlKnQL4WcE7Eftjd0fE7RZ=w800"/><img alt="MC3" loading="lazy" src="https://lh3.googleusercontent.com/d/1T2ON4bQMsLQjDJrcwxNcOMXxeSvWL1xA=w800"/><img alt="MC4" loading="lazy" src="https://lh3.googleusercontent.com/d/1o31d2WVPG3EMIUeHCCxaKnF8PX-lhiUA=w800"/></div>
-</section><section>
-<h3 class="titulo-subcarpeta">
-<span class="material-symbols-outlined" style="font-size: 18px;">folder</span>
-<span>Museo Nacional del Vino y la Vendimia </span>
-</h3>
-<div class="galeria" id="galeria-1BDCYgVpzgKSXKd2aFSfCZzIMPFLk38xn"><img alt="M1" loading="lazy" src="https://lh3.googleusercontent.com/d/1vkQTaPFCdjYmL3BhPipCvyeGq_A7TPZe=w800"/><img alt="M2" loading="lazy" src="https://lh3.googleusercontent.com/d/1KN87NrisD7yVyFg8YqSQVFidMJalL3NU=w800"/><img alt="M3" loading="lazy" src="https://lh3.googleusercontent.com/d/10ryzJriS1PT5tKf9VePV9u_b0JZyy9Yi=w800"/><img alt="M4" loading="lazy" src="https://lh3.googleusercontent.com/d/1PtYMR346UYT9zZM0TNt8oTh_vHVdJ5xJ=w800"/><img alt="M5" loading="lazy" src="https://lh3.googleusercontent.com/d/1cOjCzQdlg2__QlsKtq9nmugREaRAS71f=w800"/><img alt="M6" loading="lazy" src="https://lh3.googleusercontent.com/d/1Bho9XlMqyblo4Nkxo1y1S8ynl9mOXa0B=w800"/><img alt="M7" loading="lazy" src="https://lh3.googleusercontent.com/d/1V3Sg-AcaoWnaz_c5Fa8a0mE4Frnww4Qn=w800"/><img alt="M8" loading="lazy" src="https://lh3.googleusercontent.com/d/1S6ow5mXY5Lufm1jxdFfgLp6sR8dpMgMZ=w800"/></div>
-</section></main>
-<div class="redes-sociales">
-<a class="btn-red btn-wsp" href="https://wa.me/542613175222" target="_blank">
-<span class="material-symbols-outlined">chat</span>
-<span>WhatsApp</span>
-</a>
-<a class="btn-red btn-cat" href="https://wa.me/c/5492613175222" target="_blank">
-<span class="material-symbols-outlined">inventory_2</span>
-<span>Catálogo</span>
-</a>
-<a class="btn-red btn-ig" href="https://www.instagram.com/sergioricardo.molina?igsi=OG84bTUxanllMnh4" target="_blank">
-<span class="material-symbols-outlined">photo_camera_back</span>
-<span>Instagram</span>
-</a>
-</div>
-<footer>
-<p>© Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina</p>
-</footer>
-<div class="modal" id="modal">
-<span class="btn-cerrar" id="btn-cerrar-modal">×</span>
-<span class="btn-nav btn-prev" id="btn-prev-modal">❮</span>
-<div class="modal-contenido" id="modal-touch-area">
-<div style="position: relative; display: inline-flex; align-items: center; justify-content: center; max-width: 100%; max-height: 85vh; overflow: hidden; border-radius: 4px;">
-<img alt="Ensayos Sergio Molina" id="img-ampliada" src="" style="max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 4px; display: block; box-shadow: 0 10px 30px rgba(0,0,0,0.8); pointer-events: auto;"/>
-<div class="firma-visor">
-<div class="header-autor">
-<span class="material-symbols-outlined" style="font-size: 15px; color: #38bdf8;">photo_camera</span>
-<span>Sergio Molina</span>
-</div>
-<span class="detalle-foto" id="firma-detalle"></span>
-</div>
-</div>
-</div>
-<span class="btn-nav btn-next" id="btn-next-modal">❯</span>
-</div>
-<script>
-    // Detección automática del token maestro Sergio Molina / Admin
-    (function comprobarTokenMaestro() {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('sergio') === '1' || urlParams.get('admin') === '1' || urlParams.get('ignorar') === '1') {
-        localStorage.setItem('dispositivo_token', 'sergio_molina_master_device');
-        localStorage.setItem('ignorar_visita', 'true');
-        urlParams.delete('sergio');
-        urlParams.delete('admin');
-        urlParams.delete('ignorar');
-        const nuevaQuery = urlParams.toString();
-        const nuevaUrl = window.location.pathname + (nuevaQuery ? '?' + nuevaQuery : '') + window.location.hash;
-        window.history.replaceState({}, document.title, nuevaUrl);
-      }
-    })();
+  <div class="cabecera-galeria">
+    <a href="index.html" class="btn-volver">← Volver al Portafolio</a>
+    <h2 class="titulo-categoria">
+      <span class="material-symbols-outlined" style="color: #38bdf8;">auto_awesome</span>
+      <span>Ensayos</span>
+    </h2>
+  </div>
 
+  <main id="contenedor-secciones">
+    <div style="text-align:center; padding: 60px 0; color: #888;">
+      <div style="width: 32px; height: 32px; border: 2px solid #005580; border-top-color: #38bdf8; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px;"></div>
+      Cargando colección de Ensayos...
+    </div>
+  </main>
+
+  <div class="redes-sociales">
+    <a class="btn-red btn-wsp" href="https://wa.me/542613175222" target="_blank" rel="noopener noreferrer">
+      <span class="material-symbols-outlined">chat</span>
+      <span>WhatsApp</span>
+    </a>
+    <a class="btn-red btn-cat" href="https://wa.me/c/5492613175222" target="_blank" rel="noopener noreferrer">
+      <span class="material-symbols-outlined">inventory_2</span>
+      <span>Catálogo</span>
+    </a>
+    <a class="btn-red btn-ig" href="https://www.instagram.com/sergioricardo.molina?igsi=OG84bTUxanllMnh4" target="_blank" rel="noopener noreferrer">
+      <span class="material-symbols-outlined">photo_camera_back</span>
+      <span>Instagram</span>
+    </a>
+  </div>
+
+  <footer>
+    <p>© Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina</p>
+  </footer>
+
+  <div class="modal" id="modal" onclick="cerrarVisorFondo(event)">
+    <span class="btn-cerrar" onclick="cerrarVisor()">×</span>
+    <span class="btn-nav btn-prev" onclick="cambiarFoto(-1, event)">❮</span>
+    <div class="modal-contenido" onclick="event.stopPropagation()">
+      <img id="img-ampliada" src="" alt="Ensayos Sergio Molina">
+      <div class="firma-visor" id="firma-visor">
+        <span>Sergio Molina</span>
+        <span class="dot">•</span>
+        <span id="firma-subcarpeta">Ensayos</span>
+        <span class="dot">•</span>
+        <span id="firma-archivo">#foto.jpg</span>
+      </div>
+    </div>
+    <button class="btn-like-visor" id="btn-like-visor" onclick="toggleCorazonVisor(event)" type="button">
+      <span class="material-symbols-outlined" id="ico-like-visor">favorite</span>
+      <span id="txt-like-visor">0</span>
+    </button>
+    <span class="btn-nav btn-next" onclick="cambiarFoto(1, event)">❯</span>
+  </div>
+
+  <script>
     const API_KEY = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
     const FOLDER_ID = '1K4h3SPq2WdCEMMzrTSToD-quebXDD4rS';
     const NOMBRE_SECCION = 'Ensayos';
 
+    const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
+
+    const supabase = (window.supabase && typeof window.supabase.createClient === 'function')
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+      : null;
+
+    function getFingerprint() {
+      let fp = localStorage.getItem('user_fingerprint');
+      if (!fp) {
+        fp = 'fp_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now();
+        localStorage.setItem('user_fingerprint', fp);
+      }
+      return fp;
+    }
+    const HUELLA_USUARIO = getFingerprint();
+
     let fotosActuales = [];
     let indiceFotoActual = 0;
+    let votosLocales = JSON.parse(localStorage.getItem('votos_ensayos') || '{}');
+    let likesMemoria = {};
+
+    async function cargarLikesDesdeSupabase() {
+      if (!supabase) return;
+      try {
+        const { data, error } = await supabase
+          .from('likes_fotos')
+          .select('foto_id, conteo')
+          .eq('galeria', 'ensayos');
+        if (!error && data) {
+          data.forEach(item => { likesMemoria[item.foto_id] = item.conteo; });
+          actualizarTodosLosBadges();
+        }
+      } catch (_) {}
+    }
+
+    async function toggleLikeFoto(fotoId, fotoNombre, e) {
+      if (e) { e.stopPropagation(); e.preventDefault(); }
+      const yaVoto = !!votosLocales[fotoId];
+      const conteoActual = likesMemoria[fotoId] || 0;
+      const nuevoConteo = yaVoto ? Math.max(0, conteoActual - 1) : conteoActual + 1;
+
+      likesMemoria[fotoId] = nuevoConteo;
+      if (yaVoto) delete votosLocales[fotoId];
+      else votosLocales[fotoId] = true;
+      localStorage.setItem('votos_ensayos', JSON.stringify(votosLocales));
+
+      actualizarBadgeFoto(fotoId, nuevoConteo, !yaVoto);
+      if (fotosActuales[indiceFotoActual] && fotosActuales[indiceFotoActual].id === fotoId) {
+        actualizarBotonVisor(nuevoConteo, !yaVoto);
+      }
+
+      if (supabase) {
+        try {
+          const { data } = await supabase.rpc('toggle_corazon', {
+            p_foto_id: fotoId,
+            p_foto_nombre: fotoNombre || 'foto.jpg',
+            p_galeria: 'ensayos',
+            p_huella: HUELLA_USUARIO
+          });
+          if (data) {
+            likesMemoria[fotoId] = data.total;
+            if (data.liked) votosLocales[fotoId] = true;
+            else delete votosLocales[fotoId];
+            localStorage.setItem('votos_ensayos', JSON.stringify(votosLocales));
+            actualizarBadgeFoto(fotoId, data.total, data.liked);
+            if (fotosActuales[indiceFotoActual] && fotosActuales[indiceFotoActual].id === fotoId) {
+              actualizarBotonVisor(data.total, data.liked);
+            }
+          }
+        } catch (_) {}
+      }
+    }
+
+    function toggleCorazonVisor(e) {
+      if (!fotosActuales[indiceFotoActual]) return;
+      const f = fotosActuales[indiceFotoActual];
+      toggleLikeFoto(f.id, f.name, e);
+    }
+
+    function actualizarBadgeFoto(fotoId, conteo, isLiked) {
+      const badge = document.getElementById('badge-like-' + fotoId);
+      const txt = document.getElementById('txt-like-' + fotoId);
+      if (txt) txt.textContent = conteo;
+      if (badge) {
+        if (isLiked) badge.classList.add('liked');
+        else badge.classList.remove('liked');
+      }
+    }
+
+    function actualizarTodosLosBadges() {
+      Object.keys(likesMemoria).forEach(fotoId => {
+        actualizarBadgeFoto(fotoId, likesMemoria[fotoId], !!votosLocales[fotoId]);
+      });
+    }
+
+    function actualizarBotonVisor(conteo, isLiked) {
+      const btn = document.getElementById('btn-like-visor');
+      const txt = document.getElementById('txt-like-visor');
+      if (txt) txt.textContent = conteo;
+      if (btn) {
+        if (isLiked) btn.classList.add('liked');
+        else btn.classList.remove('liked');
+      }
+    }
 
     async function cargarSubcarpetas() {
       const contenedor = document.getElementById('contenedor-secciones');
-      const urlFolders = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType='application/vnd.google-apps.folder'+and+trashed=false&orderBy=name&pageSize=1000&key=${API_KEY}&fields=files(id,name)`;
+      const urlFolders = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType='application/vnd.google-apps.folder'+and+trashed=false&orderBy=name&key=${API_KEY}&fields=files(id,name)`;
       try {
         const res = await fetch(urlFolders);
         const data = await res.json();
@@ -389,11 +470,12 @@
       } catch (err) {
         await renderizarFotosDirectas(FOLDER_ID, NOMBRE_SECCION);
       }
+      try { cargarLikesDesdeSupabase(); } catch(_) {}
     }
 
     async function renderizarSubcarpeta(subId, subNombre) {
       const contenedor = document.getElementById('contenedor-secciones');
-      const urlFiles = `https://www.googleapis.com/drive/v3/files?q='${subId}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&pageSize=1000&key=${API_KEY}&fields=files(id,name)`;
+      const urlFiles = `https://www.googleapis.com/drive/v3/files?q='${subId}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY}&fields=files(id,name)`;
       try {
         const res = await fetch(urlFiles);
         const data = await res.json();
@@ -401,23 +483,30 @@
           const seccion = document.createElement('section');
           seccion.innerHTML = `
             <h3 class="titulo-subcarpeta">
-              <span class="material-symbols-outlined" style="font-size: 18px;">folder</span>
+              <span class="material-symbols-outlined" style="font-size: 20px;">folder</span>
               <span>${subNombre}</span>
             </h3>
             <div class="galeria" id="galeria-${subId}"></div>
           `;
           contenedor.appendChild(seccion);
-          const grid = seccion.querySelector(`#galeria-${subId}`);
+          const grid = seccion.querySelector('#galeria-' + subId);
           data.files.forEach(f => {
             const urlHD = `https://lh3.googleusercontent.com/d/${f.id}=w1600`;
-            const index = fotosActuales.length;
-            fotosActuales.push({ url: urlHD, name: f.name || 'foto.jpg', subcarpeta: subNombre });
-            const img = document.createElement('img');
-            img.src = `https://lh3.googleusercontent.com/d/${f.id}=w800`;
-            img.alt = f.name;
-            img.loading = 'lazy';
-            img.onclick = () => abrirVisor(index);
-            grid.appendChild(img);
+            const indexGlobal = fotosActuales.length;
+            fotosActuales.push({ id: f.id, url: urlHD, name: f.name || 'foto.jpg', subcarpeta: subNombre });
+            const card = document.createElement('div');
+            card.className = 'card-foto';
+            const conteo = likesMemoria[f.id] || 0;
+            const liked = !!votosLocales[f.id];
+            card.innerHTML = `
+              <img src="https://lh3.googleusercontent.com/d/${f.id}=w800" alt="${f.name}" loading="lazy">
+              <button class="badge-likes-thumb ${liked ? 'liked' : ''}" id="badge-like-${f.id}" onclick="toggleLikeFoto('${f.id}', '${f.name}', event)" type="button">
+                <span class="material-symbols-outlined">favorite</span>
+                <span id="txt-like-${f.id}">${conteo}</span>
+              </button>
+            `;
+            card.onclick = () => abrirVisor(indexGlobal);
+            grid.appendChild(card);
           });
         }
       } catch (_) {}
@@ -425,69 +514,66 @@
 
     async function renderizarFotosDirectas(folderId, nombreCarpeta) {
       const contenedor = document.getElementById('contenedor-secciones');
-      const urlFiles = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&pageSize=1000&key=${API_KEY}&fields=files(id,name)`;
+      const urlFiles = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY}&fields=files(id,name)`;
       try {
         const res = await fetch(urlFiles);
         const data = await res.json();
         if (data.files && data.files.length > 0) {
-          contenedor.innerHTML = `<div class="galeria" id="galeria-directa"></div>`;
+          contenedor.innerHTML = '<div class="galeria" id="galeria-directa"></div>';
           const grid = document.getElementById('galeria-directa');
           data.files.forEach(f => {
             const urlHD = `https://lh3.googleusercontent.com/d/${f.id}=w1600`;
-            const index = fotosActuales.length;
-            fotosActuales.push({ url: urlHD, name: f.name || 'foto.jpg', subcarpeta: nombreCarpeta });
-            const img = document.createElement('img');
-            img.src = `https://lh3.googleusercontent.com/d/${f.id}=w800`;
-            img.alt = f.name;
-            img.loading = 'lazy';
-            img.onclick = () => abrirVisor(index);
-            grid.appendChild(img);
+            const indexGlobal = fotosActuales.length;
+            fotosActuales.push({ id: f.id, url: urlHD, name: f.name || 'foto.jpg', subcarpeta: nombreCarpeta });
+            const card = document.createElement('div');
+            card.className = 'card-foto';
+            const conteo = likesMemoria[f.id] || 0;
+            const liked = !!votosLocales[f.id];
+            card.innerHTML = `
+              <img src="https://lh3.googleusercontent.com/d/${f.id}=w800" alt="${f.name}" loading="lazy">
+              <button class="badge-likes-thumb ${liked ? 'liked' : ''}" id="badge-like-${f.id}" onclick="toggleLikeFoto('${f.id}', '${f.name}', event)" type="button">
+                <span class="material-symbols-outlined">favorite</span>
+                <span id="txt-like-${f.id}">${conteo}</span>
+              </button>
+            `;
+            card.onclick = () => abrirVisor(indexGlobal);
+            grid.appendChild(card);
           });
-        } else {
-          contenedor.innerHTML = '<div style="text-align:center; padding: 50px 16px; color:#888;">No se encontraron fotografías disponibles en esta carpeta de Google Drive.</div>';
         }
-      } catch (_) {
-        contenedor.innerHTML = '<div style="text-align:center; padding: 50px 16px; color:#f87171;">No se pudo conectar a Google Drive. Verificá los permisos públicos de la carpeta.</div>';
-      }
+      } catch (_) {}
     }
 
     function abrirVisor(index) {
-      if (index >= fotosActuales.length) index = 0;
       indiceFotoActual = index;
-      actualizarContenidoVisor();
-      document.getElementById('modal').style.display = 'flex';
-      document.body.classList.add('visor-abierto');
-      const foto = fotosActuales[indiceFotoActual];
-      if (foto) registrarMetrica('foto_visor_hd', `Foto: #${foto.name} en ${foto.subcarpeta}`);
-    }
-
-    function actualizarContenidoVisor() {
       const foto = fotosActuales[indiceFotoActual];
       if (!foto) return;
       document.getElementById('img-ampliada').src = foto.url;
-      const sub = foto.subcarpeta || NOMBRE_SECCION;
-      document.getElementById('firma-detalle').innerText = `${sub} • #${foto.name}`;
+      document.getElementById('firma-subcarpeta').innerText = foto.subcarpeta || NOMBRE_SECCION;
+      document.getElementById('firma-archivo').innerText = '#' + foto.name;
+      const conteo = likesMemoria[foto.id] || 0;
+      const liked = !!votosLocales[foto.id];
+      actualizarBotonVisor(conteo, liked);
+      document.getElementById('modal').style.display = 'flex';
+      registrarMetrica('foto_visor_hd', `Foto: #${foto.name} en ${foto.subcarpeta}`);
     }
 
-    function cerrarVisor() {
-      document.getElementById('modal').style.display = 'none';
-      document.body.classList.remove('visor-abierto');
-    }
-
-    function cambiarFoto(dir) {
-      if (fotosActuales.length === 0) return;
+    function cerrarVisor() { document.getElementById('modal').style.display = 'none'; }
+    function cerrarVisorFondo(e) { if (e.target.id === 'modal') cerrarVisor(); }
+    function cambiarFoto(dir, event) {
+      if (event) event.stopPropagation();
       indiceFotoActual += dir;
       if (indiceFotoActual >= fotosActuales.length) indiceFotoActual = 0;
       else if (indiceFotoActual < 0) indiceFotoActual = fotosActuales.length - 1;
-      actualizarContenidoVisor();
+      const foto = fotosActuales[indiceFotoActual];
+      if (foto) {
+        document.getElementById('img-ampliada').src = foto.url;
+        document.getElementById('firma-subcarpeta').innerText = foto.subcarpeta || NOMBRE_SECCION;
+        document.getElementById('firma-archivo').innerText = '#' + foto.name;
+        const conteo = likesMemoria[foto.id] || 0;
+        const liked = !!votosLocales[foto.id];
+        actualizarBotonVisor(conteo, liked);
+      }
     }
-
-    document.getElementById('btn-cerrar-modal').addEventListener('click', e => { e.stopPropagation(); cerrarVisor(); });
-    document.getElementById('btn-prev-modal').addEventListener('click', e => { e.stopPropagation(); cambiarFoto(-1); });
-    document.getElementById('btn-next-modal').addEventListener('click', e => { e.stopPropagation(); cambiarFoto(1); });
-    document.getElementById('modal').addEventListener('click', e => {
-      if (e.target.id === 'modal' || e.target.id === 'modal-touch-area') cerrarVisor();
-    });
 
     document.addEventListener('keydown', e => {
       const m = document.getElementById('modal');
@@ -499,85 +585,27 @@
     });
 
     let touchStartX = 0;
-    let touchStartY = 0;
-    let touchEndX = 0;
-    let touchEndY = 0;
-
-    const modalTouch = document.getElementById('modal');
-
-    modalTouch.addEventListener('touchstart', e => {
-      if (e.touches && e.touches.length > 0) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-        touchEndX = touchStartX;
-        touchEndY = touchStartY;
-      }
-    }, { passive: true });
-
-    modalTouch.addEventListener('touchmove', e => {
-      if (e.touches && e.touches.length > 0) {
-        touchEndX = e.touches[0].clientX;
-        touchEndY = e.touches[0].clientY;
-      }
-    }, { passive: true });
-
-    modalTouch.addEventListener('touchend', () => {
-      const diffX = touchEndX - touchStartX;
-      const diffY = touchEndY - touchStartY;
-      if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
-        if (diffX < 0) {
-          cambiarFoto(1);
-        } else {
-          cambiarFoto(-1);
-        }
-      }
-    }, { passive: true });
+    const modalEl = document.getElementById('modal');
+    modalEl.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
+    modalEl.addEventListener('touchend', e => {
+      const touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX + 50 < touchStartX) cambiarFoto(1);
+      else if (touchEndX > touchStartX + 50) cambiarFoto(-1);
+    }, false);
 
     async function registrarMetrica(tipo, detalle) {
       try {
-        if (!window.supabase) return;
-
-        // Comprobación local inmediata de exclusión
-        const ignorarVisita = localStorage.getItem('ignorar_visita') === 'true';
-        const tokenDispositivo = localStorage.getItem('dispositivo_token');
-        const esAdminAuth = sessionStorage.getItem('admin_auth') === 'true';
-
-        if (ignorarVisita || tokenDispositivo === 'sergio_molina_master_device' || esAdminAuth) {
-          return; // Dispositivo de Sergio excluido
+        if (window.supabase) {
+          const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+          await client.from('visitas').insert([{ tipo, pagina: 'ensayos.html', detalle, dispositivo: window.innerWidth < 640 ? 'mobile' : 'desktop' }]);
         }
-
-        const client = window.supabase.createClient('https://zbixojacwvanucxlrdcd.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68');
-
-        // Si existe un token asignado, validar contra tabla de dispositivos excluidos
-        if (tokenDispositivo) {
-          const { data: excluido } = await client
-            .from('dispositivos_ignorados')
-            .select('id')
-            .eq('token', tokenDispositivo)
-            .maybeSingle();
-
-          if (excluido) {
-            localStorage.setItem('ignorar_visita', 'true');
-            return;
-          }
-        }
-
-        const dispositivo = window.innerWidth < 640 ? 'mobile' : (window.innerWidth < 1024 ? 'tablet' : 'desktop');
-        const origen = document.referrer ? (new URL(document.referrer).hostname || 'directo') : 'directo';
-
-        await client.from('visitas').insert([{
-          tipo: tipo || 'visita_pagina',
-          pagina: 'ensayos.html',
-          detalle: detalle || 'Galería Ensayos',
-          dispositivo: dispositivo,
-          origen: origen
-        }]);
       } catch (_) {}
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       cargarSubcarpetas();
-      registrarMetrica('visita_pagina', 'Galería Ensayos');
+      registrarMetrica('visita_pagina', 'Visita a galería Ensayos');
     });
   </script>
-</body></html>
+</body>
+</html>
