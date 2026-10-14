@@ -16,12 +16,12 @@
       font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: #111111;
       color: #ffffff;
-      padding: 20px 16px 40px;
+      padding: 16px 12px 40px;
       max-width: 960px;
       margin: 0 auto;
       min-height: 100vh;
     }
-    .cabecera-galeria {
+    header {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -38,14 +38,14 @@
       font-size: 0.88rem;
       font-weight: 500;
       cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       text-decoration: none;
-      transition: background 0.2s, border-color 0.2s;
     }
     .btn-volver:hover {
-      background: #2f2f2f;
+      background: #2a2a2a;
       border-color: #38bdf8;
     }
     .titulo-categoria {
@@ -56,16 +56,30 @@
       align-items: center;
       gap: 8px;
     }
-    .titulo-subcarpeta {
-      font-size: 1rem;
-      font-weight: 500;
+    .titulo-categoria .material-symbols-outlined {
       color: #38bdf8;
-      margin: 26px 0 12px;
+      font-size: 24px;
+    }
+    .seccion-subcarpeta {
+      margin-bottom: 32px;
+    }
+    .subcarpeta-header {
       display: flex;
       align-items: center;
       gap: 8px;
-      border-bottom: 1px solid #222;
-      padding-bottom: 6px;
+      margin-bottom: 14px;
+      padding-left: 2px;
+    }
+    .subcarpeta-header .material-symbols-outlined {
+      font-size: 18px;
+      color: #38bdf8;
+    }
+    .subcarpeta-titulo {
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #38bdf8;
     }
     .galeria {
       display: grid;
@@ -87,7 +101,7 @@
       overflow: hidden;
       border: 1px solid #2a2a2a;
       cursor: pointer;
-      transition: transform 0.2s, opacity 0.2s;
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
     .card-foto:hover {
       transform: scale(1.02);
@@ -117,7 +131,6 @@
       font-weight: 700;
       color: #ffffff;
       z-index: 5;
-      cursor: pointer;
       transition: all 0.2s ease;
     }
     .badge-likes-thumb:hover {
@@ -131,6 +144,7 @@
     }
     .badge-likes-thumb .material-symbols-outlined {
       font-size: 14px;
+      transition: transform 0.2s ease;
     }
     .badge-likes-thumb.liked .material-symbols-outlined {
       font-variation-settings: 'FILL' 1;
@@ -140,47 +154,53 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.96);
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.96);
       justify-content: center;
       align-items: center;
       z-index: 1000;
     }
     .modal-contenido {
       position: relative;
-      display: inline-block;
       max-width: 92%;
       max-height: 85vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .modal img {
       max-width: 100%;
       max-height: 85vh;
       object-fit: contain;
-      border-radius: 4px;
-      display: block;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
       user-select: none;
       -webkit-user-drag: none;
+      border-radius: 4px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      display: block;
     }
     .firma-visor {
       position: absolute;
-      bottom: 12px;
+      bottom: 14px;
       left: 14px;
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(4px);
-      padding: 5px 10px;
-      border-radius: 4px;
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #e0e0e0;
-      font-family: monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
-      pointer-events: none;
-      z-index: 1002;
+      background: rgba(18, 18, 18, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 6px 12px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       gap: 6px;
+      font-size: 0.78rem;
+      color: #e5e5e5;
+      pointer-events: none;
+      z-index: 1002;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
-    .firma-visor .dot { color: #38bdf8; }
+    .firma-visor .material-symbols-outlined {
+      font-size: 15px;
+      color: #38bdf8;
+    }
     .btn-like-visor {
       position: absolute;
       bottom: 20px;
@@ -214,10 +234,12 @@
     }
     .btn-like-visor .material-symbols-outlined {
       font-size: 18px;
+      transition: transform 0.2s ease;
     }
     .btn-like-visor.liked .material-symbols-outlined {
       font-variation-settings: 'FILL' 1;
       color: #f43f5e;
+      transform: scale(1.15);
     }
     .btn-nav {
       position: absolute;
@@ -227,14 +249,23 @@
       font-size: 2.2rem;
       padding: 14px 20px;
       cursor: pointer;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(6px);
       border-radius: 50%;
       user-select: none;
       z-index: 1001;
-      border: 1px solid rgba(255,255,255,0.15);
-      transition: background 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
     }
-    .btn-nav:hover { background: rgba(0,85,128,0.7); }
+    .btn-nav:hover {
+      background: rgba(0, 85, 128, 0.75);
+      border-color: #38bdf8;
+      transform: translateY(-50%) scale(1.08);
+    }
     .btn-prev { left: 16px; }
     .btn-next { right: 16px; }
     .btn-cerrar {
@@ -244,16 +275,20 @@
       color: white;
       font-size: 2rem;
       cursor: pointer;
-      z-index: 1001;
+      z-index: 1004;
       padding: 4px 14px;
-      background: rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(6px);
       border-radius: 50%;
+      line-height: 1;
+      transition: background 0.2s ease;
     }
+    .btn-cerrar:hover { background: rgba(255, 255, 255, 0.25); }
     .redes-sociales {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin-top: 40px;
+      margin-top: 36px;
     }
     .btn-red {
       background: #222222;
@@ -264,15 +299,15 @@
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 600;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 4px;
-      transition: transform 0.2s;
     }
-    .btn-red:active { transform: scale(0.96); }
+    .btn-red:active { transform: scale(0.96); background: #2a2a2a; }
     .btn-wsp { border: 2px solid #4ade80; color: #4ade80; }
     .btn-cat { border: 2px solid #facc15; color: #facc15; }
     .btn-ig  { border: 2px solid #fb923c; color: #fb923c; }
@@ -283,27 +318,38 @@
       border-top: 1px solid #222222;
       color: #666666;
       font-size: 0.8rem;
+      letter-spacing: 0.5px;
     }
-    @media (max-width: 600px) { .btn-nav { display: none; } }
+    .cargando {
+      text-align: center;
+      color: #888888;
+      padding: 60px 0;
+      font-size: 0.95rem;
+    }
+    @media (max-width: 640px) {
+      .btn-nav { display: none; }
+      .firma-visor { font-size: 0.7rem; padding: 4px 8px; left: 8px; bottom: 8px; }
+      .btn-like-visor { font-size: 0.78rem; padding: 6px 10px; right: 12px; bottom: 12px; }
+    }
   </style>
 </head>
 <body oncontextmenu="return false;">
-  <div class="cabecera-galeria">
-    <a href="index.html" class="btn-volver">← Volver al Portafolio</a>
-    <h2 class="titulo-categoria">
-      <span class="material-symbols-outlined" style="color: #38bdf8;">auto_awesome</span>
+  <header>
+    <a class="btn-volver" href="index.html">
+      <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span>
+      <span>Volver al Portafolio</span>
+    </a>
+    <h1 class="titulo-categoria">
+      <span class="material-symbols-outlined">auto_awesome</span>
       <span>Ensayos</span>
-    </h2>
-  </div>
+    </h1>
+  </header>
 
-  <main id="contenedor-secciones">
-    <div style="text-align:center; padding: 60px 0; color: #888;">
-      <div style="width: 32px; height: 32px; border: 2px solid #005580; border-top-color: #38bdf8; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px;"></div>
-      Cargando colección de Ensayos...
-    </div>
+  <main id="contenedor-ensayos">
+    <div class="cargando">Conectando con Google Drive y Supabase...</div>
   </main>
 
-  <div class="redes-sociales">
+  <section class="redes-sociales">
     <a class="btn-red btn-wsp" href="https://wa.me/542613175222" target="_blank" rel="noopener noreferrer">
       <span class="material-symbols-outlined">chat</span>
       <span>WhatsApp</span>
@@ -316,7 +362,7 @@
       <span class="material-symbols-outlined">photo_camera_back</span>
       <span>Instagram</span>
     </a>
-  </div>
+  </section>
 
   <footer>
     <p>© Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina</p>
@@ -326,13 +372,10 @@
     <span class="btn-cerrar" onclick="cerrarVisor()">×</span>
     <span class="btn-nav btn-prev" onclick="cambiarFoto(-1, event)">❮</span>
     <div class="modal-contenido" onclick="event.stopPropagation()">
-      <img id="img-ampliada" src="" alt="Ensayos Sergio Molina">
+      <img alt="Fotografía ampliada" id="img-ampliada" src="">
       <div class="firma-visor" id="firma-visor">
-        <span>Sergio Molina</span>
-        <span class="dot">•</span>
-        <span id="firma-subcarpeta">Ensayos</span>
-        <span class="dot">•</span>
-        <span id="firma-archivo">#foto.jpg</span>
+        <span class="material-symbols-outlined">photo_camera</span>
+        <span id="texto-firma">Sergio Molina</span>
       </div>
     </div>
     <button class="btn-like-visor" id="btn-like-visor" onclick="toggleCorazonVisor(event)" type="button">
@@ -343,10 +386,8 @@
   </div>
 
   <script>
-    const API_KEY = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
-    const FOLDER_ID = '1K4h3SPq2WdCEMMzrTSToD-quebXDD4rS';
-    const NOMBRE_SECCION = 'Ensayos';
-
+    const FOLDER_ENSAYOS = '1K4h3SPq2WdCEMMzrTSToD-quebXDD4rS';
+    const API_KEY_DRIVE = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
     const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
 
@@ -377,54 +418,69 @@
           .select('foto_id, conteo')
           .eq('galeria', 'ensayos');
         if (!error && data) {
-          data.forEach(item => { likesMemoria[item.foto_id] = item.conteo; });
-          actualizarTodosLosBadges();
+          data.forEach(item => {
+            likesMemoria[item.foto_id] = item.conteo;
+          });
+          actualizarTodosLosBadgesEnPantalla();
         }
-      } catch (_) {}
+      } catch (err) {
+        console.warn('Carga likes Supabase:', err);
+      }
     }
 
     async function toggleLikeFoto(fotoId, fotoNombre, e) {
-      if (e) { e.stopPropagation(); e.preventDefault(); }
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
       const yaVoto = !!votosLocales[fotoId];
       const conteoActual = likesMemoria[fotoId] || 0;
       const nuevoConteo = yaVoto ? Math.max(0, conteoActual - 1) : conteoActual + 1;
-
+      
       likesMemoria[fotoId] = nuevoConteo;
-      if (yaVoto) delete votosLocales[fotoId];
-      else votosLocales[fotoId] = true;
+      if (yaVoto) {
+        delete votosLocales[fotoId];
+      } else {
+        votosLocales[fotoId] = true;
+      }
       localStorage.setItem('votos_ensayos', JSON.stringify(votosLocales));
-
       actualizarBadgeFoto(fotoId, nuevoConteo, !yaVoto);
+
       if (fotosActuales[indiceFotoActual] && fotosActuales[indiceFotoActual].id === fotoId) {
         actualizarBotonVisor(nuevoConteo, !yaVoto);
       }
 
       if (supabase) {
         try {
-          const { data } = await supabase.rpc('toggle_corazon', {
+          const { data, error } = await supabase.rpc('toggle_corazon', {
             p_foto_id: fotoId,
             p_foto_nombre: fotoNombre || 'foto.jpg',
             p_galeria: 'ensayos',
             p_huella: HUELLA_USUARIO
           });
-          if (data) {
+          if (!error && data) {
             likesMemoria[fotoId] = data.total;
-            if (data.liked) votosLocales[fotoId] = true;
-            else delete votosLocales[fotoId];
+            if (data.liked) {
+              votosLocales[fotoId] = true;
+            } else {
+              delete votosLocales[fotoId];
+            }
             localStorage.setItem('votos_ensayos', JSON.stringify(votosLocales));
             actualizarBadgeFoto(fotoId, data.total, data.liked);
             if (fotosActuales[indiceFotoActual] && fotosActuales[indiceFotoActual].id === fotoId) {
               actualizarBotonVisor(data.total, data.liked);
             }
           }
-        } catch (_) {}
+        } catch (rpcErr) {
+          console.warn('RPC toggle_corazon:', rpcErr);
+        }
       }
     }
 
     function toggleCorazonVisor(e) {
       if (!fotosActuales[indiceFotoActual]) return;
       const f = fotosActuales[indiceFotoActual];
-      toggleLikeFoto(f.id, f.name, e);
+      toggleLikeFoto(f.id, f.nombre, e);
     }
 
     function actualizarBadgeFoto(fotoId, conteo, isLiked) {
@@ -432,14 +488,18 @@
       const txt = document.getElementById('txt-like-' + fotoId);
       if (txt) txt.textContent = conteo;
       if (badge) {
-        if (isLiked) badge.classList.add('liked');
-        else badge.classList.remove('liked');
+        if (isLiked) {
+          badge.classList.add('liked');
+        } else {
+          badge.classList.remove('liked');
+        }
       }
     }
 
-    function actualizarTodosLosBadges() {
+    function actualizarTodosLosBadgesEnPantalla() {
       Object.keys(likesMemoria).forEach(fotoId => {
-        actualizarBadgeFoto(fotoId, likesMemoria[fotoId], !!votosLocales[fotoId]);
+        const isLiked = !!votosLocales[fotoId];
+        actualizarBadgeFoto(fotoId, likesMemoria[fotoId], isLiked);
       });
     }
 
@@ -448,136 +508,144 @@
       const txt = document.getElementById('txt-like-visor');
       if (txt) txt.textContent = conteo;
       if (btn) {
-        if (isLiked) btn.classList.add('liked');
-        else btn.classList.remove('liked');
+        if (isLiked) {
+          btn.classList.add('liked');
+        } else {
+          btn.classList.remove('liked');
+        }
       }
     }
 
-    async function cargarSubcarpetas() {
-      const contenedor = document.getElementById('contenedor-secciones');
-      const urlFolders = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType='application/vnd.google-apps.folder'+and+trashed=false&orderBy=name&key=${API_KEY}&fields=files(id,name)`;
+    async function cargarEnsayos() {
+      const contenedor = document.getElementById('contenedor-ensayos');
+      fotosActuales = [];
+
       try {
-        const res = await fetch(urlFolders);
-        const data = await res.json();
-        if (data.files && data.files.length > 0) {
-          contenedor.innerHTML = '';
-          for (const sub of data.files) {
-            await renderizarSubcarpeta(sub.id, sub.name);
+        const urlSub = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ENSAYOS}'+in+parents+and+mimeType='application/vnd.google-apps.folder'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
+        const resSub = await fetch(urlSub);
+        const dataSub = await resSub.json();
+        const carpetas = (dataSub.files && dataSub.files.length > 0) ? dataSub.files : [];
+
+        contenedor.innerHTML = '';
+
+        if (carpetas.length === 0) {
+          const urlRaiz = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ENSAYOS}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
+          const resRaiz = await fetch(urlRaiz);
+          const dataRaiz = await resRaiz.json();
+          if (dataRaiz.files && dataRaiz.files.length > 0) {
+            renderizarSeccion('Ensayos', dataRaiz.files, contenedor);
+          } else {
+            contenedor.innerHTML = '<p class="cargando">No se encontraron fotografías en Google Drive.</p>';
           }
         } else {
-          await renderizarFotosDirectas(FOLDER_ID, NOMBRE_SECCION);
+          for (const carpeta of carpetas) {
+            const urlFotos = `https://www.googleapis.com/drive/v3/files?q='${carpeta.id}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
+            const resFotos = await fetch(urlFotos);
+            const dataFotos = await resFotos.json();
+            if (dataFotos.files && dataFotos.files.length > 0) {
+              renderizarSeccion(carpeta.name, dataFotos.files, contenedor);
+            }
+          }
         }
+
+        cargarLikesDesdeSupabase();
       } catch (err) {
-        await renderizarFotosDirectas(FOLDER_ID, NOMBRE_SECCION);
+        console.error('Error al cargar Ensayos:', err);
+        contenedor.innerHTML = '<p class="cargando" style="color:#ef4444;">Error al conectar con Google Drive. Verifique permisos.</p>';
       }
-      try { cargarLikesDesdeSupabase(); } catch(_) {}
     }
 
-    async function renderizarSubcarpeta(subId, subNombre) {
-      const contenedor = document.getElementById('contenedor-secciones');
-      const urlFiles = `https://www.googleapis.com/drive/v3/files?q='${subId}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY}&fields=files(id,name)`;
-      try {
-        const res = await fetch(urlFiles);
-        const data = await res.json();
-        if (data.files && data.files.length > 0) {
-          const seccion = document.createElement('section');
-          seccion.innerHTML = `
-            <h3 class="titulo-subcarpeta">
-              <span class="material-symbols-outlined" style="font-size: 20px;">folder</span>
-              <span>${subNombre}</span>
-            </h3>
-            <div class="galeria" id="galeria-${subId}"></div>
-          `;
-          contenedor.appendChild(seccion);
-          const grid = seccion.querySelector('#galeria-' + subId);
-          data.files.forEach(f => {
-            const urlHD = `https://lh3.googleusercontent.com/d/${f.id}=w1600`;
-            const indexGlobal = fotosActuales.length;
-            fotosActuales.push({ id: f.id, url: urlHD, name: f.name || 'foto.jpg', subcarpeta: subNombre });
-            const card = document.createElement('div');
-            card.className = 'card-foto';
-            const conteo = likesMemoria[f.id] || 0;
-            const liked = !!votosLocales[f.id];
-            card.innerHTML = `
-              <img src="https://lh3.googleusercontent.com/d/${f.id}=w800" alt="${f.name}" loading="lazy">
-              <button class="badge-likes-thumb ${liked ? 'liked' : ''}" id="badge-like-${f.id}" onclick="toggleLikeFoto('${f.id}', '${f.name}', event)" type="button">
-                <span class="material-symbols-outlined">favorite</span>
-                <span id="txt-like-${f.id}">${conteo}</span>
-              </button>
-            `;
-            card.onclick = () => abrirVisor(indexGlobal);
-            grid.appendChild(card);
-          });
-        }
-      } catch (_) {}
-    }
+    function renderizarSeccion(nombreCarpeta, archivos, contenedorPadre) {
+      const seccion = document.createElement('section');
+      seccion.className = 'seccion-subcarpeta';
 
-    async function renderizarFotosDirectas(folderId, nombreCarpeta) {
-      const contenedor = document.getElementById('contenedor-secciones');
-      const urlFiles = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY}&fields=files(id,name)`;
-      try {
-        const res = await fetch(urlFiles);
-        const data = await res.json();
-        if (data.files && data.files.length > 0) {
-          contenedor.innerHTML = '<div class="galeria" id="galeria-directa"></div>';
-          const grid = document.getElementById('galeria-directa');
-          data.files.forEach(f => {
-            const urlHD = `https://lh3.googleusercontent.com/d/${f.id}=w1600`;
-            const indexGlobal = fotosActuales.length;
-            fotosActuales.push({ id: f.id, url: urlHD, name: f.name || 'foto.jpg', subcarpeta: nombreCarpeta });
-            const card = document.createElement('div');
-            card.className = 'card-foto';
-            const conteo = likesMemoria[f.id] || 0;
-            const liked = !!votosLocales[f.id];
-            card.innerHTML = `
-              <img src="https://lh3.googleusercontent.com/d/${f.id}=w800" alt="${f.name}" loading="lazy">
-              <button class="badge-likes-thumb ${liked ? 'liked' : ''}" id="badge-like-${f.id}" onclick="toggleLikeFoto('${f.id}', '${f.name}', event)" type="button">
-                <span class="material-symbols-outlined">favorite</span>
-                <span id="txt-like-${f.id}">${conteo}</span>
-              </button>
-            `;
-            card.onclick = () => abrirVisor(indexGlobal);
-            grid.appendChild(card);
-          });
-        }
-      } catch (_) {}
+      const cabecera = document.createElement('div');
+      cabecera.className = 'subcarpeta-header';
+      cabecera.innerHTML = `
+        <span class="material-symbols-outlined">folder</span>
+        <h2 class="subcarpeta-titulo">${nombreCarpeta}</h2>
+      `;
+      seccion.appendChild(cabecera);
+
+      const grid = document.createElement('div');
+      grid.className = 'galeria';
+
+      archivos.forEach(archivo => {
+        const urlFull = `https://lh3.googleusercontent.com/d/${archivo.id}=w1600`;
+        const urlThumb = `https://lh3.googleusercontent.com/d/${archivo.id}=w800`;
+        const indexFoto = fotosActuales.length;
+
+        fotosActuales.push({
+          id: archivo.id,
+          nombre: archivo.name,
+          carpeta: nombreCarpeta,
+          urlFull: urlFull
+        });
+
+        const card = document.createElement('div');
+        card.className = 'card-foto';
+        card.onclick = () => abrirVisor(indexFoto);
+
+        const conteoInicial = likesMemoria[archivo.id] || 0;
+        const yaLiked = !!votosLocales[archivo.id];
+
+        card.innerHTML = `
+          <img src="${urlThumb}" alt="${archivo.name}" loading="lazy">
+          <button class="badge-likes-thumb ${yaLiked ? 'liked' : ''}" id="badge-like-${archivo.id}" onclick="toggleLikeFoto('${archivo.id}', '${archivo.name}', event)" type="button" title="Me gusta">
+            <span class="material-symbols-outlined">favorite</span>
+            <span id="txt-like-${archivo.id}">${conteoInicial}</span>
+          </button>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      seccion.appendChild(grid);
+      contenedorPadre.appendChild(seccion);
     }
 
     function abrirVisor(index) {
+      if (!fotosActuales[index]) return;
       indiceFotoActual = index;
-      const foto = fotosActuales[indiceFotoActual];
-      if (!foto) return;
-      document.getElementById('img-ampliada').src = foto.url;
-      document.getElementById('firma-subcarpeta').innerText = foto.subcarpeta || NOMBRE_SECCION;
-      document.getElementById('firma-archivo').innerText = '#' + foto.name;
-      const conteo = likesMemoria[foto.id] || 0;
-      const liked = !!votosLocales[foto.id];
-      actualizarBotonVisor(conteo, liked);
+      const f = fotosActuales[indiceFotoActual];
+
+      document.getElementById('img-ampliada').src = f.urlFull;
+      document.getElementById('texto-firma').textContent = `Sergio Molina • ${f.carpeta} • #${f.nombre}`;
+
+      const conteo = likesMemoria[f.id] || 0;
+      const yaLiked = !!votosLocales[f.id];
+      actualizarBotonVisor(conteo, yaLiked);
+
       document.getElementById('modal').style.display = 'flex';
-      registrarMetrica('foto_visor_hd', `Foto: #${foto.name} en ${foto.subcarpeta}`);
+      history.pushState({ visor: true }, '', '');
     }
 
-    function cerrarVisor() { document.getElementById('modal').style.display = 'none'; }
-    function cerrarVisorFondo(e) { if (e.target.id === 'modal') cerrarVisor(); }
-    function cambiarFoto(dir, event) {
-      if (event) event.stopPropagation();
-      indiceFotoActual += dir;
+    function cerrarVisor() {
+      document.getElementById('modal').style.display = 'none';
+    }
+
+    function cerrarVisorFondo(e) {
+      if (e.target.id === 'modal') cerrarVisor();
+    }
+
+    function cambiarFoto(direccion, e) {
+      if (e) e.stopPropagation();
+      indiceFotoActual += direccion;
       if (indiceFotoActual >= fotosActuales.length) indiceFotoActual = 0;
       else if (indiceFotoActual < 0) indiceFotoActual = fotosActuales.length - 1;
-      const foto = fotosActuales[indiceFotoActual];
-      if (foto) {
-        document.getElementById('img-ampliada').src = foto.url;
-        document.getElementById('firma-subcarpeta').innerText = foto.subcarpeta || NOMBRE_SECCION;
-        document.getElementById('firma-archivo').innerText = '#' + foto.name;
-        const conteo = likesMemoria[foto.id] || 0;
-        const liked = !!votosLocales[foto.id];
-        actualizarBotonVisor(conteo, liked);
-      }
+
+      const f = fotosActuales[indiceFotoActual];
+      document.getElementById('img-ampliada').src = f.urlFull;
+      document.getElementById('texto-firma').textContent = `Sergio Molina • ${f.carpeta} • #${f.nombre}`;
+
+      const conteo = likesMemoria[f.id] || 0;
+      const yaLiked = !!votosLocales[f.id];
+      actualizarBotonVisor(conteo, yaLiked);
     }
 
-    document.addEventListener('keydown', e => {
-      const m = document.getElementById('modal');
-      if (m && m.style.display === 'flex') {
+    document.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('modal');
+      if (modal.style.display === 'flex') {
         if (e.key === 'Escape') cerrarVisor();
         else if (e.key === 'ArrowLeft') cambiarFoto(-1);
         else if (e.key === 'ArrowRight') cambiarFoto(1);
@@ -585,27 +653,46 @@
     });
 
     let touchStartX = 0;
-    const modalEl = document.getElementById('modal');
-    modalEl.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
-    modalEl.addEventListener('touchend', e => {
-      const touchEndX = e.changedTouches[0].screenX;
-      if (touchEndX + 50 < touchStartX) cambiarFoto(1);
-      else if (touchEndX > touchStartX + 50) cambiarFoto(-1);
+    let touchEndX = 0;
+    const modal = document.getElementById('modal');
+    modal.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
+    modal.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX + 45 < touchStartX) cambiarFoto(1);
+      else if (touchEndX > touchStartX + 45) cambiarFoto(-1);
     }, false);
 
-    async function registrarMetrica(tipo, detalle) {
-      try {
-        if (window.supabase) {
-          const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-          await client.from('visitas').insert([{ tipo, pagina: 'ensayos.html', detalle, dispositivo: window.innerWidth < 640 ? 'mobile' : 'desktop' }]);
-        }
-      } catch (_) {}
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      cargarSubcarpetas();
-      registrarMetrica('visita_pagina', 'Visita a galería Ensayos');
+    window.addEventListener('popstate', () => {
+      if (document.getElementById('modal').style.display === 'flex') {
+        cerrarVisor();
+      }
     });
+
+    // Registrador de métricas en Supabase con filtro de exclusión (?sergio=1)
+    (async function registrarVisita() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('sergio') === '1') {
+          localStorage.setItem('ignorar_visita', 'true');
+          localStorage.setItem('dispositivo_token', 'sergio_molina_master_device');
+        }
+        if (localStorage.getItem('ignorar_visita') === 'true' || 
+            localStorage.getItem('dispositivo_token') === 'sergio_molina_master_device') {
+          return;
+        }
+        if (!supabase) return;
+        const esMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        await supabase.from('visitas').insert([{
+          tipo: 'visita_pagina',
+          pagina: 'ensayos.html',
+          detalle: 'Visita a galería Ensayos',
+          dispositivo: esMobile ? 'mobile' : 'desktop',
+          origen: document.referrer || 'directo'
+        }]);
+      } catch (_) {}
+    })();
+
+    document.addEventListener('DOMContentLoaded', cargarEnsayos);
   </script>
 </body>
 </html>
