@@ -386,6 +386,7 @@
   </div>
 
   <script>
+    // ID DE CARPETA DRIVE PARA ENSAYOS
     const FOLDER_ENSAYOS = '1K4h3SPq2WdCEMMzrTSToD-quebXDD4rS';
     const API_KEY_DRIVE = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
     const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
@@ -516,12 +517,14 @@
       }
     }
 
+    // CLON IDÉNTICO A MISCELÁNEAS
     async function cargarEnsayos() {
       const contenedor = document.getElementById('contenedor-ensayos');
       fotosActuales = [];
 
       try {
-        const urlSub = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ENSAYOS}'+in+parents+and+mimeType='application/vnd.google-apps.folder'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
+        const qSub = `'${FOLDER_ENSAYOS}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`;
+        const urlSub = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(qSub)}&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
         const resSub = await fetch(urlSub);
         const dataSub = await resSub.json();
         const carpetas = (dataSub.files && dataSub.files.length > 0) ? dataSub.files : [];
@@ -529,7 +532,8 @@
         contenedor.innerHTML = '';
 
         if (carpetas.length === 0) {
-          const urlRaiz = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ENSAYOS}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
+          const qRaiz = `'${FOLDER_ENSAYOS}' in parents and mimeType contains 'image/' and trashed=false`;
+          const urlRaiz = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(qRaiz)}&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
           const resRaiz = await fetch(urlRaiz);
           const dataRaiz = await resRaiz.json();
           if (dataRaiz.files && dataRaiz.files.length > 0) {
@@ -539,7 +543,8 @@
           }
         } else {
           for (const carpeta of carpetas) {
-            const urlFotos = `https://www.googleapis.com/drive/v3/files?q='${carpeta.id}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
+            const qFotos = `'${carpeta.id}' in parents and mimeType contains 'image/' and trashed=false`;
+            const urlFotos = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(qFotos)}&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
             const resFotos = await fetch(urlFotos);
             const dataFotos = await resFotos.json();
             if (dataFotos.files && dataFotos.files.length > 0) {
@@ -668,7 +673,6 @@
       }
     });
 
-    // Registrador de métricas en Supabase con filtro de exclusión (?sergio=1)
     (async function registrarVisita() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
