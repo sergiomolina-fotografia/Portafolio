@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
@@ -8,749 +7,698 @@
 <link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;family=Raleway:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #111111;
-      color: #ffffff;
-      padding: 16px 12px 40px;
-      max-width: 960px;
-      margin: 0 auto;
-      min-height: 100vh;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-    .cabecera-galeria {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #282828;
-    }
-    .btn-volver {
-      background: #222222;
-      color: #ffffff;
-      border: 1px solid #005580;
-      padding: 7px 15px;
-      border-radius: 20px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      text-decoration: none;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .btn-volver:hover {
-      background: #2f2f2f;
-      border-color: #38bdf8;
-    }
-    .titulo-categoria {
-      font-size: 1.15rem;
-      font-weight: 300;
-      letter-spacing: 0.8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* Subcarpetas y Cuadrícula */
-    .seccion-subcarpeta {
-      margin-bottom: 30px;
-    }
-    .titulo-subcarpeta {
-      font-size: 0.86rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: #38bdf8;
-      margin: 18px 0 10px;
-      padding-bottom: 4px;
-      border-bottom: 1px dashed #222222;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* Cuadrícula fiel: 2 cols móvil (<600px), 3 cols tablet, 4 cols desktop */
-    .galeria {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-    @media (min-width: 600px) {
-      .galeria { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    }
-    @media (min-width: 768px) {
-      .galeria { grid-template-columns: repeat(4, 1fr); gap: 12px; }
-    }
-
-    /* Tarjeta de foto con botón de like integrado */
-    .tarjeta-foto-wrap {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      border-radius: 8px;
-      overflow: hidden;
-      background: #000000;
-      border: 1px solid #2a2a2a;
-    }
-    .tarjeta-foto-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      cursor: pointer;
-      transition: transform 0.25s ease, opacity 0.2s ease;
-      display: block;
-      pointer-events: auto;
-    }
-    .tarjeta-foto-wrap:hover img {
-      transform: scale(1.03);
-      opacity: 0.95;
-    }
-
-    /* Botón flotante de corazón sobre la miniatura (esquina inferior izquierda) */
-    .btn-like-miniatura {
-      position: absolute;
-      bottom: 8px;
-      left: 8px;
-      z-index: 5;
-      background: rgba(17, 17, 17, 0.75);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      padding: 3px 8px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #e5e5e5;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      user-select: none;
-    }
-    .btn-like-miniatura:hover {
-      background: rgba(220, 38, 38, 0.2);
-      border-color: #ef4444;
-      color: #ffffff;
-      transform: scale(1.05);
-    }
-    .btn-like-miniatura.liked {
-      background: rgba(239, 68, 68, 0.25);
-      border-color: #f87171;
-      color: #f87171;
-    }
-    .btn-like-miniatura .material-symbols-outlined {
-      font-size: 15px;
-      line-height: 1;
-    }
-    .btn-like-miniatura.liked .material-symbols-outlined {
-      font-variation-settings: 'FILL' 1;
-      color: #ef4444;
-    }
-
-    .cargando {
-      text-align: center;
-      color: #888888;
-      grid-column: 1 / -1;
-      padding: 50px 0;
-      font-size: 0.9rem;
-    }
-
-    /* VISOR MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.96);
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-    }
-    .contenedor-img-visor {
-      position: relative;
-      max-width: 94%;
-      max-height: 88vh;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal img {
-      max-width: 100%;
-      max-height: 85vh;
-      object-fit: contain;
-      border-radius: 4px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.85);
-      pointer-events: none;
-    }
-
-    /* FIRMA DE AUTOR (Esquina inferior izquierda como estaba) */
-    .firma-visor {
-      position: absolute;
-      bottom: 12px;
-      left: 12px;
-      background: rgba(17, 17, 17, 0.78);
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 8px;
-      padding: 6px 12px;
-      pointer-events: auto;
-      z-index: 10;
-      text-align: left;
-      font-size: 0.76rem;
-      line-height: 1.35;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-    .firma-autor {
-      font-weight: 700;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      letter-spacing: 0.5px;
-    }
-    .firma-autor .material-symbols-outlined {
-      font-size: 14px;
-      color: #38bdf8;
-    }
-    .firma-detalle {
-      color: #aaaaaa;
-      font-size: 0.7rem;
-      font-family: monospace;
-      margin-top: 2px;
-      letter-spacing: 0.3px;
-    }
-
-    /* CONTADOR DE CORAZONES EN EL VISOR (Estilo firma pero colocado en la esquina inferior izquierda al lado) */
-    .contador-corazones-visor {
-      position: absolute;
-      bottom: 12px;
-      left: calc(12px + 230px + 8px); /* Ubicado inmediatamente al lado de la firma */
-      background: rgba(17, 17, 17, 0.82);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      border-radius: 8px;
-      padding: 6px 14px;
-      z-index: 12;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      cursor: pointer;
-      color: #ffffff;
-      font-size: 0.82rem;
-      font-weight: 700;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.5);
-      transition: all 0.2s ease;
-      user-select: none;
-    }
-    @media (max-width: 600px) {
-      .contador-corazones-visor {
-        left: 12px;
-        bottom: 58px; /* En móviles queda apilado justo arriba de la firma en la esquina izquierda */
-      }
-    }
-    .contador-corazones-visor:hover {
-      background: rgba(239, 68, 68, 0.25);
-      border-color: #ef4444;
-      transform: scale(1.04);
-    }
-    .contador-corazones-visor.liked {
-      background: rgba(220, 38, 38, 0.3);
-      border-color: #f87171;
-      color: #fca5a5;
-    }
-    .contador-corazones-visor .material-symbols-outlined {
-      font-size: 18px;
-      color: #ef4444;
-      transition: transform 0.15s ease;
-    }
-    .contador-corazones-visor:active .material-symbols-outlined {
-      transform: scale(1.3);
-    }
-    .contador-corazones-visor.liked .material-symbols-outlined {
-      font-variation-settings: 'FILL' 1;
-    }
-
-    .btn-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      color: white;
-      font-size: 2rem;
-      padding: 12px 16px;
-      cursor: pointer;
-      background: rgba(0,0,0,0.45);
-      border-radius: 50%;
-      user-select: none;
-      z-index: 1001;
-      border: 1px solid rgba(255,255,255,0.15);
-      transition: background 0.2s;
-    }
-    .btn-nav:hover { background: rgba(0,85,128,0.7); }
-    .btn-prev { left: 14px; }
-    .btn-next { right: 14px; }
-    .btn-cerrar {
-      position: absolute;
-      top: 18px;
-      right: 20px;
-      color: white;
-      font-size: 2rem;
-      cursor: pointer;
-      z-index: 1001;
-      padding: 3px 12px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 50%;
-      line-height: 1;
-    }
-
-    /* Redes Sociales Oficiales */
-    .redes-sociales {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 36px;
-    }
-    .btn-red {
-      background: #222222;
-      border-radius: 12px;
-      padding: 12px 4px;
-      text-align: center;
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 0.82rem;
-      font-weight: 600;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      transition: transform 0.15s, background 0.15s;
-    }
-    .btn-red:active { transform: scale(0.96); background: #2a2a2a; }
-    .btn-wsp { border: 2px solid #4ade80; color: #4ade80; }
-    .btn-cat { border: 2px solid #facc15; color: #facc15; }
-    .btn-ig  { border: 2px solid #fb923c; color: #fb923c; }
-
-    footer {
-      text-align: center;
-      margin-top: 36px;
-      padding-top: 20px;
-      border-top: 1px solid #222222;
-      color: #666666;
-      font-size: 0.78rem;
-    }
-
-    @media (max-width: 600px) {
-      .btn-nav { display: none; }
-    }
-  </style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #111111;
+  color: #ffffff;
+  padding: 16px 12px 40px;
+  max-width: 960px;
+  margin: 0 auto;
+  min-height: 100vh;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.cabecera-galeria {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #282828;
+}
+.btn-volver {
+  background: #222222;
+  color: #ffffff;
+  border: 1px solid #005580;
+  padding: 7px 15px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+.btn-volver:hover {
+  background: #2f2f2f;
+  border-color: #38bdf8;
+}
+.titulo-categoria {
+  font-size: 1.15rem;
+  font-weight: 300;
+  letter-spacing: 0.8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.seccion-subcarpeta {
+  margin-bottom: 30px;
+}
+.titulo-subcarpeta {
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #38bdf8;
+  margin: 18px 0 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px dashed #222222;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+@media (min-width: 600px) {
+  .galeria { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+}
+@media (min-width: 768px) {
+  .galeria { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+}
+.tarjeta-foto-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000000;
+  border: 1px solid #2a2a2a;
+}
+.tarjeta-foto-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+  display: block;
+}
+.tarjeta-foto-wrap:hover img {
+  transform: scale(1.03);
+  opacity: 0.95;
+}
+.btn-like-miniatura {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  z-index: 5;
+  background: rgba(17, 17, 17, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #e5e5e5;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-like-miniatura:hover {
+  background: rgba(220, 38, 38, 0.2);
+  border-color: #ef4444;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+.btn-like-miniatura.liked {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #f87171;
+  color: #f87171;
+}
+.btn-like-miniatura .material-symbols-outlined {
+  font-size: 15px;
+  line-height: 1;
+}
+.btn-like-miniatura.liked .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1;
+  color: #ef4444;
+}
+.cargando {
+  text-align: center;
+  color: #888888;
+  grid-column: 1 / -1;
+  padding: 50px 0;
+  font-size: 0.9rem;
+}
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.96);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+.contenedor-img-visor {
+  position: relative;
+  max-width: 94%;
+  max-height: 88vh;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal img {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.85);
+  pointer-events: none;
+}
+.firma-visor {
+  position: absolute;
+  bottom: 20px;
+  left: 24px;
+  background: rgba(17, 17, 17, 0.78);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 6px 14px;
+  pointer-events: auto;
+  z-index: 10;
+  text-align: left;
+  font-size: 0.76rem;
+  line-height: 1.35;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+.firma-autor {
+  font-weight: 700;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  letter-spacing: 0.5px;
+}
+.firma-autor .material-symbols-outlined {
+  font-size: 14px;
+  color: #38bdf8;
+}
+.firma-detalle {
+  color: #aaaaaa;
+  font-size: 0.7rem;
+  font-family: monospace;
+  margin-top: 2px;
+  letter-spacing: 0.3px;
+}
+.contador-corazones-visor {
+  position: absolute;
+  bottom: 20px;
+  right: 24px;
+  left: auto;
+  background: rgba(17, 17, 17, 0.82);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 20px;
+  padding: 7px 16px;
+  z-index: 12;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.contador-corazones-visor:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  transform: scale(1.04);
+}
+.contador-corazones-visor.liked {
+  background: rgba(220, 38, 38, 0.3);
+  border-color: #f87171;
+  color: #fca5a5;
+}
+.contador-corazones-visor .material-symbols-outlined {
+  font-size: 18px;
+  color: #ef4444;
+  transition: transform 0.15s ease;
+}
+.contador-corazones-visor:active .material-symbols-outlined {
+  transform: scale(1.3);
+}
+.contador-corazones-visor.liked .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1;
+}
+.btn-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ffffff;
+  font-size: 1.8rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: rgba(17, 17, 17, 0.75);
+  backdrop-filter: blur(8px);
+  border-radius: 50%;
+  user-select: none;
+  z-index: 1005;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+.btn-nav:hover { background: rgba(0,85,128,0.7); }
+.btn-prev { left: 20px; }
+.btn-next { right: 20px; }
+.btn-cerrar {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 1001;
+  padding: 3px 12px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+  line-height: 1;
+}
+.redes-sociales {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 36px;
+}
+.btn-red {
+  background: #222222;
+  border-radius: 12px;
+  padding: 12px 4px;
+  text-align: center;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: transform 0.15s, background 0.15s;
+}
+.btn-red:active { transform: scale(0.96); background: #2a2a2a; }
+.btn-wsp { border: 2px solid #4ade80; color: #4ade80; }
+.btn-cat { border: 2px solid #facc15; color: #facc15; }
+.btn-ig { border: 2px solid #fb923c; color: #fb923c; }
+footer {
+  text-align: center;
+  margin-top: 36px;
+  padding-top: 20px;
+  border-top: 1px solid #222222;
+  color: #666666;
+  font-size: 0.78rem;
+}
+@media (max-width: 600px) {
+  .btn-nav { display: none; }
+  .firma-visor { left: 14px; bottom: 14px; padding: 4px 10px; font-size: 0.7rem; }
+  .contador-corazones-visor { right: 14px; bottom: 14px; padding: 5px 12px; font-size: 0.75rem; }
+}
+</style>
 </head>
 <body oncontextmenu="return false;">
-<!-- Cabecera -->
+
 <div class="cabecera-galeria">
-<a class="btn-volver" href="index.html">← Volver al Portafolio</a>
-<h2 class="titulo-categoria">
-<span class="material-symbols-outlined" style="color: #38bdf8; font-size: 20px;">photo_camera</span>
-<span>Sesiones</span>
-</h2>
+  <a class="btn-volver" href="index.html">← Volver al Portafolio</a>
+  <h2 class="titulo-categoria">
+    <span class="material-symbols-outlined" style="color: #38bdf8; font-size: 20px;">photo_camera</span>
+    <span>Sesiones</span>
+  </h2>
 </div>
-<!-- Contenedor Principal de Subcarpetas y Fotos -->
+
 <main id="galeria-contenedor">
-<div class="cargando">Cargando colección de Sesiones...</div>
+  <div class="cargando">Cargando colección de Sesiones...</div>
 </main>
-<!-- Redes Sociales Oficiales (Idénticas) -->
+
 <div class="redes-sociales">
-<a class="btn-red btn-wsp" href="https://wa.me/542613175222" target="_blank">
-<span class="material-symbols-outlined">chat</span>
-<span>WhatsApp</span>
-</a>
-<a class="btn-red btn-cat" href="https://wa.me/c/5492613175222" target="_blank">
-<span class="material-symbols-outlined">inventory_2</span>
-<span>Catálogo</span>
-</a>
-<a class="btn-red btn-ig" href="https://www.instagram.com/sergioricardo.molina?igsi=OG84bTUxanllMnh4" target="_blank">
-<span class="material-symbols-outlined">photo_camera_back</span>
-<span>Instagram</span>
-</a>
+  <a class="btn-red btn-wsp" href="https://wa.me/542613175222" target="_blank">
+    <span class="material-symbols-outlined">chat</span>
+    <span>WhatsApp</span>
+  </a>
+  <a class="btn-red btn-cat" href="https://wa.me/c/5492613175222" target="_blank">
+    <span class="material-symbols-outlined">inventory_2</span>
+    <span>Catálogo</span>
+  </a>
+  <a class="btn-red btn-ig" href="https://www.instagram.com/sergioricardo.molina?igsi=OG84bTUxanllMnh4" target="_blank">
+    <span class="material-symbols-outlined">photo_camera_back</span>
+    <span>Instagram</span>
+  </a>
 </div>
+
 <footer>
-<p>© Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina</p>
+  <p>© Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina</p>
 </footer>
-<!-- MODAL VISOR EN PANTALLA COMPLETA CON FIRMA Y CONTADOR DE CORAZONES -->
+
 <div class="modal" id="modal" onclick="cerrarVisorFondo(event)">
-<span class="btn-cerrar" onclick="cerrarVisor()">×</span>
-<span class="btn-nav btn-prev" onclick="cambiarFoto(-1, event)" style="position: absolute; top: 50%; transform: translateY(-50%); left: 20px; color: #ffffff; font-size: 1.8rem; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: rgba(17, 17, 17, 0.75); backdrop-filter: blur(8px); border-radius: 50%; user-select: none; z-index: 1005; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.6);">❮</span>
-<div class="contenedor-img-visor">
-<img alt="Fotografía Sergio Molina" draggable="false" id="img-ampliada" src=""/>
-<!-- Firma sutil oficial en esquina inferior izquierda -->
-<div class="firma-visor" id="firma-visor" style="position: absolute; bottom: 20px; left: 24px; background: rgba(17, 17, 17, 0.78); backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; padding: 6px 14px; pointer-events: auto; z-index: 10; text-align: left; font-size: 0.76rem; line-height: 1.35; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
-<div class="firma-autor">
-<span class="material-symbols-outlined">photo_camera</span>
-<span>Sergio Molina</span>
+  <span class="btn-cerrar" onclick="cerrarVisor()">×</span>
+  <span class="btn-nav btn-prev" onclick="cambiarFoto(-1, event)">❮</span>
+  <div class="contenedor-img-visor">
+    <img alt="Fotografía Sergio Molina" draggable="false" id="img-ampliada" src=""/>
+    <div class="firma-visor" id="firma-visor">
+      <div class="firma-autor">
+        <span class="material-symbols-outlined">photo_camera</span>
+        <span>Sergio Molina</span>
+      </div>
+      <div class="firma-detalle" id="firma-detalle">Sesiones • Foto</div>
+    </div>
+    <button class="contador-corazones-visor" id="btn-like-visor" onclick="toggleCorazonVisor(event)" title="Dar corazón a esta foto">
+      <span class="material-symbols-outlined" id="icono-corazon-visor">favorite</span>
+      <span id="conteo-corazones-visor">0</span>
+    </button>
+  </div>
+  <span class="btn-nav btn-next" onclick="cambiarFoto(1, event)">❯</span>
 </div>
-<div class="firma-detalle" id="firma-detalle">Sesiones • Foto</div>
-</div>
-<!-- Contador y botón de corazón interactivo en esquina inferior izquierda -->
-<button class="contador-corazones-visor" id="btn-like-visor" onclick="toggleCorazonVisor(event)" style="position: absolute; bottom: 20px; right: 24px; left: auto; background: rgba(17, 17, 17, 0.82); backdrop-filter: blur(8px); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 20px; padding: 7px 16px; z-index: 12; display: inline-flex; align-items: center; gap: 7px; cursor: pointer; color: #ffffff; font-size: 0.82rem; font-weight: 700; box-shadow: 0 4px 14px rgba(0,0,0,0.5); transition: all 0.2s ease;" title="Dar corazón a esta foto">
-<span class="material-symbols-outlined" id="icono-corazon-visor">favorite</span>
-<span id="conteo-corazones-visor">0</span>
-</button>
-</div>
-<span class="btn-nav btn-next" onclick="cambiarFoto(1, event)" style="position: absolute; top: 50%; transform: translateY(-50%); right: 20px; color: #ffffff; font-size: 1.8rem; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: rgba(17, 17, 17, 0.75); backdrop-filter: blur(8px); border-radius: 50%; user-select: none; z-index: 1005; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.6);">❯</span>
-</div>
-<!-- SCRIPTS: GOOGLE DRIVE + SUPABASE RANKING DE CORAZONES + EXCLUSIÓN DE DISPOSITIVOS -->
+
 <script>
-    // 1. Auto-detección del token maestro de exclusión (?sergio=1)
-    (function detectarTokenMaestro() {
-      try {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('sergio') === '1' || urlParams.get('admin') === '1' || urlParams.get('ignorar') === '1') {
-          localStorage.setItem('dispositivo_token', 'sergio_molina_master_device');
-          localStorage.setItem('ignorar_visita', 'true');
-          urlParams.delete('sergio');
-          urlParams.delete('admin');
-          urlParams.delete('ignorar');
-          const nuevaQuery = urlParams.toString();
-          const nuevaUrl = window.location.pathname + (nuevaQuery ? '?' + nuevaQuery : '') + window.location.hash;
-          window.history.replaceState({}, document.title, nuevaUrl);
-          console.log('🛡️ Dispositivo marcado como propio. Métricas omitidas.');
-        }
-      } catch (_) {}
-    })();
-
-    // 2. Credenciales oficiales de Supabase y Google Drive
-    const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
-    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
-    const API_KEY_DRIVE = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
-    const FOLDER_ID_GALERIA = '1IReNcUgPTRAa9nj3-u38QstyZWV9n6RY';
-
-    const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : null;
-
-    // 3. Obtener o crear huella única de navegador para limitar a 1 corazón por foto
-    function obtenerHuellaNavegador() {
-      let huella = localStorage.getItem('usuario_huella_voto');
-      if (!huella) {
-        huella = 'usr_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now().toString(36);
-        localStorage.setItem('usuario_huella_voto', huella);
-      }
-      return huella;
+// 1. Exclusión voluntaria solo si el usuario pasa ?sergio=1 explícito
+(function detectarTokenMaestro() {
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('sergio') === '1' || urlParams.get('admin') === '1' || urlParams.get('ignorar') === '1') {
+      localStorage.setItem('dispositivo_token', 'sergio_molina_master_device');
+      localStorage.setItem('ignorar_visita', 'true');
+      urlParams.delete('sergio');
+      urlParams.delete('admin');
+      urlParams.delete('ignorar');
+      const nuevaQuery = urlParams.toString();
+      const nuevaUrl = window.location.pathname + (nuevaQuery ? '?' + nuevaQuery : '') + window.location.hash;
+      window.history.replaceState({}, document.title, nuevaUrl);
+      console.log('🛡️ Dispositivo marcado como propio.');
     }
-    const HUELLA_USUARIO = obtenerHuellaNavegador();
+  } catch (_) {}
+})();
 
-    // Mapas de estado en memoria para likes
-    const likesCache = new Map(); // fotoId -> conteo
-    const misVotosCache = new Set(); // fotoIds que este navegador ya votó
+// 2. Credenciales oficiales de Supabase y Google Drive
+const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
+const API_KEY_DRIVE = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
+const FOLDER_ID_GALERIA = '1IReNcUgPTRAa9nj3-u38QstyZWV9n6RY';
 
-    let fotosActuales = [];
-    let indiceFotoActual = 0;
+const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : null;
 
-    // 4. Cargar estado de likes desde Supabase para la galería actual
-    async function sincronizarLikesDeGaleria() {
-      if (!supabaseClient) return;
-      try {
-        // A) Traer conteos totales de likes_fotos
-        const { data: totales } = await supabaseClient
-          .from('likes_fotos')
-          .select('foto_id, conteo')
-          .eq('galeria', 'sesiones');
+function obtenerHuellaNavegador() {
+  let huella = localStorage.getItem('usuario_huella_voto');
+  if (!huella) {
+    huella = 'usr_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now().toString(36);
+    localStorage.setItem('usuario_huella_voto', huella);
+  }
+  return huella;
+}
+const HUELLA_USUARIO = obtenerHuellaNavegador();
 
-        if (totales && totales.length > 0) {
-          totales.forEach(item => {
-            likesCache.set(item.foto_id, item.conteo || 0);
-          });
-        }
+const likesCache = new Map();
+const misVotosCache = new Set();
+let fotosActuales = [];
+let indiceFotoActual = 0;
 
-        // B) Traer votos registrados por este navegador
-        const { data: misVotos } = await supabaseClient
-          .from('votos_corazones')
-          .select('foto_id')
-          .eq('dispositivo_huella', HUELLA_USUARIO);
-
-        if (misVotos && misVotos.length > 0) {
-          misVotos.forEach(item => misVotosCache.add(item.foto_id));
-        }
-
-        actualizarTodosLosBotonesDeLikes();
-      } catch (err) {
-        console.warn('Error sincronizando ranking de corazones:', err);
-      }
+// Sincronizar Likes
+async function sincronizarLikesDeGaleria() {
+  if (!supabaseClient) return;
+  try {
+    const { data: totales } = await supabaseClient
+      .from('likes_fotos')
+      .select('foto_id, conteo')
+      .eq('galeria', 'sesiones');
+    if (totales && totales.length > 0) {
+      totales.forEach(item => {
+        likesCache.set(item.foto_id, item.conteo || 0);
+      });
     }
 
-    function actualizarTodosLosBotonesDeLikes() {
-      fotosActuales.forEach(foto => {
-        const total = likesCache.get(foto.id) || 0;
-        const yaVotado = misVotosCache.has(foto.id);
+    const { data: misVotos } = await supabaseClient
+      .from('votos_corazones')
+      .select('foto_id')
+      .eq('dispositivo_huella', HUELLA_USUARIO);
+    if (misVotos && misVotos.length > 0) {
+      misVotos.forEach(item => misVotosCache.add(item.foto_id));
+    }
+    actualizarTodosLosBotonesDeLikes();
+  } catch (err) {
+    console.warn('Error sincronizando ranking de corazones:', err);
+  }
+}
 
-        // Actualizar botón de miniatura
-        const btnMini = document.getElementById(`btn-like-mini-${foto.id}`);
-        const conteoMini = document.getElementById(`conteo-mini-${foto.id}`);
-        if (btnMini && conteoMini) {
-          conteoMini.textContent = total;
-          if (yaVotado) {
-            btnMini.classList.add('liked');
-          } else {
-            btnMini.classList.remove('liked');
-          }
-        }
+function actualizarTodosLosBotonesDeLikes() {
+  fotosActuales.forEach(foto => {
+    const total = likesCache.get(foto.id) || 0;
+    const yaVotado = misVotosCache.has(foto.id);
+    const btnMini = document.getElementById(`btn-like-mini-${foto.id}`);
+    const conteoMini = document.getElementById(`conteo-mini-${foto.id}`);
+    if (btnMini && conteoMini) {
+      conteoMini.textContent = total;
+      if (yaVotado) btnMini.classList.add('liked');
+      else btnMini.classList.remove('liked');
+    }
+  });
+  actualizarBotonVisor();
+}
+
+function actualizarBotonVisor() {
+  if (fotosActuales.length === 0) return;
+  const foto = fotosActuales[indiceFotoActual];
+  if (!foto) return;
+  const total = likesCache.get(foto.id) || 0;
+  const yaVotado = misVotosCache.has(foto.id);
+  const btnVisor = document.getElementById('btn-like-visor');
+  const conteoVisor = document.getElementById('conteo-corazones-visor');
+  if (btnVisor && conteoVisor) {
+    conteoVisor.textContent = total;
+    if (yaVotado) btnVisor.classList.add('liked');
+    else btnVisor.classList.remove('liked');
+  }
+}
+
+async function toggleCorazon(fotoId, fotoNombre, event) {
+  if (event) event.stopPropagation();
+  const yaVotado = misVotosCache.has(fotoId);
+  const totalPrevio = likesCache.get(fotoId) || 0;
+  const nuevoTotal = yaVotado ? Math.max(0, totalPrevio - 1) : totalPrevio + 1;
+
+  likesCache.set(fotoId, nuevoTotal);
+  if (yaVotado) misVotosCache.delete(fotoId);
+  else misVotosCache.add(fotoId);
+
+  actualizarTodosLosBotonesDeLikes();
+
+  if (supabaseClient) {
+    try {
+      const { data: resRpc, error: errRpc } = await supabaseClient.rpc('toggle_corazon', {
+        p_foto_id: fotoId,
+        p_foto_nombre: fotoNombre || 'Foto',
+        p_galeria: 'sesiones',
+        p_huella: HUELLA_USUARIO
       });
 
-      // Actualizar visor si está abierto
-      actualizarBotonVisor();
-    }
-
-    function actualizarBotonVisor() {
-      if (fotosActuales.length === 0) return;
-      const foto = fotosActuales[indiceFotoActual];
-      if (!foto) return;
-
-      const total = likesCache.get(foto.id) || 0;
-      const yaVotado = misVotosCache.has(foto.id);
-
-      const btnVisor = document.getElementById('btn-like-visor');
-      const conteoVisor = document.getElementById('conteo-corazones-visor');
-      if (btnVisor && conteoVisor) {
-        conteoVisor.textContent = total;
-        if (yaVotado) {
-          btnVisor.classList.add('liked');
-        } else {
-          btnVisor.classList.remove('liked');
-        }
+      if (!errRpc && resRpc) {
+        likesCache.set(fotoId, resRpc.total || 0);
+        if (resRpc.liked) misVotosCache.add(fotoId);
+        else misVotosCache.delete(fotoId);
+        actualizarTodosLosBotonesDeLikes();
+        return;
       }
-    }
 
-    // 5. Función universal para dar / quitar corazón (1 corazón por navegador)
-    async function toggleCorazon(fotoId, fotoNombre, event) {
-      if (event) event.stopPropagation();
-
-      const yaVotado = misVotosCache.has(fotoId);
-      const totalPrevio = likesCache.get(fotoId) || 0;
-
-      // Optimistic UI Update inmediato
-      const nuevoTotal = yaVotado ? Math.max(0, totalPrevio - 1) : totalPrevio + 1;
-      likesCache.set(fotoId, nuevoTotal);
       if (yaVotado) {
-        misVotosCache.delete(fotoId);
+        await supabaseClient.from('votos_corazones').delete()
+          .eq('foto_id', fotoId).eq('dispositivo_huella', HUELLA_USUARIO);
+        await supabaseClient.from('likes_fotos').upsert({
+          foto_id: fotoId,
+          foto_nombre: fotoNombre,
+          galeria: 'sesiones',
+          conteo: nuevoTotal,
+          updated_at: new Date().toISOString()
+        });
       } else {
-        misVotosCache.add(fotoId);
-      }
-      actualizarTodosLosBotonesDeLikes();
-
-      // Persistencia en Supabase
-      if (supabaseClient) {
-        try {
-          // Intentar llamada RPC atómica
-          const { data: resRpc, error: errRpc } = await supabaseClient.rpc('toggle_corazon', {
-            p_foto_id: fotoId,
-            p_foto_nombre: fotoNombre || 'Foto',
-            p_galeria: 'sesiones',
-            p_huella: HUELLA_USUARIO
-          });
-
-          if (!errRpc && resRpc) {
-            likesCache.set(fotoId, resRpc.total || 0);
-            if (resRpc.liked) misVotosCache.add(fotoId);
-            else misVotosCache.delete(fotoId);
-            actualizarTodosLosBotonesDeLikes();
-            return;
-          }
-
-          // Fallback manual en caso de que la RPC no esté cargada
-          if (yaVotado) {
-            await supabaseClient.from('votos_corazones').delete()
-              .eq('foto_id', fotoId).eq('dispositivo_huella', HUELLA_USUARIO);
-            await supabaseClient.from('likes_fotos').upsert({
-              foto_id: fotoId,
-              foto_nombre: fotoNombre,
-              galeria: 'sesiones',
-              conteo: nuevoTotal,
-              updated_at: new Date().toISOString()
-            });
-          } else {
-            await supabaseClient.from('votos_corazones').insert([{
-              foto_id: fotoId,
-              dispositivo_huella: HUELLA_USUARIO
-            }]);
-            await supabaseClient.from('likes_fotos').upsert({
-              foto_id: fotoId,
-              foto_nombre: fotoNombre,
-              galeria: 'sesiones',
-              conteo: nuevoTotal,
-              updated_at: new Date().toISOString()
-            });
-          }
-        } catch (err) {
-          console.warn('Error guardando like:', err);
-        }
-      }
-    }
-
-    function toggleCorazonVisor(event) {
-      if (fotosActuales.length === 0) return;
-      const foto = fotosActuales[indiceFotoActual];
-      if (foto) {
-        toggleCorazon(foto.id, foto.name, event);
-      }
-    }
-
-    // 6. Carga de fotos desde Google Drive con subcarpetas
-    async function cargarGaleria() {
-      const contenedor = document.getElementById('galeria-contenedor');
-      contenedor.innerHTML = '<div class="cargando">Cargando colección de Sesiones...</div>';
-      fotosActuales = [];
-
-      try {
-        // Listar subcarpetas
-        const urlSubcarpetas = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID_GALERIA}'+in+parents+and+mimeType='application/vnd.google-apps.folder'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
-        const resSub = await fetch(urlSubcarpetas);
-        const dataSub = await resSub.json();
-
-        let subcarpetas = dataSub.files || [];
-
-        // Si no hay subcarpetas, listar fotos de la raíz directamente
-        if (subcarpetas.length === 0) {
-          subcarpetas = [{ id: FOLDER_ID_GALERIA, name: 'Sesiones' }];
-        }
-
-        contenedor.innerHTML = '';
-
-        for (const sub of subcarpetas) {
-          const urlFotos = `https://www.googleapis.com/drive/v3/files?q='${sub.id}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&pageSize=100&fields=files(id,name)`;
-          const resFotos = await fetch(urlFotos);
-          const dataFotos = await resFotos.json();
-
-          if (dataFotos.files && dataFotos.files.length > 0) {
-            const seccion = document.createElement('section');
-            seccion.className = 'seccion-subcarpeta';
-
-            if (sub.id !== FOLDER_ID_GALERIA) {
-              const h3 = document.createElement('h3');
-              h3.className = 'titulo-subcarpeta';
-              h3.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">folder_open</span><span>${sub.name}</span>`;
-              seccion.appendChild(h3);
-            }
-
-            const grid = document.createElement('div');
-            grid.className = 'galeria';
-
-            dataFotos.files.forEach(archivo => {
-              const fotoObj = {
-                id: archivo.id,
-                name: archivo.name || 'Fotografía',
-                subcarpeta: sub.name,
-                urlAlta: `https://lh3.googleusercontent.com/d/${archivo.id}=w1600`,
-                urlThumb: `https://lh3.googleusercontent.com/d/${archivo.id}=w800`
-              };
-              fotosActuales.push(fotoObj);
-              const index = fotosActuales.length - 1;
-
-              const wrap = document.createElement('div');
-              wrap.className = 'tarjeta-foto-wrap';
-              wrap.innerHTML = `
-                <img src="${fotoObj.urlThumb}" alt="${fotoObj.name}" loading="lazy" onclick="abrirVisor(${index})"/>
-                <!-- Botón de corazón en esquina inferior izquierda -->
-                <button class="btn-like-miniatura" id="btn-like-mini-${fotoObj.id}" onclick="toggleCorazon('${fotoObj.id}', '${fotoObj.name.replace(/'/g, "\\'")}', event)">
-                  <span class="material-symbols-outlined">favorite</span>
-                  <span id="conteo-mini-${fotoObj.id}">0</span>
-                </button>
-              `;
-              grid.appendChild(wrap);
-            });
-
-            seccion.appendChild(grid);
-            contenedor.appendChild(seccion);
-          }
-        }
-
-        // Sincronizar likes con Supabase una vez renderizadas las fotos
-        sincronizarLikesDeGaleria();
-
-      } catch (e) {
-        console.error('Error cargando Sesiones:', e);
-        contenedor.innerHTML = '<div class="cargando" style="color:#ef4444;">No se pudieron cargar las fotografías de Google Drive.</div>';
-      }
-    }
-
-    // 7. Visor Modal con Firma y Corazón en la Esquina Inferior Izquierda
-    function abrirVisor(index) {
-      if (index < 0 || index >= fotosActuales.length) return;
-      indiceFotoActual = index;
-      const foto = fotosActuales[indiceFotoActual];
-
-      document.getElementById('img-ampliada').src = foto.urlAlta;
-      document.getElementById('firma-detalle').textContent = `${foto.subcarpeta} • ${foto.name}`;
-
-      actualizarBotonVisor();
-      document.getElementById('modal').style.display = 'flex';
-    }
-
-    function cerrarVisor() {
-      document.getElementById('modal').style.display = 'none';
-    }
-
-    function cerrarVisorFondo(event) {
-      if (event.target.id === 'modal') cerrarVisor();
-    }
-
-    function cambiarFoto(dir, event) {
-      if (event) event.stopPropagation();
-      indiceFotoActual += dir;
-      if (indiceFotoActual >= fotosActuales.length) indiceFotoActual = 0;
-      else if (indiceFotoActual < 0) indiceFotoActual = fotosActuales.length - 1;
-      abrirVisor(indiceFotoActual);
-    }
-
-    // Navegación por teclado físico
-    document.addEventListener('keydown', (e) => {
-      const modal = document.getElementById('modal');
-      if (modal.style.display === 'flex') {
-        if (e.key === 'Escape') cerrarVisor();
-        else if (e.key === 'ArrowLeft') cambiarFoto(-1);
-        else if (e.key === 'ArrowRight') cambiarFoto(1);
-      }
-    });
-
-    // Soporte táctil Swipe en móvil
-    let touchStartX = 0;
-    let touchEndX = 0;
-    const modalEl = document.getElementById('modal');
-    modalEl.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
-    modalEl.addEventListener('touchend', e => {
-      touchEndX = e.changedTouches[0].screenX;
-      if (touchEndX + 45 < touchStartX) cambiarFoto(1);
-      else if (touchEndX > touchStartX + 45) cambiarFoto(-1);
-    }, false);
-
-    // 8. Registro de visitas reales en Supabase (con filtro de exclusión de dispositivos propios)
-    async function registrarVisita() {
-      if (localStorage.getItem('ignorar_visita') === 'true' || 
-          localStorage.getItem('dispositivo_token') === 'sergio_molina_master_device') return;
-      try {
-        if (!supabaseClient) return;
-        const esMovil = /Mobi|Android|iPhone/i.test(navigator.userAgent);
-        await supabaseClient.from('visitas').insert([{
-          tipo: 'visita_pagina',
-          pagina: 'sesiones.html',
-          album_id: FOLDER_ID_GALERIA,
-          album_titulo: 'Sesiones',
-          detalle: 'Visita a galería Sesiones',
-          dispositivo: esMovil ? 'mobile' : 'desktop',
-          origen: document.referrer ? (new URL(document.referrer).hostname || 'directo') : 'directo'
+        await supabaseClient.from('votos_corazones').insert([{
+          foto_id: fotoId,
+          dispositivo_huella: HUELLA_USUARIO
         }]);
-      } catch (_) {}
+        await supabaseClient.from('likes_fotos').upsert({
+          foto_id: fotoId,
+          foto_nombre: fotoNombre,
+          galeria: 'sesiones',
+          conteo: nuevoTotal,
+          updated_at: new Date().toISOString()
+        });
+      }
+    } catch (err) {
+      console.warn('Error guardando like:', err);
+    }
+  }
+}
+
+function toggleCorazonVisor(event) {
+  if (fotosActuales.length === 0) return;
+  const foto = fotosActuales[indiceFotoActual];
+  if (foto) toggleCorazon(foto.id, foto.name, event);
+}
+
+// Carga de fotos desde Google Drive con subcarpetas
+async function cargarGaleria() {
+  const contenedor = document.getElementById('galeria-contenedor');
+  contenedor.innerHTML = '<div class="cargando">Cargando colección de Sesiones...</div>';
+  fotosActuales = [];
+
+  try {
+    const urlSubcarpetas = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID_GALERIA}'+in+parents+and+mimeType='application/vnd.google-apps.folder'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
+    const resSub = await fetch(urlSubcarpetas);
+    const dataSub = await resSub.json();
+    let subcarpetas = dataSub.files || [];
+
+    if (subcarpetas.length === 0) {
+      subcarpetas = [{ id: FOLDER_ID_GALERIA, name: 'Sesiones' }];
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      cargarGaleria();
-      registrarVisita();
-    });
-  </script>
+    contenedor.innerHTML = '';
+
+    for (const sub of subcarpetas) {
+      const urlFotos = `https://www.googleapis.com/drive/v3/files?q='${sub.id}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&pageSize=100&fields=files(id,name)`;
+      const resFotos = await fetch(urlFotos);
+      const dataFotos = await resFotos.json();
+
+      if (dataFotos.files && dataFotos.files.length > 0) {
+        const seccion = document.createElement('section');
+        seccion.className = 'seccion-subcarpeta';
+
+        if (sub.id !== FOLDER_ID_GALERIA) {
+          const h3 = document.createElement('h3');
+          h3.className = 'titulo-subcarpeta';
+          h3.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">folder_open</span><span>${sub.name}</span>`;
+          seccion.appendChild(h3);
+        }
+
+        const grid = document.createElement('div');
+        grid.className = 'galeria';
+
+        dataFotos.files.forEach(archivo => {
+          const fotoObj = {
+            id: archivo.id,
+            name: archivo.name || 'Fotografía',
+            subcarpeta: sub.name,
+            urlAlta: `https://lh3.googleusercontent.com/d/${archivo.id}=w1600`,
+            urlThumb: `https://lh3.googleusercontent.com/d/${archivo.id}=w800`
+          };
+          fotosActuales.push(fotoObj);
+          const index = fotosActuales.length - 1;
+
+          const wrap = document.createElement('div');
+          wrap.className = 'tarjeta-foto-wrap';
+          wrap.innerHTML = `
+            <img src="${fotoObj.urlThumb}" alt="${fotoObj.name}" loading="lazy" onclick="abrirVisor(${index})"/>
+            <button class="btn-like-miniatura" id="btn-like-mini-${fotoObj.id}" onclick="toggleCorazon('${fotoObj.id}', '${fotoObj.name.replace(/'/g, "\\\'")}', event)">
+              <span class="material-symbols-outlined">favorite</span>
+              <span id="conteo-mini-${fotoObj.id}">0</span>
+            </button>
+          `;
+          grid.appendChild(wrap);
+        });
+
+        seccion.appendChild(grid);
+        contenedor.appendChild(seccion);
+      }
+    }
+
+    sincronizarLikesDeGaleria();
+  } catch (e) {
+    console.error('Error cargando Sesiones:', e);
+    contenedor.innerHTML = '<div class="cargando" style="color:#ef4444;">No se pudieron cargar las fotografías de Google Drive.</div>';
+  }
+}
+
+// Visor Modal con Registro Activo de Métricas 'foto_visor_hd'
+function abrirVisor(index) {
+  if (index < 0 || index >= fotosActuales.length) return;
+  indiceFotoActual = index;
+  const foto = fotosActuales[indiceFotoActual];
+
+  document.getElementById('img-ampliada').src = foto.urlAlta;
+  document.getElementById('firma-detalle').textContent = `${foto.subcarpeta} • ${foto.name}`;
+
+  actualizarBotonVisor();
+  document.getElementById('modal').style.display = 'flex';
+
+  // ¡CRÍTICO! Registrar la vista de imagen en Supabase para el contador de 'Fotos en Visor HD'
+  registrarMetrica('foto_visor_hd', `Foto: #${foto.name} en ${foto.subcarpeta}`, foto.id, foto.subcarpeta);
+}
+
+function cerrarVisor() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+function cerrarVisorFondo(event) {
+  if (event.target.id === 'modal') cerrarVisor();
+}
+
+function cambiarFoto(dir, event) {
+  if (event) event.stopPropagation();
+  indiceFotoActual += dir;
+  if (indiceFotoActual >= fotosActuales.length) indiceFotoActual = 0;
+  else if (indiceFotoActual < 0) indiceFotoActual = fotosActuales.length - 1;
+  abrirVisor(indiceFotoActual);
+}
+
+document.addEventListener('keydown', (e) => {
+  const modal = document.getElementById('modal');
+  if (modal.style.display === 'flex') {
+    if (e.key === 'Escape') cerrarVisor();
+    else if (e.key === 'ArrowLeft') cambiarFoto(-1);
+    else if (e.key === 'ArrowRight') cambiarFoto(1);
+  }
+});
+
+let touchStartX = 0;
+let touchEndX = 0;
+const modalEl = document.getElementById('modal');
+modalEl.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
+modalEl.addEventListener('touchend', e => {
+  touchEndX = e.changedTouches[0].screenX;
+  if (touchEndX + 45 < touchStartX) cambiarFoto(1);
+  else if (touchEndX > touchStartX + 45) cambiarFoto(-1);
+}, false);
+
+// 8. Registro de métricas y visitas reales en Supabase (foto_visor_hd y visita_pagina)
+async function registrarMetrica(tipo, detalle, albumId = FOLDER_ID_GALERIA, albumTitulo = 'Sesiones') {
+  if (localStorage.getItem('ignorar_visita') === 'true' ||
+      localStorage.getItem('dispositivo_token') === 'sergio_molina_master_device') {
+    return;
+  }
+  try {
+    if (!supabaseClient) return;
+    const esMovil = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+    await supabaseClient.from('visitas').insert([{
+      tipo: tipo || 'visita_pagina',
+      pagina: 'sesiones.html',
+      album_id: albumId,
+      album_titulo: albumTitulo,
+      detalle: detalle || 'Visita a galería Sesiones',
+      dispositivo: esMovil ? 'mobile' : 'desktop',
+      origen: document.referrer ? (new URL(document.referrer).hostname || 'directo') : 'directo'
+    }]);
+  } catch (err) {
+    console.warn('Registro de métrica omitido o fallido:', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  cargarGaleria();
+  registrarMetrica('visita_pagina', 'Visita a galería Sesiones');
+});
+</script>
 </body>
 </html>
