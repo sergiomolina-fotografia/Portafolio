@@ -7,7 +7,7 @@
 <link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;family=Raleway:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -51,8 +51,9 @@
       border-color: #38bdf8;
     }
     .titulo-categoria {
+      font-family: 'Raleway', sans-serif;
       font-size: 1.3rem;
-      font-weight: 400;
+      font-weight: 500;
       letter-spacing: 1px;
       display: flex;
       align-items: center;
@@ -74,6 +75,7 @@
       padding-bottom: 6px;
     }
     .subcarpeta-titulo {
+      font-family: 'Raleway', sans-serif;
       font-size: 1rem;
       font-weight: 600;
       letter-spacing: 1px;
@@ -87,6 +89,10 @@
       color: #888888;
       font-family: monospace;
       margin-left: auto;
+      background: #1c1c1c;
+      padding: 2px 8px;
+      border-radius: 10px;
+      border: 1px solid #2c2c2c;
     }
     .galeria {
       display: grid;
@@ -336,9 +342,9 @@
 </h1>
 </header>
 <main id="contenedor-secciones">
-<div class="cargando-wrap">
+<div class="cargando-wrap" id="estado-carga">
 <div class="spinner"></div>
-<div>Cargando colección de Ensayos desde Google Drive...</div>
+<div id="txt-carga">Cargando colección de Ensayos desde Google Drive...</div>
 </div>
 </main>
 <section class="redes-sociales">
@@ -400,6 +406,15 @@
     let indiceFotoActual = 0;
     let votosLocales = JSON.parse(localStorage.getItem('votos_ensayos') || '{}');
     let likesMemoria = {};
+
+    // Helper timeout de red para que NUNCA quede congelado
+    function fetchConTimeout(url, ms = 4000) {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), ms);
+      return fetch(url, { signal: controller.signal })
+        .then(res => { clearTimeout(id); return res; })
+        .catch(err => { clearTimeout(id); throw err; });
+    }
 
     // Carga de Likes en segundo plano
     async function cargarLikesDesdeSupabase() {
@@ -486,16 +501,22 @@
       }
     }
 
-    // MOTOR DE CARGA CON QUERY COMPATIBLE Y SIN BLOQUEOS
+    // MOTOR DE CARGA RESILIENTE: NUNCA SE QUEDA COLGADO
     async function cargarFotosDrive() {
       const contenedor = document.getElementById('contenedor-secciones');
+      contenedor.innerHTML = `
+        <div class="cargando-wrap" id="estado-carga">
+          <div class="spinner"></div>
+          <div id="txt-carga">Cargando colección de Ensayos desde Google Drive...</div>
+        </div>
+      `;
       fotosActuales = [];
 
       try {
-        const qRaiz = `'${FOLDER_ID}' in parents and trashed = false`;
-        const urlRaiz = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(qRaiz)}&pageSize=100&orderBy=name&key=${API_KEY}&fields=files(id,name,mimeType)`;
+        // Query de Drive API v3
+        const urlRaiz = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+trashed=false&pageSize=100&orderBy=name&key=${API_KEY}&fields=files(id,name,mimeType)`;
 
-        const res = await fetch(urlRaiz);
+        const res = await fetchConTimeout(urlRaiz, 4000);
         const data = await res.json();
 
         if (data.error) {
@@ -509,49 +530,75 @@
           /\.(jpe?g|png|webp|heic|cr2|cr3|nef|raw)$/i.test(f.name)
         );
 
-        contenedor.innerHTML = '';
-
-        if (subcarpetas.length === 0 && fotosRaiz.length === 0) {
-          contenedor.innerHTML = '<div class="cargando-wrap"><p>No se encontraron fotografías disponibles en esta carpeta de Google Drive.</p></div>';
-          return;
-        }
+        let tieneContenido = false;
 
         // Renderizar fotos sueltas de raíz
         if (fotosRaiz.length > 0) {
+          contenedor.innerHTML = '';
           renderizarGrupo(contenedor, subcarpetas.length > 0 ? 'Fotografías Generales' : '', fotosRaiz);
+          tieneContenido = true;
         }
 
-        // Cargar fotos de subcarpetas en paralelo
+        // Cargar fotos de subcarpetas en paralelo seguro con Promise.allSettled
         if (subcarpetas.length > 0) {
           const promesasSub = subcarpetas.map(async sub => {
             try {
-              const qSub = `'${sub.id}' in parents and trashed = false`;
-              const urlSub = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(qSub)}&pageSize=100&orderBy=name&key=${API_KEY}&fields=files(id,name,mimeType)`;
-              const rSub = await fetch(urlSub);
+              const urlSub = `https://www.googleapis.com/drive/v3/files?q='${sub.id}'+in+parents+and+trashed=false&pageSize=100&orderBy=name&key=${API_KEY}&fields=files(id,name,mimeType)`;
+              const rSub = await fetchConTimeout(urlSub, 4000);
               const dSub = await rSub.json();
               const imgs = (dSub.files || []).filter(f => 
                 (f.mimeType && f.mimeType.startsWith('image/')) || 
                 /\.(jpe?g|png|webp|heic|cr2|cr3|nef|raw)$/i.test(f.name)
               );
               return { titulo: sub.name, fotos: imgs };
-            } catch (_) {
+            } catch (e) {
+              console.warn('Error cargando subcarpeta ' + sub.name, e);
               return { titulo: sub.name, fotos: [] };
             }
           });
 
-          const resultados = await Promise.all(promesasSub);
-          resultados.forEach(resGrupo => {
-            if (resGrupo.fotos.length > 0) {
-              renderizarGrupo(contenedor, resGrupo.titulo, resGrupo.fotos);
+          const resultadosSettled = await Promise.allSettled(promesasSub);
+
+          if (!tieneContenido) {
+            contenedor.innerHTML = '';
+          }
+
+          resultadosSettled.forEach(item => {
+            if (item.status === 'fulfilled' && item.value.fotos.length > 0) {
+              renderizarGrupo(contenedor, item.value.titulo, item.value.fotos);
+              tieneContenido = true;
             }
           });
+        }
+
+        if (!tieneContenido) {
+          contenedor.innerHTML = `
+            <div class="cargando-wrap" style="color:#aaaaaa;">
+              <span class="material-symbols-outlined" style="font-size:36px;color:#38bdf8;">folder_open</span>
+              <p>No se encontraron fotografías disponibles en esta carpeta de Google Drive.</p>
+              <button class="btn-volver" onclick="cargarFotosDrive()" style="margin-top:10px;">
+                <span class="material-symbols-outlined">refresh</span>
+                <span>Reintentar</span>
+              </button>
+            </div>
+          `;
+          return;
         }
 
         cargarLikesDesdeSupabase();
 
       } catch (err) {
         console.error('Error al explorar Google Drive:', err);
-        contenedor.innerHTML = '<div class="cargando-wrap" style="color:#ef4444;"><p>Error al conectar con Google Drive. Verificá los permisos públicos de la carpeta.</p><button class="btn-volver" onclick="cargarFotosDrive()" style="margin-top:10px;"><span class="material-symbols-outlined">refresh</span><span>Reintentar</span></button></div>';
+        contenedor.innerHTML = `
+          <div class="cargando-wrap" style="color:#ef4444;">
+            <span class="material-symbols-outlined" style="font-size:36px;color:#ef4444;">cloud_off</span>
+            <p>Error al conectar con Google Drive. Se excedió el tiempo o verificá los permisos públicos de la carpeta.</p>
+            <button class="btn-volver" onclick="cargarFotosDrive()" style="margin-top:10px;">
+              <span class="material-symbols-outlined">refresh</span>
+              <span>Reintentar conexión</span>
+            </button>
+          </div>
+        `;
       }
     }
 
@@ -621,15 +668,21 @@
       const liked = !!votosLocales[f.id];
       actualizarBotonVisor(conteo, liked);
 
+      document.body.classList.add('visor-abierto');
       document.getElementById('modal').style.display = 'flex';
       registrarMetrica('foto_visor_hd', `Foto: #${f.nombre} en ${f.subcarpeta}`);
     }
 
-    function cerrarVisor() { document.getElementById('modal').style.display = 'none'; }
+    function cerrarVisor() { 
+      document.body.classList.remove('visor-abierto');
+      document.getElementById('modal').style.display = 'none'; 
+    }
+    
     function cerrarVisorFondo(e) { if (e.target.id === 'modal') cerrarVisor(); }
 
     function cambiarFoto(dir, event) {
       if (event) event.stopPropagation();
+      if (!fotosActuales.length) return;
       indiceFotoActual += dir;
       if (indiceFotoActual >= fotosActuales.length) indiceFotoActual = 0;
       else if (indiceFotoActual < 0) indiceFotoActual = fotosActuales.length - 1;
@@ -665,6 +718,9 @@
     // REGISTRADOR DIRECTO DE VISITAS
     async function registrarMetrica(tipo, detalle) {
       try {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('sergio') === '1') return; // Excluye solo si es el dueño navegando
+
         if (supabase) {
           await supabase.from('visitas').insert([{
             tipo,
