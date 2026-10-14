@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 
-<html lang="es"><head>
+<html lang="es">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
 <title>Postales | Sergio Ricardo Molina</title>
 <link href="https://lh3.googleusercontent.com/d/1A6PFi2lpp_VNhnmtTYGkYXyjMZ1p8LhA" rel="icon" type="image/png"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;family=Raleway:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -16,14 +17,13 @@
       font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: #111111;
       color: #ffffff;
-      padding: 16px 12px 36px;
+      padding: 16px 12px 40px;
       max-width: 960px;
       margin: 0 auto;
       min-height: 100vh;
       user-select: none;
+      -webkit-user-select: none;
     }
-    body.visor-abierto { overflow: hidden; }
-
     .cabecera-galeria {
       display: flex;
       align-items: center;
@@ -36,7 +36,7 @@
       background: #222222;
       color: #ffffff;
       border: 1px solid #005580;
-      padding: 7px 14px;
+      padding: 7px 15px;
       border-radius: 20px;
       font-size: 0.82rem;
       font-weight: 500;
@@ -53,26 +53,32 @@
     }
     .titulo-categoria {
       font-size: 1.15rem;
-      font-weight: 500;
+      font-weight: 300;
       letter-spacing: 0.8px;
       display: flex;
       align-items: center;
       gap: 6px;
-      color: #ffffff;
     }
 
+    /* Subcarpetas y Cuadrícula */
+    .seccion-subcarpeta {
+      margin-bottom: 30px;
+    }
     .titulo-subcarpeta {
-      font-size: 0.95rem;
+      font-size: 0.86rem;
       font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       color: #38bdf8;
-      margin: 24px 0 12px;
+      margin: 18px 0 10px;
+      padding-bottom: 4px;
+      border-bottom: 1px dashed #222222;
       display: flex;
       align-items: center;
       gap: 6px;
-      border-bottom: 1px solid #222222;
-      padding-bottom: 6px;
     }
 
+    /* Cuadrícula fiel: 2 cols móvil (<600px), 3 cols tablet, 4 cols desktop */
     .galeria {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -84,273 +90,232 @@
     @media (min-width: 768px) {
       .galeria { grid-template-columns: repeat(4, 1fr); gap: 12px; }
     }
-    .galeria-item {
+
+    /* Tarjeta de foto con botón de like integrado */
+    .tarjeta-foto-wrap {
       position: relative;
+      width: 100%;
       aspect-ratio: 1 / 1;
-      background: #181818;
-      border-radius: 6px;
+      border-radius: 8px;
       overflow: hidden;
-      border: 1px solid #242424;
-      cursor: pointer;
+      background: #000000;
+      border: 1px solid #2a2a2a;
     }
-    .galeria-item img {
+    .tarjeta-foto-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.25s ease, opacity 0.2s ease;
       display: block;
-      transition: transform 0.25s ease, opacity 0.25s ease;
-      background: #151515;
+      pointer-events: auto;
     }
-    .galeria-item:hover img {
+    .tarjeta-foto-wrap:hover img {
       transform: scale(1.03);
       opacity: 0.95;
     }
-    .galeria-item:active img {
-      transform: scale(0.98);
-    }
 
-    /* Pastilla de Likes en Miniatura */
-    .badge-likes {
+    /* Botón flotante de corazón sobre la miniatura (esquina inferior izquierda) */
+    .btn-like-miniatura {
       position: absolute;
       bottom: 8px;
       left: 8px;
-      z-index: 10;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(14, 14, 14, 0.72);
+      z-index: 5;
+      background: rgba(17, 17, 17, 0.75);
       backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 14px;
+      border-radius: 20px;
       padding: 3px 8px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #e5e5e5;
       cursor: pointer;
       transition: all 0.2s ease;
-      pointer-events: auto;
+      user-select: none;
     }
-    .badge-likes:hover {
-      background: rgba(25, 25, 25, 0.9);
-      border-color: rgba(244, 63, 94, 0.6);
+    .btn-like-miniatura:hover {
+      background: rgba(220, 38, 38, 0.2);
+      border-color: #ef4444;
+      color: #ffffff;
       transform: scale(1.05);
     }
-    .badge-likes.activo {
-      border-color: rgba(244, 63, 94, 0.8);
-      background: rgba(244, 63, 94, 0.18);
+    .btn-like-miniatura.liked {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #f87171;
+      color: #f87171;
     }
-    .badge-likes.activo .icon-corazon {
-      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
-      color: #f43f5e;
-    }
-    .icon-corazon {
+    .btn-like-miniatura .material-symbols-outlined {
       font-size: 15px;
-      color: #f43f5e;
-      transition: transform 0.15s ease;
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      line-height: 1;
     }
-    .badge-likes:active .icon-corazon {
-      transform: scale(1.25);
-    }
-
-    /* Estado de carga / vacío */
-    .cargando-estado, .estado-vacio {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 48px 16px;
-      color: #777777;
-      font-size: 0.88rem;
-      gap: 12px;
-    }
-    .spinner {
-      width: 26px;
-      height: 26px;
-      border: 2px solid #282828;
-      border-top-color: #38bdf8;
-      border-radius: 50%;
-      animation: girar 0.8s linear infinite;
-    }
-    @keyframes girar {
-      to { transform: rotate(360deg); }
+    .btn-like-miniatura.liked .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1;
+      color: #ef4444;
     }
 
-    /* Visor Modal */
+    .cargando {
+      text-align: center;
+      color: #888888;
+      grid-column: 1 / -1;
+      padding: 50px 0;
+      font-size: 0.9rem;
+    }
+
+    /* VISOR MODAL */
     .modal {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.96);
+      background: rgba(0, 0, 0, 0.96);
       justify-content: center;
       align-items: center;
       z-index: 2000;
-      touch-action: pan-y;
     }
-    .modal-contenido {
+    .contenedor-img-visor {
       position: relative;
-      display: flex;
+      max-width: 94%;
+      max-height: 88vh;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      max-width: 95%;
-      max-height: 85vh;
-      width: 100%;
-      user-select: none;
-    }
-    .modal-wrapper-img {
-      position: relative;
-      display: inline-flex;
-      max-width: 100%;
-      max-height: 85vh;
-      overflow: hidden;
-      border-radius: 6px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.85);
     }
     .modal img {
       max-width: 100%;
       max-height: 85vh;
       object-fit: contain;
-      border-radius: 6px;
-      display: block;
+      border-radius: 4px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.85);
+      pointer-events: none;
+    }
+
+    /* FIRMA DE AUTOR (Esquina inferior izquierda como estaba) */
+    .firma-visor {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      background: rgba(17, 17, 17, 0.78);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 6px 12px;
       pointer-events: auto;
+      z-index: 10;
+      text-align: left;
+      font-size: 0.76rem;
+      line-height: 1.35;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .firma-autor {
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      letter-spacing: 0.5px;
+    }
+    .firma-autor .material-symbols-outlined {
+      font-size: 14px;
+      color: #38bdf8;
+    }
+    .firma-detalle {
+      color: #aaaaaa;
+      font-size: 0.7rem;
+      font-family: monospace;
+      margin-top: 2px;
+      letter-spacing: 0.3px;
+    }
+
+    /* CONTADOR DE CORAZONES EN EL VISOR (Estilo firma pero colocado en la esquina inferior izquierda al lado) */
+    .contador-corazones-visor {
+      position: absolute;
+      bottom: 12px;
+      left: calc(12px + 230px + 8px); /* Ubicado inmediatamente al lado de la firma */
+      background: rgba(17, 17, 17, 0.82);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 8px;
+      padding: 6px 14px;
+      z-index: 12;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    @media (max-width: 600px) {
+      .contador-corazones-visor {
+        left: 12px;
+        bottom: 58px; /* En móviles queda apilado justo arriba de la firma en la esquina izquierda */
+      }
+    }
+    .contador-corazones-visor:hover {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #ef4444;
+      transform: scale(1.04);
+    }
+    .contador-corazones-visor.liked {
+      background: rgba(220, 38, 38, 0.3);
+      border-color: #f87171;
+      color: #fca5a5;
+    }
+    .contador-corazones-visor .material-symbols-outlined {
+      font-size: 18px;
+      color: #ef4444;
+      transition: transform 0.15s ease;
+    }
+    .contador-corazones-visor:active .material-symbols-outlined {
+      transform: scale(1.3);
+    }
+    .contador-corazones-visor.liked .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1;
     }
 
     .btn-nav {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      color: #ffffff;
-      font-size: 1.5rem;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      padding: 12px 16px;
       cursor: pointer;
-      background: rgba(18, 18, 18, 0.55);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(0,0,0,0.45);
       border-radius: 50%;
       user-select: none;
-      z-index: 2003;
-      border: 1px solid rgba(255,255,255,0.22);
-      transition: background 0.2s, transform 0.2s, border-color 0.2s;
+      z-index: 1001;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: background 0.2s;
     }
-    .btn-nav:hover {
-      background: rgba(0,85,128,0.75);
-      border-color: #38bdf8;
-    }
-    .btn-nav:active {
-      background: rgba(0,85,128,0.9);
-      transform: translateY(-50%) scale(0.92);
-    }
-    .btn-prev { left: 16px; }
-    .btn-next { right: 16px; }
-
+    .btn-nav:hover { background: rgba(0,85,128,0.7); }
+    .btn-prev { left: 14px; }
+    .btn-next { right: 14px; }
     .btn-cerrar {
       position: absolute;
-      top: 16px;
-      right: 16px;
-      color: #ffffff;
-      font-size: 1.8rem;
+      top: 18px;
+      right: 20px;
+      color: white;
+      font-size: 2rem;
       cursor: pointer;
-      z-index: 2003;
-      width: 42px;
-      height: 42px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255,255,255,0.12);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      z-index: 1001;
+      padding: 3px 12px;
+      background: rgba(255,255,255,0.08);
       border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.18);
-      transition: background 0.2s, transform 0.2s;
-    }
-    .btn-cerrar:hover {
-      background: rgba(255,255,255,0.25);
-      transform: scale(1.05);
-    }
-
-    /* Firma y Like bilateral en Visor */
-    .firma-foto {
-      position: absolute;
-      bottom: 14px;
-      left: 14px;
-      z-index: 1002;
-      background: rgba(10, 10, 10, 0.78);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-left: 3px solid #38bdf8;
-      border-radius: 8px;
-      padding: 6px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      text-align: left;
-      pointer-events: none;
-      max-width: calc(100% - 130px);
-    }
-    .firma-foto-titulo {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 600;
-      font-size: 0.78rem;
-      letter-spacing: 0.2px;
-      color: #ffffff;
-    }
-    .firma-foto-detalle {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 11px;
-      color: #999999;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .btn-like-visor {
-      position: absolute;
-      bottom: 14px;
-      right: 14px;
-      z-index: 1002;
-      background: rgba(10, 10, 10, 0.78);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      padding: 6px 12px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: #ffffff;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      pointer-events: auto;
-    }
-    .btn-like-visor:hover {
-      background: rgba(25, 25, 25, 0.95);
-      border-color: rgba(244, 63, 94, 0.6);
-      transform: scale(1.05);
-    }
-    .btn-like-visor.activo {
-      border-color: rgba(244, 63, 94, 0.8);
-      background: rgba(244, 63, 94, 0.22);
-    }
-    .btn-like-visor.activo .icon-corazon {
-      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+      line-height: 1;
     }
 
     /* Redes Sociales Oficiales */
     .redes-sociales {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 40px;
+      gap: 12px;
+      margin-top: 36px;
     }
     .btn-red {
       background: #222222;
@@ -359,7 +324,7 @@
       text-align: center;
       color: #ffffff;
       text-decoration: none;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 600;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       display: flex;
@@ -367,9 +332,9 @@
       align-items: center;
       justify-content: center;
       gap: 4px;
-      transition: transform 0.15s, opacity 0.15s;
+      transition: transform 0.15s, background 0.15s;
     }
-    .btn-red:active { transform: scale(0.96); }
+    .btn-red:active { transform: scale(0.96); background: #2a2a2a; }
     .btn-wsp { border: 2px solid #4ade80; color: #4ade80; }
     .btn-cat { border: 2px solid #facc15; color: #facc15; }
     .btn-ig  { border: 2px solid #fb923c; color: #fb923c; }
@@ -381,37 +346,37 @@
       border-top: 1px solid #222222;
       color: #666666;
       font-size: 0.78rem;
-      line-height: 1.4;
+    }
+
+    @media (max-width: 600px) {
+      .btn-nav { display: none; }
     }
   </style>
 </head>
 <body oncontextmenu="return false;">
-<!-- Cabecera Oficial -->
-<header class="cabecera-galeria">
+<!-- Cabecera -->
+<div class="cabecera-galeria">
 <a class="btn-volver" href="index.html">← Volver al Portafolio</a>
 <h2 class="titulo-categoria">
 <span class="material-symbols-outlined" style="color: #38bdf8; font-size: 20px;">landscape</span>
 <span>Postales</span>
 </h2>
-</header>
-<!-- Contenedor dinámico exclusivo para fotos reales de Google Drive -->
-<main id="contenedor-secciones">
-<div class="cargando-estado">
-<div class="spinner"></div>
-<p>Cargando fotografías oficiales...</p>
 </div>
+<!-- Contenedor Principal de Subcarpetas y Fotos -->
+<main id="galeria-contenedor">
+<div class="cargando">Cargando colección de Postales...</div>
 </main>
-<!-- Redes Oficiales en 3 columnas -->
+<!-- Redes Sociales Oficiales (Idénticas) -->
 <div class="redes-sociales">
-<a class="btn-red btn-wsp" href="https://wa.me/5492613175222" rel="noopener noreferrer" target="_blank">
+<a class="btn-red btn-wsp" href="https://wa.me/542613175222" target="_blank">
 <span class="material-symbols-outlined">chat</span>
 <span>WhatsApp</span>
 </a>
-<a class="btn-red btn-cat" href="https://wa.me/c/5492613175222" rel="noopener noreferrer" target="_blank">
+<a class="btn-red btn-cat" href="https://wa.me/c/5492613175222" target="_blank">
 <span class="material-symbols-outlined">inventory_2</span>
 <span>Catálogo</span>
 </a>
-<a class="btn-red btn-ig" href="https://www.instagram.com/sergioricardo.molina?igsi=OG84bTUxanllMnh4" rel="noopener noreferrer" target="_blank">
+<a class="btn-red btn-ig" href="https://www.instagram.com/sergioricardo.molina?igsi=OG84bTUxanllMnh4" target="_blank">
 <span class="material-symbols-outlined">photo_camera_back</span>
 <span>Instagram</span>
 </a>
@@ -419,479 +384,373 @@
 <footer>
 <p>© Sergio Ricardo Molina · Fotografía Profesional · Mendoza, Argentina</p>
 </footer>
-<!-- Modal Visor Ampliado con Firma Fija y Botón de Like Bilateral -->
-<div class="modal" id="modal">
-<span class="btn-cerrar" id="btn-cerrar-modal" title="Cerrar">×</span>
-<span class="btn-nav btn-prev" id="btn-prev-modal" title="Anterior">❮</span>
-<div class="modal-contenido" id="modal-touch-area">
-<div class="modal-wrapper-img">
-<img alt="Fotografía Sergio Molina" id="img-ampliada" src=""/>
-<!-- Firma de autor en esquina inferior izquierda -->
-<div class="firma-foto" id="firma-visor">
-<div class="firma-foto-titulo">
-<span class="material-symbols-outlined" style="font-size: 15px; color: #38bdf8;">photo_camera</span>
+<!-- MODAL VISOR EN PANTALLA COMPLETA CON FIRMA Y CONTADOR DE CORAZONES -->
+<div class="modal" id="modal" onclick="cerrarVisorFondo(event)">
+<span class="btn-cerrar" onclick="cerrarVisor()">×</span>
+<span class="btn-nav btn-prev" onclick="cambiarFoto(-1, event)" style="position: absolute; top: 50%; transform: translateY(-50%); left: 20px; color: #ffffff; font-size: 1.8rem; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: rgba(17, 17, 17, 0.75); backdrop-filter: blur(8px); border-radius: 50%; user-select: none; z-index: 1005; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.6);">❮</span>
+<div class="contenedor-img-visor">
+<img alt="Fotografía Sergio Molina" draggable="false" id="img-ampliada" src=""/>
+<!-- Firma sutil oficial en esquina inferior izquierda -->
+<div class="firma-visor" id="firma-visor" style="position: absolute; bottom: 20px; left: 24px; background: rgba(17, 17, 17, 0.78); backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; padding: 6px 14px; pointer-events: auto; z-index: 10; text-align: left; font-size: 0.76rem; line-height: 1.35; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+<div class="firma-autor">
+<span class="material-symbols-outlined">photo_camera</span>
 <span>Sergio Molina</span>
 </div>
-<div class="firma-foto-detalle">
-<span id="firma-subcarpeta">Postales</span> • <span id="firma-archivo">#foto.jpg</span>
+<div class="firma-detalle" id="firma-detalle">Postales • Foto</div>
 </div>
-</div>
-<!-- Botón de Like armónico en esquina inferior derecha -->
-<button class="btn-like-visor" id="btn-like-visor" title="Me gusta">
-<span class="material-symbols-outlined icon-corazon">favorite</span>
-<span id="visor-likes-count">0</span>
+<!-- Contador y botón de corazón interactivo en esquina inferior izquierda -->
+<button class="contador-corazones-visor" id="btn-like-visor" onclick="toggleCorazonVisor(event)" style="position: absolute; bottom: 20px; right: 24px; left: auto; background: rgba(17, 17, 17, 0.82); backdrop-filter: blur(8px); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 20px; padding: 7px 16px; z-index: 12; display: inline-flex; align-items: center; gap: 7px; cursor: pointer; color: #ffffff; font-size: 0.82rem; font-weight: 700; box-shadow: 0 4px 14px rgba(0,0,0,0.5); transition: all 0.2s ease;" title="Dar corazón a esta foto">
+<span class="material-symbols-outlined" id="icono-corazon-visor">favorite</span>
+<span id="conteo-corazones-visor">0</span>
 </button>
 </div>
+<span class="btn-nav btn-next" onclick="cambiarFoto(1, event)" style="position: absolute; top: 50%; transform: translateY(-50%); right: 20px; color: #ffffff; font-size: 1.8rem; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: rgba(17, 17, 17, 0.75); backdrop-filter: blur(8px); border-radius: 50%; user-select: none; z-index: 1005; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.6);">❯</span>
 </div>
-<span class="btn-nav btn-next" id="btn-next-modal" title="Siguiente">❯</span>
-</div>
+<!-- SCRIPTS: GOOGLE DRIVE + SUPABASE RANKING DE CORAZONES + EXCLUSIÓN DE DISPOSITIVOS -->
 <script>
-    const API_KEY = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
-    const FOLDER_ID = '1W-eFu0G6mqggGw6TN7bSU9Dvz0k2h70M';
-    const NOMBRE_SECCION = 'Postales';
-
-    // Inicialización del cliente Supabase
-    let supabaseClient = null;
-    if (window.supabase) {
-      supabaseClient = window.supabase.createClient(
-        'https://zbixojacwvanucxlrdcd.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68'
-      );
-    }
-
-    // Identificador único de usuario/navegador para persistencia de votos
-    function getVoterId() {
-      let vid = localStorage.getItem('srm_voter_id');
-      if (!vid) {
-        vid = 'voter_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now();
-        localStorage.setItem('srm_voter_id', vid);
-      }
-      return vid;
-    }
-    const VOTER_ID = getVoterId();
-
-    // Cache local de votos y contadores
-    let likesMap = {}; // { [fotoId]: totalLikes }
-    let votedSet = new Set(); // Set de IDs de fotos votadas
-
-    try {
-      const storedVotes = JSON.parse(localStorage.getItem('srm_voted_photos') || '[]');
-      votedSet = new Set(storedVotes);
-    } catch (e) {
-      votedSet = new Set();
-    }
-
-    // Auto-detección del token maestro para exclusión de visitas propias
-    const MASTER_TOKEN = 'sergio_molina_master_device';
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('sergio') === '1' || params.get('admin') === '1' || params.get('ignorar') === '1') {
+    // 1. Auto-detección del token maestro de exclusión (?sergio=1)
+    (function detectarTokenMaestro() {
       try {
-        localStorage.setItem('dispositivo_token', MASTER_TOKEN);
-        localStorage.setItem('ignorar_visita', 'true');
-      } catch (e) {}
-      params.delete('sergio');
-      params.delete('admin');
-      params.delete('ignorar');
-      const newQuery = params.toString() ? '?' + params.toString() : '';
-      window.history.replaceState({}, document.title, window.location.pathname + newQuery + window.location.hash);
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('sergio') === '1' || urlParams.get('admin') === '1' || urlParams.get('ignorar') === '1') {
+          localStorage.setItem('dispositivo_token', 'sergio_molina_master_device');
+          localStorage.setItem('ignorar_visita', 'true');
+          urlParams.delete('sergio');
+          urlParams.delete('admin');
+          urlParams.delete('ignorar');
+          const nuevaQuery = urlParams.toString();
+          const nuevaUrl = window.location.pathname + (nuevaQuery ? '?' + nuevaQuery : '') + window.location.hash;
+          window.history.replaceState({}, document.title, nuevaUrl);
+          console.log('🛡️ Dispositivo marcado como propio. Métricas omitidas.');
+        }
+      } catch (_) {}
+    })();
+
+    // 2. Credenciales oficiales de Supabase y Google Drive
+    const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
+    const API_KEY_DRIVE = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
+    const FOLDER_ID_GALERIA = '1W-eFu0G6mqggGw6TN7bSU9Dvz0k2h70M';
+
+    const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : null;
+
+    // 3. Obtener o crear huella única de navegador para limitar a 1 corazón por foto
+    function obtenerHuellaNavegador() {
+      let huella = localStorage.getItem('usuario_huella_voto');
+      if (!huella) {
+        huella = 'usr_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now().toString(36);
+        localStorage.setItem('usuario_huella_voto', huella);
+      }
+      return huella;
     }
+    const HUELLA_USUARIO = obtenerHuellaNavegador();
+
+    // Mapas de estado en memoria para likes
+    const likesCache = new Map(); // fotoId -> conteo
+    const misVotosCache = new Set(); // fotoIds que este navegador ya votó
 
     let fotosActuales = [];
     let indiceFotoActual = 0;
 
-    // Sincronización de likes desde Supabase
-    async function sincronizarLikes() {
+    // 4. Cargar estado de likes desde Supabase para la galería actual
+    async function sincronizarLikesDeGaleria() {
       if (!supabaseClient) return;
       try {
-        const { data, error } = await supabaseClient
+        // A) Traer conteos totales de likes_fotos
+        const { data: totales } = await supabaseClient
           .from('likes_fotos')
-          .select('foto_id, likes');
-        if (!error && data) {
-          data.forEach(item => {
-            likesMap[item.foto_id] = item.likes || 0;
+          .select('foto_id, conteo')
+          .eq('galeria', 'postales');
+
+        if (totales && totales.length > 0) {
+          totales.forEach(item => {
+            likesCache.set(item.foto_id, item.conteo || 0);
           });
-          actualizarTodosLosBadges();
-          actualizarVisorLikeUI();
         }
+
+        // B) Traer votos registrados por este navegador
+        const { data: misVotos } = await supabaseClient
+          .from('votos_corazones')
+          .select('foto_id')
+          .eq('dispositivo_huella', HUELLA_USUARIO);
+
+        if (misVotos && misVotos.length > 0) {
+          misVotos.forEach(item => misVotosCache.add(item.foto_id));
+        }
+
+        actualizarTodosLosBotonesDeLikes();
       } catch (err) {
-        console.warn('Sincronización de likes en modo local/fallback', err);
+        console.warn('Error sincronizando ranking de corazones:', err);
       }
     }
 
-    async function toggleLike(fotoId, event) {
-      if (event) event.stopPropagation();
-      const yaVoto = votedSet.has(fotoId);
+    function actualizarTodosLosBotonesDeLikes() {
+      fotosActuales.forEach(foto => {
+        const total = likesCache.get(foto.id) || 0;
+        const yaVotado = misVotosCache.has(foto.id);
 
-      // Si ya votó, no permite duplicar votos (1 voto único por foto por navegador)
-      if (yaVoto) return;
-
-      // Actualizar localmente de inmediato para reactividad fluida
-      votedSet.add(fotoId);
-      likesMap[fotoId] = (likesMap[fotoId] || 0) + 1;
-      try {
-        localStorage.setItem('srm_voted_photos', JSON.stringify(Array.from(votedSet)));
-      } catch (e) {}
-
-      actualizarBadgeFoto(fotoId);
-      actualizarVisorLikeUI();
-
-      // Persistir en Supabase
-      if (supabaseClient) {
-        try {
-          // 1. Guardar voto individual
-          await supabaseClient.from('votos_corazones').insert([
-            { foto_id: fotoId, voter_id: VOTER_ID, seccion: 'postales' }
-          ]);
-
-          // 2. Incrementar o insertar conteo acumulativo en likes_fotos
-          const nuevoTotal = likesMap[fotoId];
-          await supabaseClient.from('likes_fotos').upsert({
-            foto_id: fotoId,
-            likes: nuevoTotal,
-            seccion: 'postales',
-            actualizado_al: new Date().toISOString()
-          }, { onConflict: 'foto_id' });
-        } catch (err) {
-          console.warn('Error al persistir voto:', err);
-        }
-      }
-    }
-
-    function actualizarBadgeFoto(fotoId) {
-      const badge = document.querySelector(`.badge-likes[data-foto-id="${fotoId}"]`);
-      if (badge) {
-        const spanCount = badge.querySelector('.badge-count');
-        if (spanCount) spanCount.innerText = likesMap[fotoId] || 0;
-        if (votedSet.has(fotoId)) {
-          badge.classList.add('activo');
-        } else {
-          badge.classList.remove('activo');
-        }
-      }
-    }
-
-    function actualizarTodosLosBadges() {
-      document.querySelectorAll('.badge-likes').forEach(badge => {
-        const id = badge.getAttribute('data-foto-id');
-        if (id) {
-          const spanCount = badge.querySelector('.badge-count');
-          if (spanCount) spanCount.innerText = likesMap[id] || 0;
-          if (votedSet.has(id)) {
-            badge.classList.add('activo');
+        // Actualizar botón de miniatura
+        const btnMini = document.getElementById(`btn-like-mini-${foto.id}`);
+        const conteoMini = document.getElementById(`conteo-mini-${foto.id}`);
+        if (btnMini && conteoMini) {
+          conteoMini.textContent = total;
+          if (yaVotado) {
+            btnMini.classList.add('liked');
           } else {
-            badge.classList.remove('activo');
+            btnMini.classList.remove('liked');
           }
         }
       });
+
+      // Actualizar visor si está abierto
+      actualizarBotonVisor();
     }
 
-    function actualizarVisorLikeUI() {
+    function actualizarBotonVisor() {
+      if (fotosActuales.length === 0) return;
       const foto = fotosActuales[indiceFotoActual];
       if (!foto) return;
-      const btn = document.getElementById('btn-like-visor');
-      const count = document.getElementById('visor-likes-count');
-      if (btn && count) {
-        count.innerText = likesMap[foto.id] || 0;
-        if (votedSet.has(foto.id)) {
-          btn.classList.add('activo');
+
+      const total = likesCache.get(foto.id) || 0;
+      const yaVotado = misVotosCache.has(foto.id);
+
+      const btnVisor = document.getElementById('btn-like-visor');
+      const conteoVisor = document.getElementById('conteo-corazones-visor');
+      if (btnVisor && conteoVisor) {
+        conteoVisor.textContent = total;
+        if (yaVotado) {
+          btnVisor.classList.add('liked');
         } else {
-          btn.classList.remove('activo');
+          btnVisor.classList.remove('liked');
         }
       }
     }
 
-    async function cargarContenidoDrive() {
-      const contenedor = document.getElementById('contenedor-secciones');
+    // 5. Función universal para dar / quitar corazón (1 corazón por navegador)
+    async function toggleCorazon(fotoId, fotoNombre, event) {
+      if (event) event.stopPropagation();
+
+      const yaVotado = misVotosCache.has(fotoId);
+      const totalPrevio = likesCache.get(fotoId) || 0;
+
+      // Optimistic UI Update inmediato
+      const nuevoTotal = yaVotado ? Math.max(0, totalPrevio - 1) : totalPrevio + 1;
+      likesCache.set(fotoId, nuevoTotal);
+      if (yaVotado) {
+        misVotosCache.delete(fotoId);
+      } else {
+        misVotosCache.add(fotoId);
+      }
+      actualizarTodosLosBotonesDeLikes();
+
+      // Persistencia en Supabase
+      if (supabaseClient) {
+        try {
+          // Intentar llamada RPC atómica
+          const { data: resRpc, error: errRpc } = await supabaseClient.rpc('toggle_corazon', {
+            p_foto_id: fotoId,
+            p_foto_nombre: fotoNombre || 'Foto',
+            p_galeria: 'postales',
+            p_huella: HUELLA_USUARIO
+          });
+
+          if (!errRpc && resRpc) {
+            likesCache.set(fotoId, resRpc.total || 0);
+            if (resRpc.liked) misVotosCache.add(fotoId);
+            else misVotosCache.delete(fotoId);
+            actualizarTodosLosBotonesDeLikes();
+            return;
+          }
+
+          // Fallback manual en caso de que la RPC no esté cargada
+          if (yaVotado) {
+            await supabaseClient.from('votos_corazones').delete()
+              .eq('foto_id', fotoId).eq('dispositivo_huella', HUELLA_USUARIO);
+            await supabaseClient.from('likes_fotos').upsert({
+              foto_id: fotoId,
+              foto_nombre: fotoNombre,
+              galeria: 'postales',
+              conteo: nuevoTotal,
+              updated_at: new Date().toISOString()
+            });
+          } else {
+            await supabaseClient.from('votos_corazones').insert([{
+              foto_id: fotoId,
+              dispositivo_huella: HUELLA_USUARIO
+            }]);
+            await supabaseClient.from('likes_fotos').upsert({
+              foto_id: fotoId,
+              foto_nombre: fotoNombre,
+              galeria: 'postales',
+              conteo: nuevoTotal,
+              updated_at: new Date().toISOString()
+            });
+          }
+        } catch (err) {
+          console.warn('Error guardando like:', err);
+        }
+      }
+    }
+
+    function toggleCorazonVisor(event) {
+      if (fotosActuales.length === 0) return;
+      const foto = fotosActuales[indiceFotoActual];
+      if (foto) {
+        toggleCorazon(foto.id, foto.name, event);
+      }
+    }
+
+    // 6. Carga de fotos desde Google Drive con subcarpetas
+    async function cargarGaleria() {
+      const contenedor = document.getElementById('galeria-contenedor');
+      contenedor.innerHTML = '<div class="cargando">Cargando colección de Postales...</div>';
       fotosActuales = [];
 
       try {
-        // 1. Consultar subcarpetas dentro del FOLDER_ID
-        const urlSubcarpetas = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType='application/vnd.google-apps.folder'+and+trashed=false&orderBy=name&pageSize=100&key=${API_KEY}&fields=files(id,name)`;
-        const resFolders = await fetch(urlSubcarpetas);
-        const dataFolders = await resFolders.json();
-        const subcarpetas = (dataFolders && dataFolders.files) ? dataFolders.files : [];
+        // Listar subcarpetas
+        const urlSubcarpetas = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID_GALERIA}'+in+parents+and+mimeType='application/vnd.google-apps.folder'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&fields=files(id,name)`;
+        const resSub = await fetch(urlSubcarpetas);
+        const dataSub = await resSub.json();
 
-        // 2. Consultar fotos en la raíz de la carpeta Postales
-        const urlFotosRaiz = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&pageSize=200&key=${API_KEY}&fields=files(id,name)`;
-        const resRaiz = await fetch(urlFotosRaiz);
-        const dataRaiz = await resRaiz.json();
-        const fotosRaiz = (dataRaiz && dataRaiz.files) ? dataRaiz.files : [];
+        let subcarpetas = dataSub.files || [];
 
-        contenedor.innerHTML = '';
-        let totalFotosCargadas = 0;
-
-        // Renderizar fotos de la raíz si existen
-        if (fotosRaiz.length > 0) {
-          renderizarGrupoFotos(contenedor, NOMBRE_SECCION, fotosRaiz);
-          totalFotosCargadas += fotosRaiz.length;
+        // Si no hay subcarpetas, listar fotos de la raíz directamente
+        if (subcarpetas.length === 0) {
+          subcarpetas = [{ id: FOLDER_ID_GALERIA, name: 'Postales' }];
         }
 
-        // Renderizar cada subcarpeta
+        contenedor.innerHTML = '';
+
         for (const sub of subcarpetas) {
-          const urlSubFotos = `https://www.googleapis.com/drive/v3/files?q='${sub.id}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&pageSize=200&key=${API_KEY}&fields=files(id,name)`;
-          try {
-            const resSub = await fetch(urlSubFotos);
-            const dataSub = await resSub.json();
-            if (dataSub.files && dataSub.files.length > 0) {
-              renderizarGrupoFotos(contenedor, sub.name, dataSub.files);
-              totalFotosCargadas += dataSub.files.length;
+          const urlFotos = `https://www.googleapis.com/drive/v3/files?q='${sub.id}'+in+parents+and+mimeType+contains+'image/'+and+trashed=false&orderBy=name&key=${API_KEY_DRIVE}&pageSize=100&fields=files(id,name)`;
+          const resFotos = await fetch(urlFotos);
+          const dataFotos = await resFotos.json();
+
+          if (dataFotos.files && dataFotos.files.length > 0) {
+            const seccion = document.createElement('section');
+            seccion.className = 'seccion-subcarpeta';
+
+            if (sub.id !== FOLDER_ID_GALERIA) {
+              const h3 = document.createElement('h3');
+              h3.className = 'titulo-subcarpeta';
+              h3.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">folder_open</span><span>${sub.name}</span>`;
+              seccion.appendChild(h3);
             }
-          } catch (e) {
-            console.error(`Error al cargar subcarpeta ${sub.name}:`, e);
+
+            const grid = document.createElement('div');
+            grid.className = 'galeria';
+
+            dataFotos.files.forEach(archivo => {
+              const fotoObj = {
+                id: archivo.id,
+                name: archivo.name || 'Fotografía',
+                subcarpeta: sub.name,
+                urlAlta: `https://lh3.googleusercontent.com/d/${archivo.id}=w1600`,
+                urlThumb: `https://lh3.googleusercontent.com/d/${archivo.id}=w800`
+              };
+              fotosActuales.push(fotoObj);
+              const index = fotosActuales.length - 1;
+
+              const wrap = document.createElement('div');
+              wrap.className = 'tarjeta-foto-wrap';
+              wrap.innerHTML = `
+                <img src="${fotoObj.urlThumb}" alt="${fotoObj.name}" loading="lazy" onclick="abrirVisor(${index})"/>
+                <!-- Botón de corazón en esquina inferior izquierda -->
+                <button class="btn-like-miniatura" id="btn-like-mini-${fotoObj.id}" onclick="toggleCorazon('${fotoObj.id}', '${fotoObj.name.replace(/'/g, "\\'")}', event)">
+                  <span class="material-symbols-outlined">favorite</span>
+                  <span id="conteo-mini-${fotoObj.id}">0</span>
+                </button>
+              `;
+              grid.appendChild(wrap);
+            });
+
+            seccion.appendChild(grid);
+            contenedor.appendChild(seccion);
           }
         }
 
-        if (totalFotosCargadas === 0) {
-          contenedor.innerHTML = `
-            <div class="estado-vacio">
-              <span class="material-symbols-outlined" style="font-size: 32px; color: #444;">image_not_supported</span>
-              <p>No se encontraron fotografías en la carpeta de Google Drive.</p>
-            </div>
-          `;
-        }
+        // Sincronizar likes con Supabase una vez renderizadas las fotos
+        sincronizarLikesDeGaleria();
 
-        // Una vez renderizadas las fotos, sincronizar likes de la base de datos
-        sincronizarLikes();
-
-      } catch (err) {
-        console.error('Error al consultar Google Drive:', err);
-        contenedor.innerHTML = `
-          <div class="estado-vacio">
-            <span class="material-symbols-outlined" style="font-size: 32px; color: #ef4444;">error_outline</span>
-            <p>No se pudieron sincronizar las fotos desde Google Drive. Verifique la conexión.</p>
-          </div>
-        `;
+      } catch (e) {
+        console.error('Error cargando Postales:', e);
+        contenedor.innerHTML = '<div class="cargando" style="color:#ef4444;">No se pudieron cargar las fotografías de Google Drive.</div>';
       }
     }
 
-    function renderizarGrupoFotos(contenedor, tituloGrupo, archivos) {
-      const seccion = document.createElement('section');
-      
-      const headerHtml = `
-        <h3 class="titulo-subcarpeta">
-          <span class="material-symbols-outlined" style="font-size: 18px;">folder</span>
-          <span>${tituloGrupo}</span>
-        </h3>
-      `;
-      seccion.innerHTML = headerHtml;
-
-      const grid = document.createElement('div');
-      grid.className = 'galeria';
-
-      archivos.forEach(file => {
-        const urlHD = `https://lh3.googleusercontent.com/d/${file.id}=w1600`;
-        const urlMiniatura = `https://lh3.googleusercontent.com/d/${file.id}=w800`;
-        const indice = fotosActuales.length;
-
-        fotosActuales.push({
-          id: file.id,
-          name: file.name || 'foto.jpg',
-          url: urlHD,
-          subcarpeta: tituloGrupo
-        });
-
-        const item = document.createElement('div');
-        item.className = 'galeria-item';
-
-        const img = document.createElement('img');
-        img.src = urlMiniatura;
-        img.alt = file.name || 'Postal';
-        img.loading = 'lazy';
-        img.onerror = () => { item.style.display = 'none'; };
-        item.onclick = () => abrirVisor(indice);
-
-        // Pastilla sutil interactiva de likes en la esquina inferior izquierda
-        const likesBadge = document.createElement('div');
-        likesBadge.className = 'badge-likes' + (votedSet.has(file.id) ? ' activo' : '');
-        likesBadge.setAttribute('data-foto-id', file.id);
-        likesBadge.innerHTML = `
-          <span class="material-symbols-outlined icon-corazon">favorite</span>
-          <span class="badge-count">${likesMap[file.id] || 0}</span>
-        `;
-        likesBadge.onclick = (e) => toggleLike(file.id, e);
-
-        item.appendChild(img);
-        item.appendChild(likesBadge);
-        grid.appendChild(item);
-      });
-
-      seccion.appendChild(grid);
-      contenedor.appendChild(seccion);
-    }
-
-    /* Visor Modal */
+    // 7. Visor Modal con Firma y Corazón en la Esquina Inferior Izquierda
     function abrirVisor(index) {
-      if (!fotosActuales.length) return;
-      if (index >= fotosActuales.length) index = 0;
-      if (index < 0) index = fotosActuales.length - 1;
-
+      if (index < 0 || index >= fotosActuales.length) return;
       indiceFotoActual = index;
-      actualizarContenidoVisor();
+      const foto = fotosActuales[indiceFotoActual];
 
+      document.getElementById('img-ampliada').src = foto.urlAlta;
+      document.getElementById('firma-detalle').textContent = `${foto.subcarpeta} • ${foto.name}`;
+
+      actualizarBotonVisor();
       document.getElementById('modal').style.display = 'flex';
-      document.body.classList.add('visor-abierto');
-
-      const foto = fotosActuales[indiceFotoActual];
-      if (foto) {
-        registrarMetrica('foto_visor_hd', `Foto: #${foto.name} en ${foto.subcarpeta}`);
-      }
-    }
-
-    function actualizarContenidoVisor() {
-      const foto = fotosActuales[indiceFotoActual];
-      if (!foto) return;
-
-      const img = document.getElementById('img-ampliada');
-      img.src = foto.url;
-      img.alt = foto.name;
-
-      const subcarpetaElem = document.getElementById('firma-subcarpeta');
-      if (subcarpetaElem) subcarpetaElem.innerText = foto.subcarpeta || NOMBRE_SECCION;
-
-      const archivoElem = document.getElementById('firma-archivo');
-      if (archivoElem) archivoElem.innerText = '#' + (foto.name || 'foto.jpg');
-
-      actualizarVisorLikeUI();
     }
 
     function cerrarVisor() {
       document.getElementById('modal').style.display = 'none';
-      document.body.classList.remove('visor-abierto');
     }
 
-    function cambiarFoto(dir) {
-      if (fotosActuales.length === 0) return;
+    function cerrarVisorFondo(event) {
+      if (event.target.id === 'modal') cerrarVisor();
+    }
+
+    function cambiarFoto(dir, event) {
+      if (event) event.stopPropagation();
       indiceFotoActual += dir;
       if (indiceFotoActual >= fotosActuales.length) indiceFotoActual = 0;
       else if (indiceFotoActual < 0) indiceFotoActual = fotosActuales.length - 1;
-      actualizarContenidoVisor();
+      abrirVisor(indiceFotoActual);
     }
 
-    // Botón Like en el Visor
-    document.getElementById('btn-like-visor').addEventListener('click', e => {
-      e.stopPropagation();
-      const foto = fotosActuales[indiceFotoActual];
-      if (foto) toggleLike(foto.id, e);
-    });
-
-    // Eventos del Visor
-    document.getElementById('btn-cerrar-modal').addEventListener('click', e => {
-      e.stopPropagation();
-      cerrarVisor();
-    });
-
-    document.getElementById('btn-prev-modal').addEventListener('click', e => {
-      e.stopPropagation();
-      cambiarFoto(-1);
-    });
-
-    document.getElementById('btn-next-modal').addEventListener('click', e => {
-      e.stopPropagation();
-      cambiarFoto(1);
-    });
-
-    document.getElementById('modal').addEventListener('click', e => {
-      if (e.target.id === 'modal' || e.target.id === 'modal-touch-area') {
-        cerrarVisor();
-      }
-    });
-
-    document.addEventListener('keydown', e => {
+    // Navegación por teclado físico
+    document.addEventListener('keydown', (e) => {
       const modal = document.getElementById('modal');
-      if (modal && modal.style.display === 'flex') {
+      if (modal.style.display === 'flex') {
         if (e.key === 'Escape') cerrarVisor();
         else if (e.key === 'ArrowLeft') cambiarFoto(-1);
         else if (e.key === 'ArrowRight') cambiarFoto(1);
       }
     });
 
-    // Deslizamiento táctil (swipe)
+    // Soporte táctil Swipe en móvil
     let touchStartX = 0;
-    let touchStartY = 0;
     let touchEndX = 0;
-    let touchEndY = 0;
+    const modalEl = document.getElementById('modal');
+    modalEl.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
+    modalEl.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX + 45 < touchStartX) cambiarFoto(1);
+      else if (touchEndX > touchStartX + 45) cambiarFoto(-1);
+    }, false);
 
-    const modalTouch = document.getElementById('modal');
-
-    modalTouch.addEventListener('touchstart', e => {
-      if (e.touches && e.touches.length > 0) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-        touchEndX = touchStartX;
-        touchEndY = touchStartY;
-      }
-    }, { passive: true });
-
-    modalTouch.addEventListener('touchmove', e => {
-      if (e.touches && e.touches.length > 0) {
-        touchEndX = e.touches[0].clientX;
-        touchEndY = e.touches[0].clientY;
-      }
-    }, { passive: true });
-
-    modalTouch.addEventListener('touchend', () => {
-      const diffX = touchEndX - touchStartX;
-      const diffY = touchEndY - touchStartY;
-      if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
-        if (diffX < 0) {
-          cambiarFoto(1);
-        } else {
-          cambiarFoto(-1);
-        }
-      }
-    }, { passive: true });
-
-    // Exclusión de Dispositivos Propios y Registro de Visitas
-    async function esDispositivoIgnorado(client) {
-      try {
-        if (localStorage.getItem('ignorar_visita') === 'true') return true;
-        if (localStorage.getItem('dispositivo_token') === MASTER_TOKEN) return true;
-        if (sessionStorage.getItem('admin_auth') === 'true') return true;
-
-        const tokenLocal = localStorage.getItem('dispositivo_token');
-        if (tokenLocal && client) {
-          const { data, error } = await client
-            .from('dispositivos_ignorados')
-            .select('token')
-            .eq('token', tokenLocal)
-            .maybeSingle();
-
-          if (!error && data && data.token) {
-            localStorage.setItem('ignorar_visita', 'true');
-            return true;
-          }
-        }
-      } catch (err) {}
-      return false;
-    }
-
-    async function registrarMetrica(tipo, detalle) {
+    // 8. Registro de visitas reales en Supabase (con filtro de exclusión de dispositivos propios)
+    async function registrarVisita() {
+      if (localStorage.getItem('ignorar_visita') === 'true' || 
+          localStorage.getItem('dispositivo_token') === 'sergio_molina_master_device') return;
       try {
         if (!supabaseClient) return;
-
-        const ignorar = await esDispositivoIgnorado(supabaseClient);
-        if (ignorar) {
-          return;
-        }
-
-        const dispositivo = window.innerWidth < 640 ? 'mobile' : (window.innerWidth < 1024 ? 'tablet' : 'desktop');
-        const origen = document.referrer ? document.referrer : 'directo';
-
-        await supabaseClient.from('visitas').insert([
-          {
-            tipo: tipo || 'visita_pagina',
-            pagina: 'postales.html',
-            detalle: detalle || 'Galería Postales',
-            dispositivo: dispositivo,
-            origen: origen
-          }
-        ]);
+        const esMovil = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+        await supabaseClient.from('visitas').insert([{
+          tipo: 'visita_pagina',
+          pagina: 'postales.html',
+          album_id: FOLDER_ID_GALERIA,
+          album_titulo: 'Postales',
+          detalle: 'Visita a galería Postales',
+          dispositivo: esMovil ? 'mobile' : 'desktop',
+          origen: document.referrer ? (new URL(document.referrer).hostname || 'directo') : 'directo'
+        }]);
       } catch (_) {}
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      cargarContenidoDrive();
-      registrarMetrica('visita_pagina', 'Galería Postales');
+      cargarGaleria();
+      registrarVisita();
     });
   </script>
-</body></html>
+</body>
+</html>
