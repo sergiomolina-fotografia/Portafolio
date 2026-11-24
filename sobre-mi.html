@@ -213,8 +213,8 @@
 <script>
     (function() {
       // Configuración de Supabase del Ecosistema de Producción
-      const SUPABASE_URL = "https://your-supabase-project.supabase.co"; 
-      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy_key";
+      const SUPABASE_URL = "https://zbixojacwvanucxlrdcd.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68";
 
       // 1. Detección de Parámetros de Dispositivo Propio (?sergio=1, ?admin=1, ?ignorar=1)
       const urlParams = new URLSearchParams(window.location.search);
@@ -223,12 +223,14 @@
       if (isOwnerParam) {
         localStorage.setItem('sergio_molina_master_device', 'true');
         localStorage.setItem('ignorar_visita', 'true');
+        localStorage.setItem('dispositivo_token', 'sergio_molina_master_device');
         console.info('[Darkroom Master] Dispositivo identificado como Sergio Ricardo Molina. Registro de visitas omitido permanentemente.');
       }
 
       // Verificación de tokens almacenados
-      const isDeviceIgnored = localStorage.getItem('sergio_molina_master_device') === 'true' || 
-                              localStorage.getItem('ignorar_visita') === 'true';
+      const isDeviceIgnored = localStorage.getItem('sergio_molina_master_device') === 'true' ||
+                              localStorage.getItem('ignorar_visita') === 'true' ||
+                              localStorage.getItem('dispositivo_token') === 'sergio_molina_master_device';
 
       // 2. Registro Seguro en Supabase (Omitiendo visitas del fotógrafo)
       async function registrarVisitaReal() {
@@ -238,33 +240,31 @@
         }
 
         try {
-          // Comprobación dual con tabla de dispositivos ignorados si existe un identificador
-          const fingerprint = navigator.userAgent + '::' + screen.width + 'x' + screen.height;
-          
+          const esMovil = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+          let origen = 'directo';
+          if (document.referrer) {
+            try { origen = new URL(document.referrer).hostname || 'directo'; } catch (_) { origen = document.referrer; }
+          }
+
           const payload = {
+            tipo: 'visita_pagina',
             pagina: 'sobre-mi.html',
-            seccion: 'Sobre Mí / Biografía',
-            timestamp: new Date().toISOString(),
-            user_agent: navigator.userAgent,
-            referrer: document.referrer || 'directo',
-            idioma: navigator.language
+            detalle: 'Visita a Sobre Mí / Biografía',
+            dispositivo: esMovil ? 'mobile' : 'desktop',
+            origen: origen
           };
 
           // Inserción en tabla 'visitas'
-          if (SUPABASE_URL && !SUPABASE_URL.includes('your-supabase-project')) {
-            await fetch(`${SUPABASE_URL}/rest/v1/visitas`, {
-              method: 'POST',
-              headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'return=minimal'
-              },
-              body: JSON.stringify(payload)
-            });
-          } else {
-            console.log('[Darkroom Telemetry] Visita de cliente registrada en cola local (Ambiente de Staging):', payload);
-          }
+          await fetch(`${SUPABASE_URL}/rest/v1/visitas`, {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(payload)
+          });
         } catch (err) {
           console.warn('[Darkroom Telemetry] Registro no crítico diferido:', err);
         }
@@ -273,19 +273,23 @@
       // 3. Registro de Interacción WhatsApp
       async function trackWhatsAppClick(origen) {
         console.log(`[Darkroom Tracking] Clic en WhatsApp capturado desde: ${origen}`);
-        if (!isDeviceIgnored && SUPABASE_URL && !SUPABASE_URL.includes('your-supabase-project')) {
+        if (!isDeviceIgnored) {
           try {
-            await fetch(`${SUPABASE_URL}/rest/v1/eventos_click`, {
+            const esMovil = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+            await fetch(`${SUPABASE_URL}/rest/v1/visitas`, {
               method: 'POST',
               headers: {
                 'apikey': SUPABASE_ANON_KEY,
                 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
               },
               body: JSON.stringify({
                 tipo: 'whatsapp_click',
-                origen: origen,
-                fecha: new Date().toISOString()
+                pagina: 'sobre-mi.html',
+                detalle: origen,
+                dispositivo: esMovil ? 'mobile' : 'desktop',
+                origen: document.referrer || 'directo'
               })
             });
           } catch (e) {

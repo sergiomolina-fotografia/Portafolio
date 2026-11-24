@@ -674,7 +674,12 @@
     async function registrarMetrica(tipo, detalle) {
       try {
         if (!supabaseClient) return;
-        if (sessionStorage.getItem('es_admin_sergio') === 'true' || localStorage.getItem('es_admin_sergio') === 'true') return;
+        if (
+          sessionStorage.getItem('es_admin_sergio') === 'true' ||
+          localStorage.getItem('es_admin_sergio') === 'true' ||
+          localStorage.getItem('ignorar_visita') === 'true' ||
+          localStorage.getItem('dispositivo_token') === 'sergio_molina_master_device'
+        ) return;
         const dispositivo = window.innerWidth <= 640 ? 'mobile' : 'desktop';
         await supabaseClient.from('visitas').insert([{
           tipo: tipo || 'visita_privada',

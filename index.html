@@ -675,13 +675,22 @@
     // REGISTRO AUTOMÁTICO EN TIEMPO REAL A SUPABASE (TABLA 'visitas')
     async function registrarVisitaEnSupabase() {
       try {
-        // 1. Detección de sesión activa de administrador
+        // 1. Detección de sesión activa de administrador o dispositivo excluido
         let esAdmin = false;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('sergio') === '1' || urlParams.get('admin') === '1' || urlParams.get('ignorar') === '1') {
+          localStorage.setItem('ignorar_visita', 'true');
+          localStorage.setItem('dispositivo_token', 'sergio_molina_master_device');
+          esAdmin = true;
+        }
 
         // Comprobación de flags y auth local
         if (localStorage.getItem('admin_autenticado') === 'true' || 
             sessionStorage.getItem('admin_autenticado') === 'true' ||
-            localStorage.getItem('isAdmin') === 'true') {
+            localStorage.getItem('isAdmin') === 'true' ||
+            localStorage.getItem('ignorar_visita') === 'true' ||
+            localStorage.getItem('dispositivo_token') === 'sergio_molina_master_device') {
           esAdmin = true;
         }
 

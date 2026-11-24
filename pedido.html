@@ -970,10 +970,46 @@
         `¿Me confirmás los datos de transferencia y plazos de entrega? Muchas gracias.`;
 
       // Número oficial: +54 9 261 317-5222 -> 5492613175222
+      registrarVisitaPedido('whatsapp_click', `Pedido WhatsApp (${ids.length} fotos) - ${eventoTitulo}`);
       const urlWa = `https://wa.me/${WHATSAPP_FOTOGRAFO}?text=${encodeURIComponent(msg)}`;
       window.open(urlWa, '_blank');
     }
 
-    document.addEventListener('DOMContentLoaded', inicializarRemito);
+    async function registrarVisitaPedido(tipo, detalle) {
+      try {
+        if (localStorage.getItem('ignorar_visita') === 'true' ||
+            localStorage.getItem('dispositivo_token') === 'sergio_molina_master_device') {
+          return;
+        }
+        const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
+        const esMovil = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+        let origen = 'directo';
+        if (document.referrer) {
+          try { origen = new URL(document.referrer).hostname || 'directo'; } catch (_) { origen = document.referrer; }
+        }
+        await fetch(`${SUPABASE_URL}/rest/v1/visitas`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            tipo: tipo || 'visita_pagina',
+            pagina: 'pedido.html',
+            detalle: detalle || 'Visita a Comprobante de Pedido',
+            dispositivo: esMovil ? 'mobile' : 'desktop',
+            origen: origen
+          })
+        });
+      } catch (_) {}
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      inicializarRemito();
+      registrarVisitaPedido('visita_pagina', 'Visita a Comprobante de Pedido');
+    });
   </script>
 </body></html>

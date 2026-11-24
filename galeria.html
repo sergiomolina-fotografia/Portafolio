@@ -234,7 +234,7 @@
 </div>
 <script>
     // Configuración centralizada y credenciales
-    const SUPABASE_URL = 'https://zbixojacwvbanucxlrdcd.supabase.co';
+    const SUPABASE_URL = 'https://zbixojacwvanucxlrdcd.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXhvamFjd3ZhbnVjeGxyZGNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzgxMzQsImV4cCI6MjEwNDExNDEzNH0.Wz35IGTGzdHuHOm2EbTsGSLBZfhw67Wt7UXBbMXek68';
     const API_KEY_DRIVE = 'AIzaSyAHNvLODt54qLomj14TUPbQyo-KJ_HO4ZM';
 
@@ -317,14 +317,25 @@
       if (!supabaseClient) return;
 
       try {
+        const esMovil = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+        let origen = 'directo';
+        if (document.referrer) {
+          try { origen = new URL(document.referrer).hostname || 'directo'; } catch (_) { origen = document.referrer; }
+        }
+        const detalle = metadata && metadata.foto_nombre
+          ? `Foto: ${metadata.foto_nombre}`
+          : (tipo === 'clic_whatsapp'
+              ? `Pedido WhatsApp (${metadata.total_fotos || 0} fotos)`
+              : `Galería: ${currentAlbumTitle || 'Evento Escolar Oficial'}`);
+
         const payload = {
-          evento: tipo, // 'visita_galeria', 'foto_visor_hd', 'clic_whatsapp'
-          galeria_titulo: currentAlbumTitle || 'Evento Escolar Oficial',
-          dispositivo_token: dispositivoToken,
-          url: window.location.href,
-          referrer: document.referrer || '',
-          metadata: metadata,
-          creado_el: new Date().toISOString()
+          tipo: tipo || 'visita_galeria',
+          pagina: 'galeria.html',
+          album_id: (metadata && metadata.folder_id) || null,
+          album_titulo: currentAlbumTitle || 'Evento Escolar Oficial',
+          detalle: detalle,
+          dispositivo: esMovil ? 'mobile' : 'desktop',
+          origen: origen
         };
 
         await supabaseClient.from('visitas').insert([payload]);
