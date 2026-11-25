@@ -1,0 +1,7 @@
+[[edge_functions]]
+  path = "/galeria.html"
+  function = "og-galeria"
+
+[[edge_functions]]
+  path = "/galeria"
+  function = "og-galeria"
